@@ -1,0 +1,122 @@
+id: bad_billy
+display_name: Bad Billy
+aliases: [BILLY, BAD BILLY]
+height: 1.0          # relative on-screen height (Billy = 1.0)
+mirror_ok: false     # monocle must stay on the LEFT eye
+default_variant: tophat
+variants:
+  tophat:
+    source: "Printed edition, cover, all Sheets/ references, every existing marketing video."
+    identity_prompt: >-
+      a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a
+      round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his
+      left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black
+      striped shorts, blue and red sneakers, long yellow feather wings used like hands
+    rules: ["monocle on LEFT eye only", "hat crack never overlaps badge", "no teeth inside beak", "three tail feathers"]
+    poses:            # cut-out ids in library/derived/cutouts/
+      front: billy_tophat_front
+      34left: billy_tophat_34left
+      sideleft: billy_tophat_sideleft
+      back: billy_tophat_back
+      sideright: billy_tophat_sideright
+      34right: billy_tophat_34right
+      scroll-pickup: billy_tophat_scroll_pickup
+      scroll-reading: billy_tophat_scroll_reading
+      scroll-stepback: billy_tophat_scroll_stepback
+      scroll-recover: billy_tophat_scroll_recover
+      scroll-faceright: billy_tophat_scroll_faceright
+      fly-saul-down: billy_tophat_fly_saul_down      # EP002: flying with Saul on his back (wing down)
+      fly-saul-up: billy_tophat_fly_saul_up          # (wing up)
+      landing-approach: billy_tophat_landing_approach  # landing sheet: coming in to land
+      landing-touchdown: billy_tophat_landing_touchdown
+      landing-fall: billy_tophat_landing_fall        # tripped, tumbling, top hat flying off (hatless head: owner rejected it 2026-10-04, don't use)
+      landing-trip1: billy_tophat_landing_trip1      # tripping, hat on
+      landing-trip2: billy_tophat_landing_trip2      # tumbling, wing clamps the hat on (EP002 S07 end frame)
+    airborne: [billy_tophat_fly_saul_down, billy_tophat_fly_saul_up, billy_tophat_landing_approach]
+    expressions:      # head cut-outs; also used for the mouth-flap fallback
+      neutral: billy_tophat_head_neutral
+      suspicious: billy_tophat_head_suspicious
+      happy: billy_tophat_head_happy
+      angry: billy_tophat_head_angry
+      surprised: billy_tophat_head_surprised
+      scared: billy_tophat_head_scared
+      wink: billy_tophat_head_wink
+      lookdown: billy_tophat_head_lookdown
+      lookup: billy_tophat_head_lookup
+      laugh: billy_tophat_head_laugh
+      talking: billy_tophat_head_talking
+      thinking: billy_tophat_head_thinking
+      skeptical: billy_tophat_head_skeptical
+      shock: billy_tophat_head_shock
+    facing:           # which way the art faces on screen: left | right | front
+      front: front
+      34left: left
+      sideleft: left
+      back: front
+      sideright: right
+      34right: right
+      scroll-pickup: left
+      scroll-reading: left
+      scroll-stepback: right
+      scroll-recover: left
+      scroll-faceright: right
+      fly-saul-down: right
+      fly-saul-up: right
+      landing-approach: right
+      landing-touchdown: right
+      landing-fall: right
+      landing-trip1: right
+      landing-trip2: right
+      neutral: front
+      angry: front
+      surprised: front
+      scared: front
+      wink: front
+      happy: front
+      suspicious: right
+      lookdown: right
+      lookup: right
+      laugh: right
+      talking: right
+      thinking: right
+      skeptical: right
+      shock: right
+    bust:             # close-ups: expression head placed on a body (sheet art only, no redraw)
+      bodies: {front: billy_tophat_front, right: billy_tophat_34right, left: billy_tophat_34left}
+      cut: 0.50       # erase the body's own head above this fraction of its height
+      neck: 0.54      # new head's bottom sits here
+      head: 0.56      # new head height as a fraction of body height
+      dx: {front: 0.0, right: 0.08, left: -0.08}
+    mouth_pairs:      # [closed, open] heads at the same angle, keyed by facing (local mouth flap)
+      front: [billy_tophat_head_neutral, billy_tophat_head_angry]
+      right: [billy_tophat_head_skeptical, billy_tophat_head_talking]
+    tease_face: images.characters.bad-billy.billy-s-head   # end-card tease: official head art (owner 2026-10-05: face only)
+    open_mouth: [talking, angry, shock]   # heads drawn with the beak open (poor first frames for lip sync)
+    face: {billy_tophat_34left: [0.38, 0.30], billy_tophat_34right: [0.62, 0.30]}   # push-in anchor between eye and beak (EP003: keeps the whole beak in a close-up)
+    kling_body:       # Kling 3.0 talking shots start from the full sheet pose facing the same way (no pasted head)
+      {right: billy_tophat_34right, left: billy_tophat_34left, front: billy_tophat_front}
+  goggles:
+    source: "PDF interior edition (book pages 7-34); crops BB-1..BB-8; AI sheet BBTB-Expression-sheet."
+    identity_prompt: >-
+      a lanky yellow cartoon bird with a long orange beak, brown leather aviator goggles pushed up on
+      his head, a small yellow feather crest, grumpy half-closed eyes, long yellow feather wings,
+      red high-top sneakers with white soles
+    poses: {}         # TODO M7: cut from book pages / BB-*.png
+    expressions: {}
+voice:
+  pace_wps: 2.3      # words/second of the approved voice, measured on EP001 (L012 2.1, L017 2.1, L023 2.8); silent-placeholder timing only
+  originals:        # exact-match lines use these verbatim
+    "Silly little worm!": audio.bad-billy.badbilly-silly-little-worm
+    "Who are you and what do you want?": audio.bad-billy.badbilly-who-are-you-and-what-do-u-want
+    "Go away! Stop following us!": audio.bad-billy.badbilly-goawaystopfollowingus
+    "I'll get you!": audio.bad-billy.badbilly-i-ll-get-you
+  clone_reference:    # ALL 7 clips (owner decision 2026-10-03). Note: bad-billy-voice.wav is an exact
+                      # compilation of the other 6 (verified by cross-correlation), so it adds no new material.
+    - audio.bad-billy.badbilly-who-are-you-and-what-do-u-want
+    - audio.bad-billy.badbilly-goawaystopfollowingus
+    - audio.bad-billy.badbilly-i-ll-get-you
+    - audio.bad-billy.badbilly-silly-little-worm
+    - audio.bad-billy.badbilly-screams-in-pain
+    - audio.bad-billy.badbilly-grunchy-growl-arrrrrr
+    - audio.bad-billy.bad-billy-voice
+  clone_id: null    # filled by `bbtb voices clone`

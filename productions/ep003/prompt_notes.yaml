@@ -1,0 +1,41 @@
+# Per-shot prompt rationale (Task 5). reviewed: who checked the prompt; owner_ok: set true when the owner signs off.
+S01:
+  emotion: theatrical self-pity turning into outrage at his own empty tummy (comic hook)
+  action: droops, looks down at his tummy, head snaps up on "EMPTY", eyes pop; settles back (end frame = start frame)
+  background: big oak trunk + treehouse, pink sky (BG_OAK_TREEHOUSE, p.12); close-up so no floating feet
+  avoid: wings as hands/fists (S02 EP002 lesson), teeth in the beak, monocle switching eye, floating
+  preserve: monocle LEFT eye, silver B badge + crack, teal moustache curls, orange beak with no teeth
+  reviewed: claude
+  owner_ok: false
+S04:
+  emotion: carefree joy
+  action: empty stump -> Saul pops up out of the hollow stump with his ball and lands in front of it (start = empty scene, end = Saul pose)
+  background: stump meadow two-shot plate (GRASS_STUMP, pp.17-22 art), no text in frame
+  avoid: legs/feet on Saul, coloured gloves, a deformed ball, a second worm
+  preserve: white gloves, pale-blue eyes, yellow ball, plum tail rings
+  reviewed: claude
+  owner_ok: false
+S05:
+  emotion: excitement
+  action: shouts "Ball time, everybody!", bounces once, lifts the ball (Kling Avatar drives the mouth with OUR audio)
+  background: Saul's side of the meadow (GRASS_SIGN); the canon sign lettering is painted art (Avatar keeps it static)
+  avoid: Avatar takes no references or negative prompt - kept short and simple, low risk
+  preserve: white gloves, ball, eyes
+  reviewed: claude
+  owner_ok: false
+S07:
+  emotion: sly, menacing glee (lunch spotted)
+  action: eyes narrow, slow wicked smile, leans slowly toward camera, one eyebrow rises; settles back (end frame = start frame)
+  background: same oak close-up as S01 (continuity - he never left the tree)
+  avoid: wing gestures (they become hands), teeth, monocle drift
+  preserve: monocle LEFT eye, badge, moustache, beak
+  reviewed: claude
+  owner_ok: false
+S08:
+  emotion: dawning fear (the cliffhanger)
+  action: Saul looks up at the tree, eyes widen, gulps, trembles; stays silent; ends in the start pose (end frame)
+  background: stump meadow (GRASS_STUMP), the same place EP002 opens
+  avoid: legs, coloured gloves, extra worms, any text
+  preserve: Saul's face, gloves, plum rings
+  reviewed: claude
+  owner_ok: false

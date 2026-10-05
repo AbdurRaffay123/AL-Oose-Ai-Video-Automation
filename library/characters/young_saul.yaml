@@ -1,0 +1,34 @@
+id: young_saul
+display_name: Young Saul
+height: 0.45
+mirror_ok: true
+aliases: [SAUL, YOUNG SAUL]
+default_variant: default
+variants:
+  default:
+    identity_prompt: >-
+      a small pink cartoon worm with huge round pale-blue eyes, brown eyebrows, two buck teeth,
+      white cartoon gloves, dark purple rings near his tail
+    poses:
+      ball-front: saul_ball_front
+      ball-side: saul_ball_side
+      idle: saul_idle
+      wave: saul_wave
+      holding-scroll: saul_talking_scroll
+      cheerful: saul_cheerful
+      standing-tall: saul_standing_tall
+      riding: billy_tophat_fly_saul_down   # EP002: riding on Billy's back (top-hat flying sheet; never mirrored)
+    facing: {ball-front: right, ball-side: right, idle: right, wave: right, holding-scroll: right, cheerful: right, standing-tall: right, riding: right}
+    airborne: [billy_tophat_fly_saul_down]
+    face: {billy_tophat_fly_saul_down: [0.62, 0.24]}   # push-in anchor: between Saul's face and Billy's head
+    expressions: {}
+    mouth_pairs: {}   # no matching closed/open art yet -> Saul's talking shots need LTX
+voice:
+  pace_wps: 3.9      # words/second of the approved voice, measured on EP001 (L013 3.9); silent-placeholder timing only
+  originals:
+    "I think we're gonna need your help.": audio.saul-the-worm.38-saul-the-worm-i-think-we-re-gunna-need-your-help
+    "I don't trust these birds.": audio.saul-the-worm.saul-the-worm-i-don-t-trust-these-birds
+  clone_reference: [audio.saul-the-worm.38-saul-the-worm-i-think-we-re-gunna-need-your-help,
+                    audio.saul-the-worm.saul-the-worm-i-don-t-trust-these-birds]
+  clone_id: null
+  warning: "Only 4.2 s of reference audio - clone quality is at risk."

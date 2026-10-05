@@ -1,0 +1,23 @@
+id: big_pea
+display_name: Big Pea
+aliases: [BIG PEA, PEA]
+height: 0.7
+mirror_ok: false
+default_variant: default
+variants:
+  default:
+    identity_prompt: >-
+      a round chubby yellow cartoon bird with a brown leather aviator helmet and big round goggles,
+      small orange beak, sleepy half-closed eyes, green sneakers
+    poses: {}          # TODO M7: cut from Big-Pea-Reference-Sheet / book crops
+    expressions: {}
+voice:
+  originals:
+    "Why are you still here?": audio.big-pea.bigpea-why-are-you-still-here
+    "You are very annoying.": audio.big-pea.bigpea-you-are-very-annoying
+    "Go away, I'm hungry!": audio.big-pea.bigpea-go-away-stop-following-me   # file is misnamed (Whisper-verified)
+  clone_reference:    # spoken clips only (laugh excluded)
+    - audio.big-pea.bigpea-why-are-you-still-here
+    - audio.big-pea.bigpea-you-are-very-annoying
+    - audio.big-pea.bigpea-go-away-stop-following-me
+  clone_id: null

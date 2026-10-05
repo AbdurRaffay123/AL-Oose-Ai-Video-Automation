@@ -1,0 +1,4 @@
+#!/bin/sh
+# Wrapper so `./bbtb ...` works from the repo root without activating the venv.
+here="$(cd "$(dirname "$0")" && pwd)"
+PYTHONPATH="$here/studio" exec "$here/.venv/bin/python" -m bbtb.cli "$@"

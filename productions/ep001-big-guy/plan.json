@@ -1,0 +1,369 @@
+{
+  "title": "EP001 The Scroll and The Big Guy",
+  "meta": {
+    "format": "9:16",
+    "resolution": "720p",
+    "music": "playful-adventure",
+    "budget": 5.0,
+    "fps": 24,
+    "captions": "off",
+    "model": "ltx-2-3-pro",
+    "talking_engine": "kling3_talk",
+    "action_engine": "kling3_action",
+    "spend_cap": 5.0,
+    "session_cap": 5.0
+  },
+  "approval_code": "61261DC2",
+  "new_cost": 0.34,
+  "shots": [
+    {
+      "id": "S01",
+      "kind": "action",
+      "engine": "kling3_action",
+      "scene": "BIG_WORM_HOLE",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_34left",
+          "framing": "wide",
+          "side": "center",
+          "mirror": false
+        }
+      ],
+      "end_cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_34left",
+          "framing": "wide",
+          "side": "center",
+          "mirror": false
+        }
+      ],
+      "lines": [],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Bad Billy: a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black striped shorts, blue and red sneakers, long yellow feather wings used like hands. Bad Billy walks in beside the rocks. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [
+        "enter-right"
+      ],
+      "source_line": 11,
+      "duration": 1.5,
+      "gen_seconds": 3.0,
+      "prompt_key": "billy_walk",
+      "acting": "Bad Billy walks in beside the rocks.",
+      "start_cast": [],
+      "trim": 1.5
+    },
+    {
+      "id": "S02",
+      "kind": "talk",
+      "engine": "kling_avatar",
+      "scene": "BIG_WORM_HOLE",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": "tophat",
+          "art": "billy_tophat_34left",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L012_bad_billy"
+      ],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Bad Billy: a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black striped shorts, blue and red sneakers, long yellow feather wings used like hands. Bad Billy talks (suspicious), his mouth/beak opening and closing in time with the speech, with small natural head and body movements while he says: \"Well, where is the worm? Is he scared to appear?!\" Only Bad Billy is speaking. The camera stays still. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [],
+      "source_line": 12,
+      "duration": 5.32,
+      "gen_seconds": 5.32,
+      "prompt_key": "talk_bad_billy",
+      "acting": "suspicious",
+      "start_cast": null,
+      "trim": 0.0
+    },
+    {
+      "id": "S03",
+      "kind": "talk",
+      "engine": "kling_avatar",
+      "scene": "BIG_WORM_HOLE",
+      "cast": [
+        {
+          "char": "young_saul",
+          "variant": "default",
+          "art": "saul_talking_scroll",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L013_young_saul"
+      ],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Young Saul: a small pink cartoon worm with huge round pale-blue eyes, brown eyebrows, two buck teeth, white cartoon gloves, dark purple rings near his tail. Young Saul talks (expressive), his mouth/beak opening and closing in time with the speech, with small natural head and body movements while he says: \"Don't sweat. He is sure to be near. But you can't see him yet until you read this scroll here.\" Only Young Saul is speaking. The camera stays still. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [],
+      "source_line": 13,
+      "duration": 5.63,
+      "gen_seconds": 5.63,
+      "prompt_key": "talk_young_saul",
+      "acting": "expressive",
+      "start_cast": null,
+      "trim": 0.0
+    },
+    {
+      "id": "S04",
+      "kind": "talk",
+      "engine": "kling3_talk",
+      "scene": "BIG_WORM_HOLE",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": "tophat",
+          "art": "billy_tophat_34left",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L014_bad_billy"
+      ],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Bad Billy: a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black striped shorts, blue and red sneakers, long yellow feather wings used like hands. Bad Billy talks (skeptical), his mouth/beak opening and closing in time with the speech, with small natural head and body movements while he says: \"Silly little worm!\" Only Bad Billy is speaking. The camera stays still. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [],
+      "source_line": 14,
+      "duration": 3.0,
+      "gen_seconds": 3.0,
+      "prompt_key": "billy_taunt",
+      "acting": "skeptical",
+      "start_cast": null,
+      "trim": 0.0
+    },
+    {
+      "id": "S05",
+      "kind": "action",
+      "engine": "kling3_action",
+      "scene": "BIG_WORM_HOLE",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_scroll_pickup",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false
+        }
+      ],
+      "end_cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_scroll_reading",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false
+        }
+      ],
+      "lines": [
+        "L015_narrator"
+      ],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Bad Billy: a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black striped shorts, blue and red sneakers, long yellow feather wings used like hands. Billy unrolls the scroll. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [
+        "pose:billy_tophat_scroll_reading"
+      ],
+      "source_line": 16,
+      "duration": 3.0,
+      "gen_seconds": 3.0,
+      "prompt_key": "billy_scroll",
+      "acting": "Billy unrolls the scroll.",
+      "start_cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_scroll_pickup",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false
+        }
+      ],
+      "trim": 0.0
+    },
+    {
+      "id": "S06",
+      "kind": "talk",
+      "engine": "kling_avatar",
+      "scene": "BIG_WORM_HOLE",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": "tophat",
+          "art": "billy_tophat_scroll_reading",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L017_bad_billy"
+      ],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Bad Billy: a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black striped shorts, blue and red sneakers, long yellow feather wings used like hands. Bad Billy talks (expressive), his mouth/beak opening and closing in time with the speech, with small natural head and body movements while he says: \"Hey Big Guy! Hey Big Guy! Hey, big juicy worm! Come out of your hole, and I'll watch you squirm.\" Only Bad Billy is speaking. The camera stays still. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [],
+      "source_line": 17,
+      "duration": 10.39,
+      "gen_seconds": 10.39,
+      "prompt_key": "talk_bad_billy",
+      "acting": "expressive",
+      "start_cast": null,
+      "trim": 0.0
+    },
+    {
+      "id": "S07",
+      "kind": "action",
+      "engine": "kling3_action",
+      "scene": "BIG_WORM_HOLE",
+      "cast": [],
+      "end_cast": [
+        {
+          "char": "big_guy",
+          "variant": null,
+          "art": "bigguy_34_open",
+          "framing": "wide",
+          "side": "center",
+          "mirror": false
+        }
+      ],
+      "lines": [
+        "L019_narrator"
+      ],
+      "sfx": [
+        {
+          "name": "rumble",
+          "at": 0.0
+        },
+        {
+          "name": "roar",
+          "at": 3.5
+        }
+      ],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. The Big Guy: a gigantic goofy pink cartoon worm with big pale-blue eyes, a wide open mouth with white pointed teeth and a pink tongue, white cartoon gloves on thin arms. The ground shakes and The Big Guy bursts up out of the hole between the rocks, arms raised high. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [],
+      "source_line": 21,
+      "duration": 5.0,
+      "gen_seconds": 5.0,
+      "prompt_key": "big_guy_erupt",
+      "acting": "The ground shakes and The Big Guy bursts up out of the hole between the rocks, arms raised high.",
+      "start_cast": null,
+      "trim": 0.0
+    },
+    {
+      "id": "S08",
+      "kind": "talk",
+      "engine": "kling3_talk",
+      "scene": "BIG_WORM_HOLE",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": "tophat",
+          "art": "billy_tophat_scroll_stepback",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L022_bad_billy"
+      ],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Bad Billy: a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black striped shorts, blue and red sneakers, long yellow feather wings used like hands. Bad Billy talks (expressive), his mouth/beak opening and closing in time with the speech, with small natural head and body movements while he says: \"Oh POOP!\" Only Bad Billy is speaking. The camera stays still. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [
+        "shake"
+      ],
+      "source_line": 22,
+      "duration": 3.0,
+      "gen_seconds": 3.0,
+      "prompt_key": "billy_terrified",
+      "acting": "expressive",
+      "start_cast": null,
+      "trim": 0.0
+    },
+    {
+      "id": "S09",
+      "kind": "talk",
+      "engine": "kling3_talk",
+      "scene": "BIG_WORM_HOLE",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": "tophat",
+          "art": "billy_tophat_34right",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L023_bad_billy"
+      ],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Bad Billy: a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black striped shorts, blue and red sneakers, long yellow feather wings used like hands. Bad Billy talks (shock), his mouth/beak opening and closing in time with the speech, with small natural head and body movements while he says: \"This worm is a worm of super-duper size! He's too big to eat, way too massive for me!\" Only Bad Billy is speaking. The camera stays still. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [],
+      "source_line": 23,
+      "duration": 5.4,
+      "gen_seconds": 6.0,
+      "prompt_key": "billy_shocked",
+      "acting": "shock",
+      "start_cast": null,
+      "trim": 0.6
+    },
+    {
+      "id": "S10",
+      "kind": "endcard",
+      "engine": "local_endcard",
+      "scene": "END_CARD",
+      "cast": [],
+      "end_cast": [],
+      "lines": [
+        "L026_narrator"
+      ],
+      "sfx": [],
+      "prompt": "",
+      "camera": "static",
+      "motion": [],
+      "source_line": 26,
+      "duration": 3.57,
+      "gen_seconds": 0.0,
+      "prompt_key": "",
+      "acting": "",
+      "start_cast": null,
+      "trim": 0.0
+    }
+  ],
+  "jobs": [
+    {
+      "shot": "S08",
+      "endpoint": "kling3-talk",
+      "cost": 0.336,
+      "request_hash": "fal:4cfa7283a680e7908e486dcc"
+    }
+  ]
+}

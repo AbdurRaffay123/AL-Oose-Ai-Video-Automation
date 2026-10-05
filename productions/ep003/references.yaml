@@ -1,0 +1,30 @@
+# EP003 scene references (owner 2026-10-05). Per shot, in element order (@Element1 ...): frontal = the exact pose in
+# the shot (our cut-out from Jason's sheets); refs = up to 3 clean images from the OFFICIAL sheets:
+# expression(s) | pose/angle | key details. Kling 3.0 Standard receives them; Kling Avatar (S04) cannot.
+S01:
+  bad_billy:
+    note: hungry, droops then outraged at his empty tummy (3/4 left)
+    frontal: billy_tophat_34left
+    refs: [[billy_head_neutral, billy_head_surprised, billy_head_angry], [billy_turn_34left, billy_turn_front],
+           [billy_detail_monocle, billy_detail_badge, billy_detail_wing, billy_detail_beak]]
+S04:
+  young_saul:
+    note: pops out of the stump with his yellow ball
+    frontal: saul_ball_front
+    refs: [[saul_ball, saul_cheerful, saul_standing_tall], [saul_face_happy, saul_face_excited, saul_face_surprised]]
+S05:
+  young_saul:
+    note: Ball time (Kling Avatar, board for review only)
+    frontal: saul_ball_front
+    refs: [[saul_ball, saul_cheerful], [saul_face_excited, saul_face_happy]]
+S07:
+  bad_billy:
+    note: sly, menacing, "Lunch... is served!" (3/4 left)
+    frontal: billy_tophat_34left
+    refs: [[billy_head_suspicious, billy_head_skeptical, billy_head_happy], [billy_turn_34left, billy_turn_front],
+           [billy_detail_monocle, billy_detail_badge, billy_detail_wing, billy_detail_beak]]
+S08:
+  young_saul:
+    note: looks up at the tree, trembles with fear
+    frontal: saul_idle
+    refs: [[saul_idle_lookup, saul_standing_tall], [saul_face_worried, saul_face_scared, saul_face_surprised]]

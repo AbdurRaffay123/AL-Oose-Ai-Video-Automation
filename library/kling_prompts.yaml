@@ -1,0 +1,345 @@
+# Kling prompt templates. Explained (and quoted verbatim) in docs/kling_prompts.md.
+# Changing any template changes the approval code of every shot that uses it.
+#
+# Placeholders, filled per shot by the pipeline:
+#   {facing}    from the art's facing in the character file ("facing right" / "facing left" / "facing the camera")
+#   {line}      the exact script line (Kling 3.0 speaks it, then ElevenLabs re-voices it as the character)
+#   {acting}    the script's acting tags for the line (e.g. "skeptical")
+#   {direction} where an entrance comes from, from the script's enter-left / enter-right tag
+# A script line picks a template with the tag `prompt:<name>`; talking lines default to talk_<character>,
+# action lines to `action`.
+
+facing_words: {right: facing right, left: facing left, front: facing the camera}
+direction_words: {enter-right: from the right, enter-left: from the left}
+
+# v3 - Kling 3.0 (owner's natural-motion prompts, 2026-10-04: talk_bad_billy, billy_walk, big_guy_erupt). Talking: fal-ai/kling-video/v3/turbo/standard/image-to-video
+# (native audio always on; no negative prompt or end frame on Turbo). Action: fal-ai/kling-video/v3/standard/
+# image-to-video, silent, start + end frame, with the negative prompt below.
+templates:
+  # v6 (owner 2026-10-04: "Billy is a VILLAIN - cocky, theatrical, dramatic"; whole-body performance).
+  talk_bad_billy: >-
+    Cartoon bird villain, orange beak, black top hat, monocle on left eye, {facing}, standing on rocky ground.
+    A cocky, theatrical show-off: every line is a performance. He is {acting} and says: "{line}" Beak opens
+    WIDE and snaps shut with each word. He throws his whole body into the line: leans far forward on the
+    taunts, rocks back on his heels for effect, head tilting and bobbing with the rhythm of the words. Wings
+    flare out wide for emphasis, then fold back. Feet shift and stomp on the ground, never floating. Big,
+    bold villain personality, never casual. Wings stay as feathered bird wings at all times, no human hands,
+    no fingers, no arms. Static camera. Consistent 2D cartoon style. No smearing.
+  # Test only (owner 2026-10-04): the most expressive version. Kling 3.0 Turbo or Wan 2.7 (tag prompt:talk_bad_billy_max_energy).
+  talk_bad_billy_max_energy: >-
+    2D cartoon animation in exactly the same art style and colours as the input image. Cartoon bird villain,
+    orange beak, black top hat with a "B" badge, monocle on his LEFT eye, {facing}, on the ground. MAXIMUM
+    energy: he is {acting} and delivers his line like a scene-stealing stage villain: "{line}" His beak flies
+    WIDE open and snaps shut on every word. Big full-body motion from the first frame to the last: he lunges
+    far forward with his neck stretched out, then whips back upright; his head jabs, tilts and bobs to the
+    rhythm of the words; both wings sweep out wide like a showman's cape and snap back to his sides; he stomps
+    one foot, shifts his weight and bounces on his knees. Huge, exaggerated cartoon acting, always the same
+    character design. The top hat and monocle stay on. Wings stay feathered yellow bird wings at all times, no
+    human hands, no fingers, no arms. Static camera. Consistent 2D cartoon style. No smearing.
+  # v3 text, kept unchanged so the owner-approved S04 clip (2026-10-04) stays valid; S04 is tagged with it.
+  talk_bad_billy_v3: >-
+    Cartoon bird character, orange beak, black top hat, monocle on left eye, {facing}, standing on rocky
+    ground. He is {acting} and says: "{line}" Beak opens WIDE and moves expressively with each word. Full body
+    natural movement, body leans forward with energy, wings gesture to emphasize words. Feet firmly on ground.
+    Dust particles at feet. Big personality. Static camera. Consistent 2D cartoon style. No smearing.
+  # v5 retakes (owner, 2026-10-04): S04 faces Saul; S08 is terrified. Both keep every v4 element.
+  billy_taunt: >-
+    Cartoon bird character, orange beak, black top hat, monocle on left eye, {facing}, standing on rocky
+    ground on the right side of the frame. Character faces left toward his opponent. He is {acting}, taunting
+    and insulting, looking directly at his opponent to the left, and says: "{line}" Beak opens WIDE and moves
+    expressively with each word. Full body natural movement, body leans forward with energy, wings gesture to
+    emphasize words. Wings stay as feathered bird wings at all times, no human hands, no fingers, no arms.
+    Feet firmly on ground. Dust particles at feet. Big personality. Static camera. Consistent 2D cartoon
+    style. No smearing.
+  billy_terrified: >-
+    Cartoon bird character, orange beak, black top hat, monocle on left eye, {facing}, standing on rocky
+    ground. Terrified expression, eyes wide with fear, backing away, absolutely horrified. Mouth drops open in
+    horror. Not smiling, not grinning. He cries out: "{line}" Beak opens WIDE and moves with each word. Full
+    body natural movement, body recoils backwards in fear. Wings stay as feathered bird wings at all times, no
+    human hands, no fingers, no arms. Feet firmly on ground. Dust particles at feet. Big personality. Static
+    camera. Consistent 2D cartoon style. No smearing.
+  # v5 text, frozen: it made the finished EP001 S09 clip (EP001 is tagged prompt:billy_shocked_v5).
+  billy_shocked_v5: >-
+    Cartoon bird character, orange beak, black top hat, monocle on left eye, {facing}. Looks up in shock and
+    fear at something enormous. Mouth drops open wide. Body shrinks back slightly. Wings stay as feathered bird wings at all times, no human hands, no
+    fingers, no arms. Eyes wide. Speaks with
+    trembling voice, beak moving with words: "{line}" Feet on rocky ground. Static camera. 2D cartoon style.
+  # v6 (owner 2026-10-04): theatrical villain whose bravado cracks.
+  billy_shocked: >-
+    Cartoon bird villain, orange beak, black top hat, monocle on left eye, {facing}, on rocky ground. He looks
+    up in total shock at something ENORMOUS towering over him and recoils dramatically: his whole body jerks
+    back, wings fly up and out wide in panic, mouth drops open. His bravado cracks and he stammers in a
+    trembling voice, beak moving with every word: "{line}" Head shakes in disbelief, knees wobble, feet
+    scramble a step backwards. Over-the-top, theatrical fear. Wings stay as feathered bird wings at all times,
+    no human hands, no fingers, no arms. Static camera. Consistent 2D cartoon style. No smearing.
+  talk_young_saul: >-
+    Small pink cartoon worm character, huge round pale-blue eyes, white cartoon gloves, {facing}. He says:
+    "{line}" Mouth opens wide and moves expressively as he speaks a long sentence. Body sways gently.
+    Confident and helpful expression. Rocky ground. Static camera. 2D cartoon style.
+  billy_walk: >-
+    Cartoon bird character, orange beak, black top hat, monocle on left eye. Walks confidently {direction}
+    into frame with cocky strut. Each foot clearly contacts rocky ground. Body bobs with walking rhythm. Small
+    dust puffs at each footstep. Wings swing with stride. Static camera. 2D cartoon style.
+  billy_scroll: >-
+    Cartoon bird character, orange beak, black top hat, monocle on left eye, {facing}. Holds a scroll in
+    wings, unrolls it dramatically. Eyes scan the scroll. Natural wing and body movement. Rocky ground, worm
+    hole visible. Static camera. 2D cartoon style.
+  big_guy_erupt: >-
+    Enormous cartoon worm bursts dramatically upward from hole in rocky ground. Ground cracks and splits. Dirt
+    and rocks fly outward. Worm rises showing enormous size. Static camera. Dramatic powerful motion. 2D
+    cartoon style.
+  # Wan 2.7 test 1 prompt, frozen (made productions/test-wan27-ep001-s02, tagged prompt:wan_bad_billy_v1).
+  wan_bad_billy_v1: >-
+    2D cartoon animation in exactly the same art style, colours and line work as the input image. A cartoon bird
+    with an orange beak, a black top hat with a "B" badge and a monocle on his LEFT eye, {facing}. He is {acting}
+    and speaks the words in the audio: his beak opens and closes in time with the voice, with small natural head
+    and body movements. His wings stay feathered yellow bird wings at all times: no hands, no fingers, no arms.
+    Feet stay on the ground. Static camera. The character stays exactly on model. No new characters, no text.
+  # EP002 "The Deal", v7 (owner 2026-10-04, after the Wan tests): Billy at about 65% energy (one big lean, one wing
+  # spread, head on the rhythm, returns near his start pose), the owner's exact monocle / wing / beak / grounding /
+  # style-lock sentences, and the real colours from the model sheet. Nothing from EP002 has been generated with v6 or
+  # earlier texts, so they are replaced, not frozen. S03/S04 run on Kling Avatar (tag prompt:saul_pitch / billy_menace).
+  saul_brave: >-
+    Static camera, two cartoon characters in a grassy meadow by a tree stump. On the left: a small pink cartoon
+    worm with huge round pale-blue eyes, brown eyebrows, two buck teeth and white cartoon gloves on his tiny
+    hands, {facing}, standing up as tall as he can. On the right, towering over him: a cartoon bird villain with
+    a long ORANGE beak, a yellow feathered body, a tall black top hat with a crack and a round silver badge with
+    a red letter B, wild brown and orange head feathers, curly blue moustache whiskers, a dark red vest with a
+    gold belt buckle, red-and-black striped shorts and blue-and-red sneakers, facing left, completely silent.
+    Only the worm speaks: "{line}" The worm is brave despite his tiny size: chin up, chest out, his body swaying
+    with confidence, one gloved hand raised politely at the start. His mouth opens WIDE and clear on every word
+    and closes between words. The bird stays SILENT with his beak CLOSED the whole time: he only leans slowly
+    over the worm with a suspicious glare. The huge size difference stays dramatic. The monocle is a small round
+    lens on his LEFT eye only — it NEVER moves to the right eye, NEVER disappears, NEVER changes size. Check the
+    monocle position in every frame. His wings are feathered yellow bird wings at all times. No human hands
+    appear. No fingers. No arms. Only feathered wings that gesture and fold. Both characters keep their feet on
+    the ground. No new characters, no text. No smearing. The art style stays flat 2D picture-book cartoon
+    throughout — no 3D rendering, no photorealism, no style drift. Same colors, same line weight, same character
+    proportions from first to last frame.
+  # v8 (owner 2026-10-05, after the S02 Turbo pilot grew fists): NO wing gestures at all - every wing gesture we asked
+  # for became a hand. Wings stay folded; only head and body act. Runs on Kling 3.0 Standard (tag kling3std) with the
+  # billy_hands negative set and the keyframe as end frame.
+  billy_outraged: >-
+    A cartoon bird villain with a long ORANGE beak, a yellow feathered body, a tall black top hat with a crack
+    and a round silver badge with a red letter B, wild brown and orange head feathers, curly blue moustache
+    whiskers, a dark red vest with a gold belt buckle, red-and-black striped shorts and blue-and-red sneakers,
+    {facing}, standing in a meadow of big smiling flowers. A theatrical stage villain, big but controlled. He is
+    {acting}, outraged that anyone dares to speak to him, and shouts: "{line}" On "REALLY" his whole body jerks
+    BACK in disbelief, eyes popping; then he leans far forward ONCE, neck stretched out, glaring down, his head
+    jabbing on "Who", "dares", "talk" and "me"; then he settles back into his starting pose. His wings stay
+    folded flat and tight against his sides throughout the entire clip. The wings do not spread, do not gesture,
+    do not move away from his body. Only his HEAD and BODY move — neck stretches, head jabs, body leans. No wing
+    movement. The orange beak flies WIDE open — wide enough to see inside — and snaps shut cleanly between
+    words. The beak moves with the EXACT rhythm of speech, not just generally open during talking. His weight
+    shifts from foot to foot and he stomps once. Both feet stay planted on the ground. When he shifts weight,
+    one foot stays down. Dust or small ground disturbance when he stomps. Billy never floats or hovers. The
+    monocle is a small round lens on his LEFT eye only — it NEVER moves to the right eye, NEVER disappears,
+    NEVER changes size. Check the monocle position in every frame. His wings are feathered yellow bird wings at
+    all times. No human hands appear. No fingers. No arms. Only Billy is in the frame. Static camera. No
+    smearing. The art style stays flat 2D picture-book cartoon throughout — no 3D rendering, no photorealism, no
+    style drift. Same colors, same line weight, same character proportions from first to last frame.
+  # v7 text, frozen: made the S02 Turbo pilot (2026-10-05, rejected for hands; kept in shots/S02/takes/).
+  billy_outraged_v7: >-
+    A cartoon bird villain with a long ORANGE beak, a yellow feathered body, a tall black top hat with a crack
+    and a round silver badge with a red letter B, wild brown and orange head feathers, curly blue moustache
+    whiskers, a dark red vest with a gold belt buckle, red-and-black striped shorts and blue-and-red sneakers,
+    {facing}, standing in a meadow of big smiling flowers. A theatrical stage villain, big but controlled. He is
+    {acting}, outraged that anyone dares to speak to him, and shouts: "{line}" On "REALLY" his whole body jerks
+    BACK in disbelief and his wings spread wide ONCE in shock; then he leans far forward ONCE, neck stretched
+    out, glaring down, his head jabbing on "Who", "dares", "talk" and "me"; then his wings fold back and he
+    settles close to his starting pose. The orange beak flies WIDE open — wide enough to see inside — and snaps
+    shut cleanly between words. The beak moves with the EXACT rhythm of speech, not just generally open during
+    talking. His weight shifts from foot to foot. Both feet stay planted on the ground. When he shifts weight,
+    one foot stays down. Dust or small ground disturbance when he stomps. Billy never floats or hovers. The
+    monocle is a small round lens on his LEFT eye only — it NEVER moves to the right eye, NEVER disappears,
+    NEVER changes size. Check the monocle position in every frame. His wings are feathered yellow bird wings at
+    all times. No human hands appear. No fingers. No arms. Only feathered wings that gesture and fold. Only
+    Billy is in the frame. Static camera. No smearing. The art style stays flat 2D picture-book cartoon
+    throughout — no 3D rendering, no photorealism, no style drift. Same colors, same line weight, same character
+    proportions from first to last frame.
+  saul_pitch: >-
+    A small pink cartoon worm with huge round pale-blue eyes, brown eyebrows, two buck teeth and white cartoon
+    gloves on his tiny hands, {facing}, in a meadow beside a wooden sign. A clever little salesman pitching a
+    deal: confident, persuasive, selling hard. His mouth opens WIDE and clearly on every word and closes between
+    words, in the exact rhythm of the voice. His eyes stay wide and expressive. He leans forward into the pitch,
+    one gloved hand sweeps up high to show how huge something is, and his excitement builds through the line.
+    Only the worm is in the frame. Static camera. No new characters, no text. No smearing. The art style stays
+    flat 2D picture-book cartoon throughout — no 3D rendering, no photorealism, no style drift. Same colors,
+    same line weight, same character proportions from first to last frame.
+  billy_menace: >-
+    A cartoon bird villain with a long ORANGE beak, a yellow feathered body, a tall black top hat with a crack
+    and a round silver badge with a red letter B, wild brown and orange head feathers, curly blue moustache
+    whiskers, a dark red vest with a gold belt buckle, red-and-black striped shorts and blue-and-red sneakers,
+    {facing}, standing in a meadow of big smiling flowers. Cold, controlled menace, never shouting: a slow,
+    suspicious nod at the start, then he leans in slowly and menacingly, his eyes narrowing to slits; he points
+    one feathered wing tip forward for the threat, then folds it back and settles close to his starting pose.
+    The orange beak opens clearly and deliberately on every word, wide enough to see inside on the strong words,
+    and closes cleanly between words, in the EXACT rhythm of his slow, low speech, never just hanging open. Head
+    moves slowly with the rhythm of the words. Both feet stay planted on the ground. When he shifts weight, one
+    foot stays down. Dust or small ground disturbance when he stomps. Billy never floats or hovers. The monocle
+    is a small round lens on his LEFT eye only — it NEVER moves to the right eye, NEVER disappears, NEVER
+    changes size. Check the monocle position in every frame. His wings are feathered yellow bird wings at all
+    times. No human hands appear. No fingers. No arms. Only feathered wings that gesture and fold. Only Billy is
+    in the frame. Static camera. No smearing. The art style stays flat 2D picture-book cartoon throughout — no
+    3D rendering, no photorealism, no style drift. Same colors, same line weight, same character proportions
+    from first to last frame.
+  billy_flight: >-
+    A cartoon bird villain with a long ORANGE beak, a yellow feathered body, a tall black top hat with a crack
+    and a round silver badge with a red letter B, wild brown and orange head feathers, curly blue moustache
+    whiskers, a dark red vest with a gold belt buckle, red-and-black striped shorts and blue-and-red sneakers
+    flies from left to right across the sky past a floating tree island, carrying a small pink cartoon worm with
+    huge round pale-blue eyes, brown eyebrows, two buck teeth and white cartoon gloves on his tiny hands on his
+    back. Billy's feathered wings beat in a strong, steady rhythm, down and up, as he glides forward, beak
+    pointed ahead with determination. The worm clings tight to the feathers on Billy's back with both gloved
+    hands, eyes wide with joy; he never slips or falls off. Both lean slightly forward into the wind. The
+    floating island stays in place in the background while they move past it. Smooth, continuous motion, no
+    stuttering, no speed blur. The top hat stays on. The monocle is a small round lens on his LEFT eye only — it
+    NEVER moves to the right eye, NEVER disappears, NEVER changes size. Check the monocle position in every
+    frame. His wings are feathered yellow bird wings at all times. No human hands appear. No fingers. No arms.
+    Only feathered wings that gesture and fold. Static camera. No new characters, no text. No smearing. The art
+    style stays flat 2D picture-book cartoon throughout — no 3D rendering, no photorealism, no style drift. Same
+    colors, same line weight, same character proportions from first to last frame.
+  saul_riding: >-
+    Static camera, high in a pastel sky with rainbows and an airship. A small pink cartoon worm with huge round
+    pale-blue eyes, brown eyebrows, two buck teeth and white cartoon gloves on his tiny hands rides on the back
+    of a flying bird: a cartoon bird villain with a long ORANGE beak, a yellow feathered body, a tall black top
+    hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, curly
+    blue moustache whiskers, a dark red vest with a gold belt buckle, red-and-black striped shorts and
+    blue-and-red sneakers, {facing}. Only the worm speaks: "{line}" On "Oh wow!" his eyes go even WIDER with
+    wonder, the wind pushes his cheeks back and his mouth opens in a huge joyful shout, opening WIDE on every
+    word; his gloved hands grip the feathers tight. Pure joy. The bird keeps flapping his wings in a steady
+    rhythm and stays SILENT with his beak CLOSED the whole time. The top hat stays on. The monocle is a small
+    round lens on his LEFT eye only — it NEVER moves to the right eye, NEVER disappears, NEVER changes size.
+    Check the monocle position in every frame. His wings are feathered yellow bird wings at all times. No human
+    hands appear. No fingers. No arms. Only feathered wings that gesture and fold. No new characters, no text.
+    No smearing. The art style stays flat 2D picture-book cartoon throughout — no 3D rendering, no photorealism,
+    no style drift. Same colors, same line weight, same character proportions from first to last frame.
+  billy_crash: >-
+    A cartoon bird villain with a long ORANGE beak, a yellow feathered body, a tall black top hat with a crack
+    and a round silver badge with a red letter B, wild brown and orange head feathers, curly blue moustache
+    whiskers, a dark red vest with a gold belt buckle, red-and-black striped shorts and blue-and-red sneakers,
+    flying fast. He swoops down from the upper left toward the rocks, touches down and immediately starts
+    sliding through the mud; his legs shoot out from under him, he trips on a rock and tumbles head over heels,
+    one feathered wing clamping the top hat down onto his head. Mud and dust spray out from the skid. Real
+    cartoon physics: weight, momentum and comic timing. He ends in a heap, beak-first against the rocks with a
+    heavy impact, the top hat still on his head. The top hat stays on his head the whole time. The monocle is a
+    small round lens on his LEFT eye only — it NEVER moves to the right eye, NEVER disappears, NEVER changes
+    size. Check the monocle position in every frame. His wings are feathered yellow bird wings at all times. No
+    human hands appear. No fingers. No arms. Only feathered wings that gesture and fold. Static camera. No new
+    characters, no text. No smearing. The art style stays flat 2D picture-book cartoon throughout — no 3D
+    rendering, no photorealism, no style drift. Same colors, same line weight, same character proportions from
+    first to last frame.
+  # EP003 "Rule Number One" (owner 2026-10-05: one take per shot). {identity_*} = official sheet descriptions.
+  billy_hungry: >-
+    {identity_bad_billy} {facing}, close up, half hidden against the trunk of a giant old oak tree, pink sky behind. He is theatrically
+    hungry and sorry for himself: he slumps, his head droops low and he looks down at his own empty tummy, then
+    his head snaps up in outrage and he says: "{line}" On "EMPTY" his eyes pop wide and his beak flies open wide
+    (no teeth inside) and snaps shut between words, in the rhythm of the words. His body sags, then puffs up
+    indignantly, then settles back into his starting pose. His wings stay folded flat against his sides the
+    whole clip: they do not spread or gesture. Only his HEAD and BODY act. Both feet stay planted; when he
+    shifts his weight one foot stays down. He never floats. The monocle is a small round lens on his LEFT eye
+    only — it NEVER moves to the right eye, NEVER disappears, NEVER changes size. Only Billy is in the frame.
+    Static camera. No smearing. The art style stays flat 2D picture-book cartoon throughout — no 3D rendering,
+    no photorealism, no style drift. Same colors, same line weight, same character proportions from first to
+    last frame.
+  billy_lunch: >-
+    {identity_bad_billy} {facing}, close up, half hidden against the trunk of a giant old oak tree, pink sky behind. A sly, menacing
+    villain who has just spotted his lunch on the ground below: his eyes narrow, a slow wicked smile spreads
+    across his beak, he leans slowly forward and down toward the camera and purrs: "{line}" The beak opens
+    slowly and clearly on each word (no teeth inside) and closes between them; one eyebrow rises. Then he
+    settles back into his starting pose with a smug look. His wings stay folded flat against his sides the whole
+    clip: they do not spread or gesture. Only his HEAD and BODY act. Both feet stay planted; when he shifts his
+    weight one foot stays down. He never floats. The monocle is a small round lens on his LEFT eye only — it
+    NEVER moves to the right eye, NEVER disappears, NEVER changes size. Only Billy is in the frame. Static
+    camera. No smearing. The art style stays flat 2D picture-book cartoon throughout — no 3D rendering, no
+    photorealism, no style drift. Same colors, same line weight, same character proportions from first to last
+    frame.
+  saul_pop: >-
+    {identity_young_saul} A grassy meadow with a hollow tree stump and a little ladder; static camera. Saul pops
+    straight up out of the hollow stump with a happy bounce, holding his round yellow ball in his white gloves,
+    looks around with big curious eyes and lands in front of the stump, smiling, ending exactly in the pose of
+    the last frame. Real cartoon weight: the pop has a quick squash and stretch. The ball stays round and
+    yellow; his gloves stay white; he has no legs. No other characters. No new text. No smearing. The art style
+    stays flat 2D picture-book cartoon throughout — no 3D rendering, no photorealism, no style drift. Same
+    colors, same line weight, same character proportions from first to last frame.
+  saul_balltime: >-
+    {identity_young_saul} {facing}, in a sunny meadow, holding his round yellow ball. Bursting with excitement,
+    he shouts: "{line}" His mouth opens WIDE and clearly on every word and closes between words, in the exact
+    rhythm of the voice; his eyes sparkle, his body bounces once with joy and he lifts the ball. Only Saul is in
+    the frame. Static camera. No smearing. The art style stays flat 2D picture-book cartoon throughout — no 3D
+    rendering, no photorealism, no style drift. Same colors, same line weight, same character proportions from
+    first to last frame.
+  saul_fear: >-
+    {identity_young_saul} {facing}, in a grassy meadow by a hollow tree stump, looking up toward a big tree. He
+    slowly realises he is being watched: his huge eyes go even wider, his eyebrows shoot up, he gulps, and his
+    whole body trembles with fear in small quick shivers, leaning back a little, then he freezes, ending exactly
+    in the pose of the last frame. He stays silent, mouth closed in a nervous wobble. His gloves stay white; he
+    has no legs. No other characters. No text. No smearing. The art style stays flat 2D picture-book cartoon
+    throughout — no 3D rendering, no photorealism, no style drift. Same colors, same line weight, same character
+    proportions from first to last frame.
+  action: >-
+    {acting} Real weight and momentum: everything that moves has follow-through, nothing floats or slides.
+    Static camera. 2D cartoon style, exactly the same art style and colours as the image.
+
+negative: >-
+  floating, hovering, sliding, feet off the ground, flickering, morphing, melting, smearing, extra limbs,
+  extra characters, text, captions, watermark, logo, blur, distortion, 3D render, realistic, style change,
+  monocle on the right eye, mirrored character
+
+# v1 - Kling AI Avatar v2 (fal-ai/kling-video/ai-avatar/v2/standard). S04 test 2026-10-03: real lip sync to
+# OUR audio but only head/shoulder sway - rejected for short lines. Hybrid plan: used for the long dialogue
+# shots S02, S03, S06 (script tag `kling`).
+characters:
+  bad_billy: >-
+    Cartoon bird character with orange beak, black top hat with monocle on left eye, {facing},
+    beak animates to match speech audio, consistent style throughout, no style drift, character stays on model
+  young_saul: >-
+    Small pink cartoon worm character with huge round pale-blue eyes, brown eyebrows, two buck teeth and
+    white cartoon gloves, {facing}, mouth animates to match speech audio, consistent style throughout,
+    no style drift, character stays on model
+
+# Wan 2.7 image-to-video (fal-ai/wan/v2.7/image-to-video), owner test 2026-10-04: OUR approved line is the driving
+# audio (lip sync + timing), so the line is not quoted. Sent with prompt expansion OFF and the shared `negative:`.
+wan_characters:
+  # v6 (owner 2026-10-04: test 1 was "too static - Billy just stands and talks").
+  bad_billy: >-
+    2D cartoon animation in exactly the same art style, colours and line work as the input image. A cartoon
+    bird villain with an orange beak, a black top hat with a "B" badge and a monocle on his LEFT eye, {facing}.
+    He is {acting}, cocky and theatrical, and performs the words in the audio like a show-off: his beak opens
+    WIDE and snaps shut in time with every word. He throws his whole body into it: leans far forward on the
+    strong words, rocks back, head tilting and bobbing with the rhythm of the voice, wings flaring out wide for
+    emphasis and folding back, feet shifting and stomping on the ground. Big villain energy, never standing
+    still, never casual. His wings stay feathered yellow bird wings at all times: no hands, no fingers, no
+    arms. Static camera. The character stays exactly on model. No new characters, no text.
+
+# Opt-in negative prompts (owner 2026-10-05). A script turns a set on with the header `negatives: <name>`; it is then
+# added to the Kling 3.0 Standard negative prompt of every shot that has the set's character on screen (talking
+# kling3std shots and start/end-frame action shots). Kling 3.0 Turbo takes no negative prompt.
+negative_sets:
+  billy_hands:
+    character: bad_billy
+    text: >-
+      human hands, human fingers, fists, clenched hands, fingers spread, arms, human limbs, hand gestures
+  saul_body:
+    character: young_saul
+    text: >-
+      legs, feet, shoes, human hands, bare hands, coloured gloves, extra fingers, deformed ball
+
+# OFFICIAL character descriptions, written from Jason's sheets (Character-Facials-sheet, 2026-10-05: 01 Turnaround,
+# 02 Head Expressions, 03 Scroll, 04 Landing, Saul Character Bible). Use in a template as {identity_bad_billy} /
+# {identity_young_saul}. With header `elements: on` Kling also SEES the sheets (library/scene_references/).
+official_identity:
+  bad_billy: >-
+    Bad Billy: a cartoon bird villain with a yellow feathered body; wild dark-brown head feathers with orange
+    eyebrow feathers; a tall black top hat with one lightning-bolt crack near the top that never overlaps the
+    badge, and a round silver badge with a white rim and a red script letter B; a round monocle with a thin
+    black frame and a thin chain on his LEFT eye only; a long orange beak with NO teeth inside when it opens;
+    teal curly moustache whiskers with the same spiral shape on both sides; a dark red vest, a brown belt with a
+    gold square buckle and red-and-black striped shorts; teal-and-red high-top sneakers with a white star and
+    pink-white soles; three long yellow tail feathers. His wings act as his arms: each wing ends in five long
+    yellow primary feathers, never human hands or fingers, never fists.
+  young_saul: >-
+    Young Saul: a small light-pink cartoon worm with no legs and no feet, dark plum rings near his tail, huge
+    round pale-blue eyes with black pupils and white highlights, small brown eyebrows, two little buck teeth
+    when he smiles, and white cartoon gloves on his tiny hands (always white). Happy, curious, playful and
+    loyal.

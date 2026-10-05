@@ -1,0 +1,40 @@
+# Scene references for EP002 (owner + Jason 2026-10-05). Per shot: characters on screen, in element order
+# (@Element1, @Element2). frontal = the exact pose in the shot; refs = up to 3 groups (one clean image each) of
+# crop names from library/sheet_crops.yaml (Jason's official sheets) or our cut-out ids.
+S01:
+  young_saul:
+    note: standing tall, brave, speaking
+    frontal: saul_standing_tall
+    refs: [[saul_standing_tall, saul_talking, saul_cheerful], [saul_face_happy, saul_face_excited, saul_face_surprised]]
+  bad_billy:
+    note: looming, silent, suspicious (3/4 left)
+    frontal: billy_tophat_34left
+    refs: [[billy_head_suspicious, billy_head_neutral, billy_head_skeptical], [billy_turn_34left, billy_turn_front],
+           [billy_detail_monocle, billy_detail_badge, billy_detail_wing, billy_detail_tail]]
+S02:
+  bad_billy:
+    note: outraged close-up (3/4 left)
+    frontal: billy_tophat_34left
+    refs: [[billy_head_angry, billy_head_talking, billy_head_surprised], [billy_turn_34left, billy_turn_sideleft],
+           [billy_detail_monocle, billy_detail_badge, billy_detail_wing, billy_detail_beak]]
+S03:
+  young_saul:
+    note: talking, excited pitch
+    frontal: saul_cheerful
+    refs: [[saul_talking, saul_cheerful, saul_standing_tall], [saul_face_excited, saul_face_happy, saul_face_surprised]]
+S04:
+  bad_billy:
+    note: suspicious, menacing (3/4 left)
+    frontal: billy_tophat_34left
+    refs: [[billy_head_suspicious, billy_head_skeptical, billy_head_thinking], [billy_turn_34left, billy_turn_front],
+           [billy_detail_monocle, billy_detail_badge, billy_detail_wing, billy_detail_tail]]
+S05:
+  young_saul:
+    note: riding on Billy's back, joyful
+    frontal: saul_riding
+    refs: [[saul_riding, saul_cheerful], [saul_face_excited, saul_face_happy, saul_face_surprised]]
+  bad_billy:
+    note: flying, facing right
+    frontal: billy_fly_approach1
+    refs: [[billy_fly_approach1, billy_fly_approach2], [billy_head_neutral, billy_head_suspicious],
+           [billy_detail_monocle, billy_detail_badge, billy_detail_wing, billy_detail_tail]]

@@ -1,0 +1,15 @@
+id: narrator
+display_name: Narrator
+height: 0
+mirror_ok: false
+default_variant: default
+variants: {default: {poses: {}, expressions: {}}}
+voice:
+  pace_wps: 4.4      # words/second of the approved voice, measured on EP001 (L015 4.8, L019 4.5, L026 4.0); silent-placeholder timing only
+  originals: {}
+  clone_reference: []
+  clone_reference_files:   # derived (not originals): narration voice from the existing marketing videos
+    - library/derived/voice_refs/narrator_helpworm_vocals.wav   # 5. HELP WORM FILE.mp4, 2.5-12.2 s, music removed with Demucs
+  note: "Same narrator voice in videos 2, 3 and 5 (Resemblyzer similarity 0.92-0.95)."
+  clone_id: null
+  decision_needed: "Owner to confirm this is the brand narrator and that cloning it is permitted."

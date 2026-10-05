@@ -1,0 +1,65 @@
+{
+  "title": "TEST Wan 2.7: EP001 S02 rebuilt",
+  "meta": {
+    "format": "9:16",
+    "resolution": "720p",
+    "music": null,
+    "budget": 1.0,
+    "fps": 24,
+    "captions": "off",
+    "model": "ltx-2-3-pro",
+    "talking_engine": "ltx_a2v",
+    "action_engine": "ltx_i2v",
+    "spend_cap": 1.0,
+    "session_cap": 1.0
+  },
+  "approval_code": "35315E81",
+  "new_cost": 0.5,
+  "shots": [
+    {
+      "id": "S01",
+      "kind": "talk",
+      "engine": "wan_talk",
+      "scene": "BIG_WORM_HOLE",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": "tophat",
+          "art": "billy_tophat_34left",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L009_bad_billy"
+      ],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Bad Billy: a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black striped shorts, blue and red sneakers, long yellow feather wings used like hands. Bad Billy talks (suspicious), his mouth/beak opening and closing in time with the speech, with small natural head and body movements while he says: \"Well, where is the worm? Is he scared to appear?!\" Only Bad Billy is speaking. The camera stays still. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [],
+      "source_line": 9,
+      "duration": 5.32,
+      "gen_seconds": 5.0,
+      "prompt_key": "talk_bad_billy",
+      "acting": "suspicious",
+      "start_cast": null,
+      "zoom": 1.0,
+      "trim": 0.0,
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    }
+  ],
+  "jobs": [
+    {
+      "shot": "S01",
+      "endpoint": "wan-talk",
+      "cost": 0.5,
+      "request_hash": "fal:3cfd6aaf1af25d40c6818644"
+    }
+  ]
+}

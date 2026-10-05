@@ -1,0 +1,25 @@
+id: big_guy
+display_name: The Big Guy
+height: 2.4
+mirror_ok: true
+aliases: [BIG GUY, BIG WORM]
+default_variant: default
+variants:
+  default:
+    identity_prompt: >-
+      a gigantic goofy pink cartoon worm with big pale-blue eyes, a wide open mouth with white
+      pointed teeth and a pink tongue, white cartoon gloves on thin arms
+    poses:
+      front-wave: bigguy_front_wave
+      arms-up: bigguy_34_open
+      talking: bigguy_talking
+      laughing: bigguy_laughing
+      reaching: bigguy_reaching
+    facing: {front-wave: front, arms-up: right, talking: front, laughing: front, reaching: right}
+    expressions: {}
+voice:
+  needed: false        # no dialogue in the book; his 'RAAA!' is a sound effect
+  originals: {}
+  clone_reference: []
+  clone_id: null
+  note: "No dialogue in the book; his 'RAAA!' is an SFX."

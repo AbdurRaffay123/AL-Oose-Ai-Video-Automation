@@ -1,0 +1,40 @@
+{
+  "width": 1380,
+  "height": 1500,
+  "fps": 24.0,
+  "seconds": 3.04,
+  "audio": false,
+  "file": "Al-Oose-content/CONTENT/BBTB MARKETING/Video/LEFT 222.mp4",
+  "analysed_seconds": 3.0,
+  "cuts": [
+    0.62
+  ],
+  "motion_mean": 8.79,
+  "motion_curve": [
+    13.4,
+    8.3,
+    14.3,
+    20.3,
+    26.6,
+    19.2,
+    11.8,
+    6.6,
+    8.9,
+    8.0,
+    6.4,
+    5.9,
+    5.1,
+    5.2,
+    4.4,
+    4.0,
+    7.1,
+    12.0,
+    2.4,
+    3.9,
+    4.9,
+    1.6,
+    2.0
+  ],
+  "camera_shift_px_per_frame": 0.22,
+  "camera": "static"
+}

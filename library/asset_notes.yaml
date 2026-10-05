@@ -1,0 +1,90 @@
+# Curated provenance notes for originals (keyed by asset ID from assets.yaml).
+# provenance: book (crop/page of the published book) | sheet (production reference sheet,
+#   likely AI-assisted, owner-approved) | marketing | ai-video | unknown
+# Files are NEVER moved or renamed; misfilings are corrected here instead.
+
+book.bad-billy-the-bird-story:
+  provenance: book
+  note: "PDF interior edition (goggles Billy). Story pp.7-35. Font FunnySports; pdftotext output needs accent normalisation."
+
+# --- Bad Billy, top-hat variant -------------------------------------------
+images.sheets.bad-billy-key-frames-sheet:
+  provenance: sheet
+  character: bad_billy
+  variant: tophat
+  note: "Turnaround x6 (front, 3/4 L, side L, back, side R, 3/4 R) + details + palette."
+images.sheets.bad-billy-facial-expressions-final-v-2:
+  provenance: sheet
+  character: bad_billy
+  variant: tophat
+  note: "14 heads incl. open-beak angry/laugh/talking and extreme-shock eye-bulge."
+images.scenes.reading-the-scroll-v-2:
+  provenance: sheet
+  character: bad_billy
+  variant: tophat
+  note: "Is a SHEET despite Scenes/ folder: 5 scroll poses incl. step-back fright."
+images.sheets.landing-sheet-v-777:
+  {provenance: sheet, character: bad_billy, variant: tophat}
+images.sheets.flying-3-step:
+  {provenance: sheet, character: bad_billy, variant: tophat, note: "10 flight key frames."}
+images.sheets.bad-bily-flying-wing-up-wing-down:
+  {provenance: sheet, character: bad_billy, variant: tophat, note: "Billy flying with Saul riding."}
+images.characters.bad-billy.billy-s-head:
+  {provenance: marketing, character: bad_billy, variant: tophat, note: "Head with real alpha, wide eyes."}
+images.characters.bad-billy.head:
+  {provenance: marketing, character: bad_billy, variant: tophat, note: "Small head with alpha (184x247)."}
+
+# --- Bad Billy, goggles variant -------------------------------------------
+images.characters.bad-billy.bbtb-expression-sheet:
+  provenance: sheet
+  character: bad_billy
+  variant: goggles
+  note: "AI-generated sheet; 'scene examples' are not real book pages. Byte-identical to bad-billy-2."
+images.characters.bad-billy.bad-billy-2:
+  {provenance: sheet, duplicate_of: images.characters.bad-billy.bbtb-expression-sheet}
+
+# --- Misfiled ------------------------------------------------------------
+images.characters.snail.snail-sheet:
+  {provenance: sheet, character: big_guy, misfiled: "Big Worm / The Big Guy sheet stored under Snail/"}
+images.characters.snail.whatsapp-image-2026-10-01-at-01-40-13:
+  {provenance: sheet, character: big_guy, misfiled: "Big Worm / The Big Guy sheet stored under Snail/"}
+images.characters.snail.screenshot-2026-10-01-at-1-41-00-am:
+  {provenance: book, character: big_guy, misfiled: "Book crop of The Big Guy (p.35) stored under Snail/"}
+images.characters.snail.screenshot-2026-10-01-at-1-41-16-am:
+  {provenance: book, character: big_guy, misfiled: "Book crop (p.33 GULP) stored under Snail/"}
+images.characters.snail.screenshot-2026-10-01-at-1-41-23-am:
+  {provenance: book, character: big_guy, misfiled: "Book crop (p.32) stored under Snail/"}
+images.characters.snail.screenshot-2026-10-01-at-1-41-29-am:
+  {provenance: book, character: big_guy, misfiled: "Book crop (p.31) stored under Snail/"}
+images.characters.old-man:
+  {provenance: sheet, character: old_wise_worm, note: "Old Wise Worm animation-sequence sheet; its sign verse is NOT book text."}
+images.backgrounds.1-green-grass:
+  {provenance: unknown, note: "Actually a 43-layer CMYK PSD (has snail01_lips_01 mouth layers)."}
+images.scenes.help-worm-v-2:
+  {provenance: marketing, note: "Verse on this page is NOT in the book."}
+
+# --- Videos ----------------------------------------------------------------
+video.left-222: {provenance: ai-video, note: "Kling 3.0 - visible watermark. Never ship."}
+video.whatsapp-image-2026-07-01-at-19-42-01: {provenance: ai-video, duplicate_of: video.left-222, note: "Re-encode; watermark."}
+video.billy-landing-funny: {provenance: ai-video, note: "Identity smear on Billy at t~0.5s."}
+video.funy-2: {provenance: ai-video, note: "Worm morph artifact at t~1.5s."}
+video.snail-kling-20260914-video-sammy-the-2251-0: {provenance: ai-video, note: "Kling watermark."}
+video.worm-playiong-ball: {provenance: ai-video, note: "Kling watermark."}
+video.worms-kling-20260914-video-sammy-the-2251-0-snail: {provenance: ai-video, note: "Kling watermark."}
+video.bbtb-rapped-final-v-1: {provenance: marketing, note: "Author reads the PRINTED edition (top-hat Billy on interior pages)."}
+
+# --- Audio -----------------------------------------------------------------
+audio.bad-billy.badbilly-silly-little-worm:
+  {provenance: original-voice, note: "Only clip matching book content (p.29 speech bubble). Use verbatim."}
+audio.bad-billy.badbilly-i-ll-get-you: {provenance: original-voice, note: "Minor clipping (6 samples)."}
+audio.bad-billy.bad-billy-voice: {provenance: original-voice, note: "13.9 s reference; minor clipping."}
+audio.big-pea.bigpea-evil-laughjentry: {provenance: original-voice, note: "Same byte size as Go_Away clip but different content."}
+# Jason's official sheets (2026-10-05, WhatsApp exports; the 02.39.* files are the larger copies of 02.34.*).
+character-facials-sheet.whatsapp-image-2026-10-05-at-02-39-43: {provenance: sheet, character: bad_billy, variant: tophat, note: "OFFICIAL 02 Head Expressions: 14 heads + close-ups (monocle, moustache, hat/badge, eyebrows, beak - no teeth)."}
+character-facials-sheet.whatsapp-image-2026-10-05-at-02-34-30: {provenance: sheet, character: bad_billy, variant: tophat, note: "Smaller copy of 02-39-43."}
+character-facials-sheet.whatsapp-image-2026-10-05-at-02-39-55: {provenance: sheet, character: bad_billy, variant: tophat, note: "OFFICIAL 01 Turnaround: 6 views, height chart, close-ups (wing = feather-finger hand, 3 tail feathers)."}
+character-facials-sheet.whatsapp-image-2026-10-05-at-02-34-42: {provenance: sheet, character: bad_billy, variant: tophat, note: "Smaller copy of 02-39-55."}
+character-facials-sheet.whatsapp-image-2026-10-05-at-02-40-11: {provenance: sheet, character: bad_billy, variant: tophat, note: "OFFICIAL 04 Landing sequence: approach 1-4 + touchdown slide."}
+character-facials-sheet.whatsapp-image-2026-10-05-at-02-41-01: {provenance: sheet, character: bad_billy, variant: tophat, note: "OFFICIAL 03 Reading the scroll & stepping back: 5 poses + feather-finger details."}
+character-facials-sheet.whatsapp-image-2026-10-05-at-02-42-00: {provenance: sheet, character: young_saul, note: "OFFICIAL Saul character bible: 28 poses incl. 08 riding on Billy, flips, 7 expressions."}
+character-facials-sheet.whatsapp-image-2026-10-05-at-02-40-50: {provenance: sheet, character: old_wise_worm, note: "Old Wise Worm sign-board animation sequence (9 steps)."}

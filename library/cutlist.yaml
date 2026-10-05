@@ -1,0 +1,72 @@
+# Cut-out definitions. Boxes are [x0, y0, x1, y1] in the ORIGINAL sheet's pixels.
+# Run `bbtb cutouts` to (re)build library/derived/cutouts/*.png.
+# holes: sheet-coordinate seeds for enclosed background gaps (e.g. between wing and body).
+sheets:
+  images.sheets.bad-billy-key-frames-sheet:
+    cuts:
+      billy_tophat_front:            {box: [25, 165, 200, 528], holes: [[104, 473]]}
+      billy_tophat_34left:           {box: [225, 165, 470, 528], holes: [[338, 465]]}
+      billy_tophat_sideleft:         {box: [418, 165, 622, 528], holes: [[535, 464]]}
+      billy_tophat_back:             {box: [625, 165, 790, 528]}
+      billy_tophat_sideright:        {box: [780, 165, 1008, 528], holes: [[904, 468]]}
+      billy_tophat_34right:          {box: [1030, 165, 1210, 528], holes: [[1118, 474]]}
+
+  images.sheets.bad-billy-facial-expressions-final-v-2:
+    cuts:
+      billy_tophat_head_neutral:     {box: [15, 160, 196, 360]}
+      billy_tophat_head_suspicious:  {box: [198, 160, 382, 360]}
+      billy_tophat_head_happy:       {box: [388, 160, 566, 360]}
+      billy_tophat_head_angry:       {box: [568, 160, 750, 360]}
+      billy_tophat_head_surprised:   {box: [753, 160, 936, 360]}
+      billy_tophat_head_scared:      {box: [938, 160, 1118, 360]}
+      billy_tophat_head_wink:        {box: [1292, 160, 1482, 360]}
+      billy_tophat_head_lookdown:    {box: [12, 465, 188, 654]}
+      billy_tophat_head_lookup:      {box: [192, 470, 372, 652]}
+      billy_tophat_head_laugh:       {box: [374, 452, 557, 652]}
+      billy_tophat_head_talking:     {box: [558, 448, 738, 652]}
+      billy_tophat_head_thinking:    {box: [742, 448, 917, 652]}
+      billy_tophat_head_skeptical:   {box: [918, 452, 1098, 652]}
+      billy_tophat_head_shock:       {box: [1278, 432, 1484, 652]}
+
+  images.scenes.reading-the-scroll-v-2:
+    cuts:
+      billy_tophat_scroll_pickup:    {box: [12, 160, 295, 552], holes: [[143, 492]]}
+      billy_tophat_scroll_reading:   {box: [300, 160, 565, 552], holes: [[442, 493]]}
+      billy_tophat_scroll_stepback:  {box: [582, 165, 905, 552]}
+      billy_tophat_scroll_recover:   {box: [910, 160, 1188, 552], holes: [[1043, 495]]}
+      billy_tophat_scroll_faceright: {box: [1188, 160, 1484, 552], holes: [[1323, 497]]}
+      prop_scroll_open:              {box: [1214, 642, 1488, 832]}
+      prop_scroll_rolled:            {box: [742, 688, 926, 812]}
+
+  images.characters.saul-the-worm.saul-the-worm:
+    cuts:
+      saul_ball_front:               {box: [28, 192, 202, 392]}
+      saul_ball_side:                {box: [204, 192, 362, 392]}
+      saul_idle:                     {box: [382, 192, 545, 392]}
+      saul_wave:                     {box: [592, 186, 778, 392]}
+      saul_talking_scroll:           {box: [788, 186, 978, 392]}
+      saul_cheerful:                 {box: [982, 192, 1168, 392]}
+      saul_standing_tall:            {box: [1236, 186, 1402, 442]}
+
+  images.characters.snail.snail-sheet:   # Big Guy sheet (misfiled under Snail/)
+    tol: 30
+    cuts:
+      bigguy_front_wave:             {box: [22, 132, 202, 394]}
+      bigguy_34_open:                {box: [194, 138, 398, 394]}
+      bigguy_talking:                {box: [150, 652, 278, 797]}
+      bigguy_laughing:               {box: [438, 648, 562, 797]}
+      bigguy_reaching:               {box: [566, 646, 734, 797]}
+
+  # EP002 (2026-10-04): flight with Saul + crash landing. All face RIGHT as drawn; Billy is never mirrored.
+  images.sheets.bad-bily-flying-wing-up-wing-down:
+    cuts:
+      billy_tophat_fly_saul_down:    {box: [160, 165, 1652, 1300], holes: [[1135, 790], [1037, 838], [554, 695], [936, 839], [1414, 827]]}
+      billy_tophat_fly_saul_up:      {box: [1745, 312, 3216, 1184]}
+
+  images.sheets.landing-sheet-v-777:
+    cuts:
+      billy_tophat_landing_approach: {box: [575, 160, 862, 436]}
+      billy_tophat_landing_touchdown: {box: [1165, 170, 1450, 445]}
+      billy_tophat_landing_fall:     {box: [700, 505, 1080, 785], min_ratio: 0.08}
+      billy_tophat_landing_trip1:    {box: [20, 530, 330, 790]}
+      billy_tophat_landing_trip2:    {box: [350, 520, 700, 792]}   # hat still on (wing clamps it): S07 end frame

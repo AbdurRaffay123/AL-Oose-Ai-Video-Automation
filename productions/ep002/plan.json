@@ -1,0 +1,291 @@
+{
+  "title": "EP002 The Deal",
+  "meta": {
+    "format": "9:16",
+    "resolution": "720p",
+    "music": "playful-adventure",
+    "budget": 4.5,
+    "fps": 24,
+    "captions": "off",
+    "model": "ltx-2-3-pro",
+    "talking_engine": "kling_avatar",
+    "action_engine": "kling3_action",
+    "spend_cap": 4.5,
+    "session_cap": 4.5,
+    "negatives": "billy_hands"
+  },
+  "approval_code": "73E4AF37",
+  "new_cost": 0.0,
+  "shots": [
+    {
+      "id": "S01",
+      "kind": "talk",
+      "engine": "kling3_talk",
+      "scene": "GRASS_STUMP",
+      "cast": [
+        {
+          "char": "young_saul",
+          "variant": "default",
+          "art": "saul_standing_tall",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false,
+          "role": ""
+        },
+        {
+          "char": "bad_billy",
+          "variant": "tophat",
+          "art": "billy_tophat_34left",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false,
+          "role": "with"
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L022_young_saul"
+      ],
+      "sfx": [
+        {
+          "name": "chomp",
+          "at": 0.0
+        }
+      ],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Young Saul: a small pink cartoon worm with huge round pale-blue eyes, brown eyebrows, two buck teeth, white cartoon gloves, dark purple rings near his tail. Young Saul talks (expressive), his mouth/beak opening and closing in time with the speech, with small natural head and body movements while he says: \"Excuse me, Bad Billy, I have something to say. If you give me a chance, I will tell you, okay?\" Only Young Saul is speaking. The camera stays still. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [],
+      "source_line": 22,
+      "duration": 6.0,
+      "gen_seconds": 6.0,
+      "prompt_key": "saul_brave",
+      "acting": "expressive",
+      "start_cast": null,
+      "zoom": 1.15,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S02",
+      "kind": "talk",
+      "engine": "kling3_talk_std",
+      "scene": "GRASS_FLOWERS",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": "tophat",
+          "art": "billy_tophat_34left",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L025_bad_billy"
+      ],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Bad Billy: a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black striped shorts, blue and red sneakers, long yellow feather wings used like hands. Bad Billy talks (surprised), his mouth/beak opening and closing in time with the speech, with small natural head and body movements while he says: \"REALLY?! Who dares talk to me?\" Only Bad Billy is speaking. The camera stays still. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [],
+      "source_line": 25,
+      "duration": 4.0,
+      "gen_seconds": 4.0,
+      "prompt_key": "billy_outraged",
+      "acting": "surprised",
+      "start_cast": null,
+      "zoom": 1.45,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S03",
+      "kind": "talk",
+      "engine": "kling_avatar",
+      "scene": "GRASS_SIGN",
+      "cast": [
+        {
+          "char": "young_saul",
+          "variant": "default",
+          "art": "saul_cheerful",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L028_young_saul"
+      ],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Young Saul: a small pink cartoon worm with huge round pale-blue eyes, brown eyebrows, two buck teeth, white cartoon gloves, dark purple rings near his tail. Young Saul talks (expressive), his mouth/beak opening and closing in time with the speech, with small natural head and body movements while he says: \"Have you seen The Big Guy? He is huge like a tree. A far bigger dinner than fifty of me!\" Only Young Saul is speaking. The camera stays still. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [],
+      "source_line": 28,
+      "duration": 6.42,
+      "gen_seconds": 6.42,
+      "prompt_key": "saul_pitch",
+      "acting": "expressive",
+      "start_cast": null,
+      "zoom": 1.1,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S04",
+      "kind": "talk",
+      "engine": "kling_avatar",
+      "scene": "GRASS_FLOWERS",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": "tophat",
+          "art": "billy_tophat_34left",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L031_bad_billy"
+      ],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Bad Billy: a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black striped shorts, blue and red sneakers, long yellow feather wings used like hands. Bad Billy talks (suspicious), his mouth/beak opening and closing in time with the speech, with small natural head and body movements while he says: \"Okay. But if this is a trick, you won't get away, as I'm awfully quick!\" Only Bad Billy is speaking. The camera stays still. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [],
+      "source_line": 31,
+      "duration": 5.25,
+      "gen_seconds": 5.25,
+      "prompt_key": "billy_menace",
+      "acting": "suspicious",
+      "start_cast": null,
+      "zoom": 1.0,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S05",
+      "kind": "talk",
+      "engine": "kling3_talk",
+      "scene": "SKY_SHIP",
+      "cast": [
+        {
+          "char": "young_saul",
+          "variant": "default",
+          "art": "billy_tophat_fly_saul_down",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L034_young_saul"
+      ],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Young Saul: a small pink cartoon worm with huge round pale-blue eyes, brown eyebrows, two buck teeth, white cartoon gloves, dark purple rings near his tail. Young Saul talks (expressive), his mouth/beak opening and closing in time with the speech, with small natural head and body movements while he says: \"Oh wow! I always wanted to fly!\" Only Young Saul is speaking. The camera stays still. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [],
+      "source_line": 34,
+      "duration": 4.0,
+      "gen_seconds": 4.0,
+      "prompt_key": "saul_riding",
+      "acting": "expressive",
+      "start_cast": null,
+      "zoom": 1.45,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S06",
+      "kind": "endcard",
+      "engine": "local_endcard",
+      "scene": "END_CARD",
+      "cast": [],
+      "end_cast": [],
+      "lines": [
+        "L040_narrator"
+      ],
+      "sfx": [],
+      "prompt": "",
+      "camera": "static",
+      "motion": [],
+      "source_line": 40,
+      "duration": 9.5,
+      "gen_seconds": 0.0,
+      "prompt_key": "",
+      "acting": "",
+      "start_cast": null,
+      "zoom": 1.0,
+      "min_secs": 9.5,
+      "cut": 0.0,
+      "trim": 0.0,
+      "card": "title",
+      "card_text": "Link in bio \ud83d\udc1b",
+      "emoji": "",
+      "backdrop": "SKY_SHIP"
+    }
+  ],
+  "jobs": [
+    {
+      "shot": "S01",
+      "endpoint": "kling3-talk",
+      "cost": 0.672,
+      "request_hash": "fal:cee9cb706d3c2e510b132ae8"
+    },
+    {
+      "shot": "S02",
+      "endpoint": "kling3-talk",
+      "cost": 0.504,
+      "request_hash": "fal:c7346b36468bd94dd3a91152"
+    },
+    {
+      "shot": "S03",
+      "endpoint": "kling-avatar",
+      "cost": 0.3372,
+      "request_hash": "fal:615e98f030ac860467fc59b3"
+    },
+    {
+      "shot": "S04",
+      "endpoint": "kling-avatar",
+      "cost": 0.281,
+      "request_hash": "fal:c9b9b2d197e7f196b17989e9"
+    },
+    {
+      "shot": "S05",
+      "endpoint": "kling3-talk",
+      "cost": 0.448,
+      "request_hash": "fal:b3ef2bf1e406a70040cdefd8"
+    }
+  ]
+}

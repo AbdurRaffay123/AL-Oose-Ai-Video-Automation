@@ -1,0 +1,154 @@
+# Character -> voice registry. Written by `bbtb voices ...`; safe to read, edit only `settings`.
+# voice IDs are not secrets; the API key lives only in .env.
+defaults:
+  provider: elevenlabs
+  model_id: eleven_multilingual_v2
+characters:
+  bad_billy:
+    assessment:
+      verdict: limited
+      speech_seconds: 5.3
+      note: '5.3s of speech (ElevenLabs advises about 60s): the clone may only loosely
+        match. More recordings would improve it.'
+    provider: elevenlabs
+    rights_confirmed: true
+    rights_confirmed_at: '2026-10-03T17:32:04'
+    approved: true
+    elevenlabs:
+      voice_id: P7F9PUE00ia0MTMWykwh
+      ref_version: 2
+      reference_file: library/derived/voice_refs/bad_billy_v2.wav
+      reference_seconds: 28.8
+      source_files:
+      - BadBilly - Who_Are_You_and_what_do_u_want?.wav
+      - BadBilly - GoAwayStopFollowingUs.wav
+      - BadBilly_I'll_get_you!!!.wav
+      - BadBilly_silly_Little_Worm.wav
+      - BadBilly - Screams in pain.wav
+      - BadBilly - GRUNCHY GROWL - Arrrrrr.wav
+      - bad-billy-voice.wav
+      source_sha256: 95d320e8e14eddf7
+      cloned_at: '2026-10-03T17:32:04'
+      settings:
+        stability: 0.45
+        similarity_boost: 0.85
+        style: 0.3
+        use_speaker_boost: true
+        speed: 1.0
+      replaced_voice_id: fFaS1yzAqPneDXnQ0rbL
+      replaced_voice_deleted_at: '2026-10-03T17:32:06'
+      test:
+        voice_id: P7F9PUE00ia0MTMWykwh
+        text: Silly little worm!
+        file: /Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep001-big-guy/reviews/voice_test/elevenlabs/approved/bad_billy_test_v2.wav
+        generated_at: '2026-10-03T17:32:28'
+    approved_at: '2026-10-03T17:46:36'
+    approved_after_test: /Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep001-big-guy/reviews/voice_test/elevenlabs/approved/bad_billy_test_v2.wav
+  big_pea:
+    assessment:
+      verdict: limited
+      speech_seconds: 5.0
+      note: '5.0s of speech (ElevenLabs advises about 60s): the clone may only loosely
+        match. More recordings would improve it.'
+    provider: elevenlabs
+    rights_confirmed: true
+    rights_confirmed_at: '2026-10-03T18:17:04'
+    approved: false
+    elevenlabs:
+      voice_id: PhCtPaVMVgQuV2ts4Ghy
+      source_files:
+      - BigPea - Why_Are_You_Still_Here.wav
+      - BigPea- You_Are_Very_Annoying.wav
+      - BigPea_Go_Away_Stop_following_me.wav
+      source_sha256: 441afd5d7f157287
+      cloned_at: '2026-10-03T18:17:04'
+      settings:
+        stability: 0.45
+        similarity_boost: 0.85
+        style: 0.3
+        use_speaker_boost: true
+        speed: 1.0
+  narrator:
+    assessment:
+      verdict: limited
+      speech_seconds: 5.8
+      note: '5.8s of speech (ElevenLabs advises about 60s): the clone may only loosely
+        match. More recordings would improve it.'
+    provider: elevenlabs
+    rights_confirmed: true
+    rights_confirmed_at: '2026-10-03T17:47:15'
+    approved: true
+    elevenlabs:
+      voice_id: 5FWWdk2JXJXw27LbrXGx
+      source_files:
+      - narrator_helpworm_vocals.wav
+      source_sha256: 2f7c6bf365e9d47c
+      cloned_at: '2026-10-03T17:47:15'
+      settings:
+        stability: 0.45
+        similarity_boost: 0.85
+        style: 0.3
+        use_speaker_boost: true
+        speed: 1.0
+      test:
+        voice_id: 5FWWdk2JXJXw27LbrXGx
+        text: Bad Billy the Bird loved to eat worms.
+        file: /Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep001-big-guy/reviews/voice_test/elevenlabs/approved/narrator_test_v1.wav
+        generated_at: '2026-10-03T17:50:22'
+    approved_at: '2026-10-03T17:59:03'
+    approved_after_test: /Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep001-big-guy/reviews/voice_test/elevenlabs/approved/narrator_test_v1.wav
+  snail:
+    assessment:
+      verdict: insufficient
+      speech_seconds: 4.4
+      note: 'only 4.4s of speech; ElevenLabs advises about 60s. Record 30-60s more
+        of this character (varied lines and emotions, quiet room, no music). Noticeable
+        background noise in: 34.Snail - Ah - These Birds are big trouble makers mun...wav,
+        36.Snail - Go ON!!! -Shooo you SILLY BIRDS!!!!.wav.'
+    provider: elevenlabs
+    rights_confirmed: true
+    rights_confirmed_at: '2026-10-03T18:17:17'
+    approved: false
+    elevenlabs:
+      voice_id: QjFbUJVm3vUxlxuBOery
+      source_files:
+      - 34.Snail - Ah - These Birds are big trouble makers mun...wav
+      - 36.Snail - Go ON!!! -Shooo you SILLY BIRDS!!!!.wav
+      source_sha256: 1be4c47ce0270c94
+      cloned_at: '2026-10-03T18:17:17'
+      settings:
+        stability: 0.45
+        similarity_boost: 0.85
+        style: 0.3
+        use_speaker_boost: true
+        speed: 1.0
+  young_saul:
+    assessment:
+      verdict: insufficient
+      speech_seconds: 2.3
+      note: only 2.3s of speech; ElevenLabs advises about 60s. Record 30-60s more
+        of this character (varied lines and emotions, quiet room, no music).
+    provider: elevenlabs
+    rights_confirmed: true
+    rights_confirmed_at: '2026-10-03T17:46:57'
+    approved: true
+    elevenlabs:
+      voice_id: h4gMqfA5m1KtiSa1x7eg
+      source_files:
+      - 38.Saul the Worm. - I think we're gunna need your help.wav
+      - Saul the Worm - I don't trust these birds..wav
+      source_sha256: 1fffd7c752c76ae9
+      cloned_at: '2026-10-03T17:46:57'
+      settings:
+        stability: 0.45
+        similarity_boost: 0.85
+        style: 0.3
+        use_speaker_boost: true
+        speed: 1.0
+      test:
+        voice_id: h4gMqfA5m1KtiSa1x7eg
+        text: Hey Billy, want to meet The Big Guy?
+        file: /Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep001-big-guy/reviews/voice_test/elevenlabs/approved/young_saul_test_v1.wav
+        generated_at: '2026-10-03T17:50:06'
+    approved_at: '2026-10-03T17:59:03'
+    approved_after_test: /Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep001-big-guy/reviews/voice_test/elevenlabs/approved/young_saul_test_v1.wav

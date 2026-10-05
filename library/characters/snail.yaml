@@ -1,0 +1,17 @@
+id: snail
+display_name: Snail
+height: 0.35
+mirror_ok: true
+default_variant: default
+variants:
+  default:
+    identity_prompt: "an orange-shelled cartoon snail with big googly eyes and a tiny top hat"
+    poses: {}          # no dedicated art; only book pages 12/14
+    expressions: {}
+voice:
+  originals:
+    "Ah, these birds are big trouble makers, mun.": audio.snail.34-snail-ah-these-birds-are-big-trouble-makers-mun
+    "Go on! Shoo, you silly birds!": audio.snail.36-snail-go-on-shooo-you-silly-birds
+  clone_reference: [audio.snail.34-snail-ah-these-birds-are-big-trouble-makers-mun,
+                    audio.snail.36-snail-go-on-shooo-you-silly-birds]
+  clone_id: null

@@ -1,0 +1,40 @@
+# Named crops from Jason's OFFICIAL character sheets (Character-Facials-sheet, 2026-10-05). Boxes are [x0, y0, x1, y1]
+# in the sheet's pixels, tight around the art (no labels), used to build scene reference boards and Kling elements.
+sheets:
+  billy_heads: character-facials-sheet.whatsapp-image-2026-10-05-at-02-39-43
+  billy_turn:  character-facials-sheet.whatsapp-image-2026-10-05-at-02-39-55
+  billy_land:  character-facials-sheet.whatsapp-image-2026-10-05-at-02-40-11
+  saul_bible:  character-facials-sheet.whatsapp-image-2026-10-05-at-02-42-00
+crops:
+  billy_head_neutral:    [billy_heads, [18, 160, 192, 362]]
+  billy_head_suspicious: [billy_heads, [204, 168, 376, 362]]
+  billy_head_angry:      [billy_heads, [572, 160, 744, 362]]
+  billy_head_surprised:  [billy_heads, [752, 160, 936, 362]]
+  billy_head_talking:    [billy_heads, [560, 448, 748, 655]]
+  billy_head_thinking:   [billy_heads, [744, 452, 916, 655]]
+  billy_head_skeptical:  [billy_heads, [920, 452, 1088, 655]]
+  billy_detail_monocle:  [billy_heads, [16, 748, 176, 864]]
+  billy_detail_beak:     [billy_heads, [756, 748, 940, 864]]
+  billy_turn_front:      [billy_turn, [28, 168, 196, 528]]
+  billy_turn_34left:     [billy_turn, [232, 168, 412, 528]]
+  billy_turn_sideleft:   [billy_turn, [418, 168, 606, 528]]
+  billy_turn_34right:    [billy_turn, [1030, 168, 1210, 528]]
+  billy_detail_badge:    [billy_turn, [424, 622, 622, 780]]
+  billy_detail_wing:     [billy_turn, [634, 622, 818, 780]]
+  billy_detail_shoe:     [billy_turn, [826, 622, 1024, 780]]
+  billy_detail_tail:     [billy_turn, [1252, 622, 1474, 780]]
+  billy_fly_approach1:   [billy_land, [18, 150, 330, 440]]
+  billy_fly_approach2:   [billy_land, [345, 150, 640, 440]]
+  saul_standing_tall:    [saul_bible, [1245, 186, 1392, 436]]
+  saul_talking:          [saul_bible, [785, 190, 985, 395]]
+  saul_cheerful:         [saul_bible, [988, 190, 1168, 395]]
+  saul_riding:           [saul_bible, [12, 520, 300, 718]]
+  saul_face_happy:       [saul_bible, [22, 830, 128, 965]]
+  saul_face_excited:     [saul_bible, [478, 830, 584, 965]]
+  saul_face_surprised:   [saul_bible, [132, 830, 238, 965]]
+  saul_ball:             [saul_bible, [22, 190, 200, 395]]
+  saul_idle_lookup:      [saul_bible, [385, 190, 565, 395]]
+  saul_face_worried:     [saul_bible, [248, 830, 354, 965]]
+  saul_face_scared:      [saul_bible, [362, 830, 468, 965]]
+  billy_head_happy:      [billy_heads, [392, 160, 566, 362]]
+  billy_head_scared:     [billy_heads, [936, 160, 1118, 362]]

@@ -1,0 +1,420 @@
+{
+  "title": "EP003 Rule Number One",
+  "meta": {
+    "format": "9:16",
+    "resolution": "720p",
+    "music": "playful-adventure",
+    "budget": 5.0,
+    "fps": 24,
+    "captions": "off",
+    "model": "ltx-2-3-pro",
+    "talking_engine": "kling_avatar",
+    "action_engine": "kling3_action",
+    "spend_cap": 8.0,
+    "session_cap": 5.0,
+    "negatives": "billy_hands,saul_body",
+    "keyframes": null,
+    "elements": "on",
+    "bg_element": "on",
+    "shot_cap": 0.7
+  },
+  "approval_code": "7B78FC61",
+  "new_cost": 1.55,
+  "shots": [
+    {
+      "id": "S01",
+      "kind": "talk",
+      "engine": "kling3_talk_std",
+      "scene": "BG_OAK_TREEHOUSE",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": "tophat",
+          "art": "billy_tophat_34left",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L016_bad_billy"
+      ],
+      "sfx": [
+        {
+          "name": "tummy",
+          "at": 0.0
+        }
+      ],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Bad Billy: a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black striped shorts, blue and red sneakers, long yellow feather wings used like hands. Bad Billy talks (suspicious), his mouth/beak opening and closing in time with the speech, with small natural head and body movements while he says: \"My tummy... it's EMPTY again!\" Only Bad Billy is speaking. The camera stays still. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [],
+      "source_line": 16,
+      "duration": 4.0,
+      "gen_seconds": 4.0,
+      "prompt_key": "billy_hungry",
+      "acting": "suspicious",
+      "start_cast": null,
+      "zoom": 1.55,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S02",
+      "kind": "hold",
+      "engine": "local_still",
+      "scene": "BG_OAK_TREEHOUSE",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": "tophat",
+          "art": "billy_tophat_34left",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L017_narrator"
+      ],
+      "sfx": [],
+      "prompt": "",
+      "camera": "push_in",
+      "motion": [],
+      "source_line": 0,
+      "duration": 4.84,
+      "gen_seconds": 0.0,
+      "prompt_key": "",
+      "acting": "",
+      "start_cast": null,
+      "zoom": 1.55,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S03",
+      "kind": "hold",
+      "engine": "local_still",
+      "scene": "BG_OAK_TREEHOUSE",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": "tophat",
+          "art": "billy_tophat_34left",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L018_narrator"
+      ],
+      "sfx": [],
+      "prompt": "",
+      "camera": "push_in",
+      "motion": [],
+      "source_line": 0,
+      "duration": 4.59,
+      "gen_seconds": 0.0,
+      "prompt_key": "",
+      "acting": "",
+      "start_cast": null,
+      "zoom": 1.55,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S04",
+      "kind": "action",
+      "engine": "kling3_action",
+      "scene": "GRASS_STUMP",
+      "cast": [],
+      "end_cast": [
+        {
+          "char": "young_saul",
+          "variant": null,
+          "art": "saul_ball_front",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "lines": [
+        "L021_narrator"
+      ],
+      "sfx": [
+        {
+          "name": "pop",
+          "at": 1.2
+        }
+      ],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Young Saul: a small pink cartoon worm with huge round pale-blue eyes, brown eyebrows, two buck teeth, white cartoon gloves, dark purple rings near his tail. Young Saul pops up out of the hollow stump with his yellow ball. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [],
+      "source_line": 23,
+      "duration": 3.0,
+      "gen_seconds": 3.0,
+      "prompt_key": "saul_pop",
+      "acting": "Young Saul pops up out of the hollow stump with his yellow ball.",
+      "start_cast": null,
+      "zoom": 1.0,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S05",
+      "kind": "talk",
+      "engine": "kling_avatar",
+      "scene": "GRASS_SIGN",
+      "cast": [
+        {
+          "char": "young_saul",
+          "variant": "default",
+          "art": "saul_ball_front",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L026_young_saul"
+      ],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Young Saul: a small pink cartoon worm with huge round pale-blue eyes, brown eyebrows, two buck teeth, white cartoon gloves, dark purple rings near his tail. Young Saul talks (expressive), his mouth/beak opening and closing in time with the speech, with small natural head and body movements while he says: \"Ball time, everybody!\" Only Young Saul is speaking. The camera stays still. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [],
+      "source_line": 26,
+      "duration": 1.8,
+      "gen_seconds": 1.8,
+      "prompt_key": "saul_balltime",
+      "acting": "expressive",
+      "start_cast": null,
+      "zoom": 1.0,
+      "min_secs": 0.0,
+      "cut": 1.6,
+      "trim": 0.0,
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S06",
+      "kind": "hold",
+      "engine": "local_still",
+      "scene": "BG_MEADOW_SIGN_FLOWERS",
+      "cast": [],
+      "end_cast": [],
+      "lines": [
+        "L029_narrator"
+      ],
+      "sfx": [],
+      "prompt": "",
+      "camera": "push_in",
+      "motion": [],
+      "source_line": 0,
+      "duration": 4.31,
+      "gen_seconds": 0.0,
+      "prompt_key": "",
+      "acting": "",
+      "start_cast": null,
+      "zoom": 1.0,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S07",
+      "kind": "talk",
+      "engine": "kling3_talk_std",
+      "scene": "BG_OAK_TREEHOUSE",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": "tophat",
+          "art": "billy_tophat_34left",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L032_bad_billy"
+      ],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Bad Billy: a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black striped shorts, blue and red sneakers, long yellow feather wings used like hands. Bad Billy talks (skeptical), his mouth/beak opening and closing in time with the speech, with small natural head and body movements while he says: \"Lunch... is served!\" Only Bad Billy is speaking. The camera stays still. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [],
+      "source_line": 32,
+      "duration": 3.0,
+      "gen_seconds": 3.0,
+      "prompt_key": "billy_lunch",
+      "acting": "skeptical",
+      "start_cast": null,
+      "zoom": 1.55,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S08",
+      "kind": "action",
+      "engine": "kling3_action",
+      "scene": "GRASS_STUMP",
+      "cast": [
+        {
+          "char": "young_saul",
+          "variant": null,
+          "art": "saul_idle",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [
+        {
+          "char": "young_saul",
+          "variant": null,
+          "art": "saul_idle",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "lines": [
+        "L035_narrator"
+      ],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Young Saul: a small pink cartoon worm with huge round pale-blue eyes, brown eyebrows, two buck teeth, white cartoon gloves, dark purple rings near his tail. Young Saul looks up at the tree and trembles with fear. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [
+        "pose:saul_idle"
+      ],
+      "source_line": 36,
+      "duration": 5.0,
+      "gen_seconds": 5.0,
+      "prompt_key": "saul_fear",
+      "acting": "Young Saul looks up at the tree and trembles with fear.",
+      "start_cast": [
+        {
+          "char": "young_saul",
+          "variant": null,
+          "art": "saul_idle",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "zoom": 1.0,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S09",
+      "kind": "endcard",
+      "engine": "local_endcard",
+      "scene": "END_CARD",
+      "cast": [],
+      "end_cast": [],
+      "lines": [
+        "L041_narrator"
+      ],
+      "sfx": [],
+      "prompt": "",
+      "camera": "static",
+      "motion": [],
+      "source_line": 41,
+      "duration": 6.0,
+      "gen_seconds": 0.0,
+      "prompt_key": "",
+      "acting": "",
+      "start_cast": null,
+      "zoom": 1.0,
+      "min_secs": 6.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "card": "tease",
+      "card_text": "YES or NO? | Comment below!",
+      "emoji": "",
+      "backdrop": "GRASS_STUMP"
+    }
+  ],
+  "jobs": [
+    {
+      "shot": "S01",
+      "endpoint": "kling3-talk",
+      "cost": 0.504,
+      "request_hash": "fal:af31030b3afcb9716f9cb1ec"
+    },
+    {
+      "shot": "S04",
+      "endpoint": "kling3-action",
+      "cost": 0.252,
+      "request_hash": "fal:24de31e1902edc53ebfd76dc"
+    },
+    {
+      "shot": "S05",
+      "endpoint": "kling-avatar",
+      "cost": 0.1124,
+      "request_hash": "fal:2449251fc1bcbe70e847bad7"
+    },
+    {
+      "shot": "S07",
+      "endpoint": "kling3-talk",
+      "cost": 0.378,
+      "request_hash": "fal:c670d250cc32e3355bc408de"
+    },
+    {
+      "shot": "S08",
+      "endpoint": "kling3-action",
+      "cost": 0.42,
+      "request_hash": "fal:18579f3d57a2c547c9178ed3"
+    }
+  ]
+}
