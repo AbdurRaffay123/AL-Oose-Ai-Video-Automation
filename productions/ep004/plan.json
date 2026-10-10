@@ -1,0 +1,710 @@
+{
+  "title": "EP004 WATCH OUT!",
+  "meta": {
+    "format": "9:16",
+    "resolution": "720p",
+    "music": "playful-adventure",
+    "budget": 6.0,
+    "fps": 24,
+    "captions": "off",
+    "model": "ltx-2-3-pro",
+    "talking_engine": "kling_avatar",
+    "action_engine": "kling3_action",
+    "spend_cap": 6.0,
+    "session_cap": 6.0,
+    "negatives": "billy_hands",
+    "keyframes": null,
+    "elements": "on",
+    "bg_element": null,
+    "shot_cap": 0.7
+  },
+  "approval_code": "44126E35",
+  "new_cost": 0.0,
+  "shots": [
+    {
+      "id": "S01a",
+      "kind": "action",
+      "engine": "kling3_action",
+      "scene": "GRASS_STUMP",
+      "cast": [
+        {
+          "char": "worms",
+          "variant": null,
+          "art": "worms_group_ball",
+          "framing": "wide",
+          "side": "center",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [
+        {
+          "char": "worms",
+          "variant": null,
+          "art": "worms_group_ball",
+          "framing": "wide",
+          "side": "center",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "lines": [
+        "L017_narrator"
+      ],
+      "sfx": [
+        {
+          "name": "giggles",
+          "at": 0.2,
+          "vol": 0.1
+        }
+      ],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. the four naughty worms: four small light-pink cartoon worms with no legs, huge round pale-blue eyes and white cartoon gloves. The four naughty worms play ball on the grass, bouncing it between them. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [
+        "loop",
+        "pose:worms_group_ball"
+      ],
+      "source_line": 18,
+      "duration": 4.875,
+      "gen_seconds": 4.0,
+      "prompt_key": "worms_play_v5",
+      "acting": "The four naughty worms play ball on the grass, bouncing it between them.",
+      "start_cast": [
+        {
+          "char": "worms",
+          "variant": null,
+          "art": "worms_group_ball",
+          "framing": "wide",
+          "side": "center",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "zoom": 1.0,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "reuse": "",
+      "reuse_from": 0.0,
+      "line_at": {},
+      "fx": "",
+      "fx_args": {
+        "gen": "4",
+        "id": "S01a"
+      },
+      "out": 0.0,
+      "place": "0.5/0.0/1.0",
+      "place_end": "0.5/0.0/1.0",
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S01b",
+      "kind": "action",
+      "engine": "kling_avatar",
+      "scene": "BG_OAK_TREEHOUSE",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_34right",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L024_narrator",
+        "L025_bad_billy"
+      ],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Bad Billy: a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black striped shorts, blue and red sneakers, long yellow feather wings used like hands. High in the oak, Bad Billy watches the meadow below, his eyes narrowing into a sly smile. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [
+        "pose:billy_tophat_34right"
+      ],
+      "source_line": 26,
+      "duration": 5.55,
+      "gen_seconds": 5.55,
+      "prompt_key": "billy_watch_avatar",
+      "acting": "High in the oak, Bad Billy watches the meadow below, his eyes narrowing into a sly smile.",
+      "start_cast": null,
+      "zoom": 1.55,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "reuse": "",
+      "reuse_from": 0.0,
+      "line_at": {
+        "L025_bad_billy": 3.95
+      },
+      "fx": "",
+      "fx_args": {
+        "id": "S01b"
+      },
+      "out": 0.0,
+      "place": "0.42/0.30/0.66",
+      "place_end": "0.42/0.30/0.66",
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S02",
+      "kind": "action",
+      "engine": "kling3_action",
+      "scene": "GRASS_FLOWERS",
+      "cast": [
+        {
+          "char": "snail",
+          "variant": null,
+          "art": "snail_side",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [
+        {
+          "char": "snail",
+          "variant": null,
+          "art": "snail_side",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "lines": [
+        "L032_snail"
+      ],
+      "sfx": [
+        {
+          "name": "alarm",
+          "at": 0.0,
+          "vol": 0.06
+        }
+      ],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Snail: an orange-shelled cartoon snail with big googly eyes and a tiny top hat. The Snail looks up at the tree, his eyes snap wide open and he shouts a silent warning. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [
+        "loop",
+        "pose:snail_side"
+      ],
+      "source_line": 33,
+      "duration": 1.8,
+      "gen_seconds": 3.0,
+      "prompt_key": "snail_watchout_v2",
+      "acting": "The Snail looks up at the tree, his eyes snap wide open and he shouts a silent warning.",
+      "start_cast": [
+        {
+          "char": "snail",
+          "variant": null,
+          "art": "snail_side",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "zoom": 1.0,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "reuse": "",
+      "reuse_from": 0.0,
+      "line_at": {
+        "L032_snail": 0.32
+      },
+      "fx": "",
+      "fx_args": {
+        "id": "S02",
+        "bubble": "WATCH OUT!!!!@0.35@x0.28/y0.13/tail0.455/0.245"
+      },
+      "out": 1.8,
+      "place": "0.45/0.54/0.30",
+      "place_end": "0.45/0.54/0.30",
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S03",
+      "kind": "action",
+      "engine": "kling3_action",
+      "scene": "GRASS_STUMP",
+      "cast": [
+        {
+          "char": "worms",
+          "variant": null,
+          "art": "worms_group_ball",
+          "framing": "wide",
+          "side": "center",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [
+        {
+          "char": "worms",
+          "variant": null,
+          "art": "worms_group_ball_down",
+          "framing": "wide",
+          "side": "center",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "lines": [
+        "L039_narrator"
+      ],
+      "sfx": [
+        {
+          "name": "aaah",
+          "at": 0.15,
+          "vol": 0.05
+        }
+      ],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. the four naughty worms: four small light-pink cartoon worms with no legs, huge round pale-blue eyes and white cartoon gloves. The four naughty worms look up, jump and scramble in panic on the spot as the ball drops. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [
+        "pose:worms_group_ball_down"
+      ],
+      "source_line": 40,
+      "duration": 3.0,
+      "gen_seconds": 3.0,
+      "prompt_key": "worms_panic_v3",
+      "acting": "The four naughty worms look up, jump and scramble in panic on the spot as the ball drops.",
+      "start_cast": [
+        {
+          "char": "worms",
+          "variant": null,
+          "art": "worms_group_ball",
+          "framing": "wide",
+          "side": "center",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "zoom": 1.0,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "reuse": "",
+      "reuse_from": 0.0,
+      "line_at": {},
+      "fx": "",
+      "fx_args": {
+        "id": "S03"
+      },
+      "out": 0.0,
+      "place": "0.5/0.0/1.0",
+      "place_end": "0.5/0.0/1.0",
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S05",
+      "kind": "action",
+      "engine": "kling3_action",
+      "scene": "GRASS_STUMP",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_landing_approach4",
+          "framing": "wide",
+          "side": "center",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_landing_touchdown",
+          "framing": "wide",
+          "side": "center",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "lines": [],
+      "sfx": [
+        {
+          "name": "whoosh",
+          "at": 0.0
+        },
+        {
+          "name": "thud",
+          "at": 0.05
+        }
+      ],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Bad Billy: a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black striped shorts, blue and red sneakers, long yellow feather wings used like hands. Bad Billy's sneakers touch down on the grass with a small puff of dust and he skids to a stop, wings out for balance. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [
+        "pose:billy_tophat_landing_touchdown"
+      ],
+      "source_line": 46,
+      "duration": 1.21,
+      "gen_seconds": 3.0,
+      "prompt_key": "billy_land_soft",
+      "acting": "Bad Billy's sneakers touch down on the grass with a small puff of dust and he skids to a stop, wings out for balance.",
+      "start_cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_landing_approach4",
+          "framing": "wide",
+          "side": "center",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "zoom": 1.0,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.79,
+      "reuse": "",
+      "reuse_from": 0.0,
+      "line_at": {},
+      "fx": "",
+      "fx_args": {
+        "id": "S05"
+      },
+      "out": 2.0,
+      "place": "0.585/0.222/0.426/air",
+      "place_end": "0.60/0.28/0.38",
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S06",
+      "kind": "action",
+      "engine": "kling3_action",
+      "scene": "GRASS_FLOWERS",
+      "cast": [
+        {
+          "char": "snail",
+          "variant": null,
+          "art": "snail_side",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [
+        {
+          "char": "snail",
+          "variant": null,
+          "art": "snail_side",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "lines": [
+        "L054_narrator"
+      ],
+      "sfx": [
+        {
+          "name": "chomp",
+          "at": 1.625
+        },
+        {
+          "name": "chomp",
+          "at": 2.042
+        },
+        {
+          "name": "chomp",
+          "at": 2.542
+        },
+        {
+          "name": "gulp",
+          "at": 2.875,
+          "vol": 0.35
+        }
+      ],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Snail: an orange-shelled cartoon snail with big googly eyes and a tiny top hat. The Snail watches off screen, flinching at every chomp, and gasps in horror on the last one. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [
+        "loop",
+        "pose:snail_side"
+      ],
+      "source_line": 55,
+      "duration": 4.333,
+      "gen_seconds": 6.0,
+      "prompt_key": "snail_cutaway_v2",
+      "acting": "The Snail watches off screen, flinching at every chomp, and gasps in horror on the last one.",
+      "start_cast": [
+        {
+          "char": "snail",
+          "variant": null,
+          "art": "snail_side",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "zoom": 1.0,
+      "min_secs": 6.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "reuse": "",
+      "reuse_from": 0.0,
+      "line_at": {},
+      "fx": "",
+      "fx_args": {
+        "numbers": "1@1.625|2@2.042|3@2.542|4!@2.875@x0.85/y0.66/pop1.4",
+        "id": "S06"
+      },
+      "out": 0.0,
+      "place": "0.38/0.58/0.26",
+      "place_end": "0.38/0.58/0.26",
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S07",
+      "kind": "action",
+      "engine": "kling3_action",
+      "scene": "GRASS_STUMP",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_34left",
+          "framing": "wide",
+          "side": "center",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_34left",
+          "framing": "wide",
+          "side": "center",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "lines": [
+        "L060_bad_billy"
+      ],
+      "sfx": [
+        {
+          "name": "burp",
+          "at": 3.05
+        }
+      ],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Bad Billy: a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black striped shorts, blue and red sneakers, long yellow feather wings used like hands. Bad Billy stands alone, full and satisfied, pats his tummy with his wing, and the ball rolls to a stop at his feet. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [
+        "loop",
+        "pose:billy_tophat_34left"
+      ],
+      "source_line": 61,
+      "duration": 4.375,
+      "gen_seconds": 5.0,
+      "prompt_key": "billy_full_v3",
+      "acting": "Bad Billy stands alone, full and satisfied, pats his tummy with his wing, and the ball rolls to a stop at his feet.",
+      "start_cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_34left",
+          "framing": "wide",
+          "side": "center",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "zoom": 1.0,
+      "min_secs": 5.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "reuse": "",
+      "reuse_from": 0.0,
+      "line_at": {
+        "L060_bad_billy": 0.85
+      },
+      "fx": "",
+      "fx_args": {
+        "id": "S07",
+        "ball": "stop@2.9"
+      },
+      "out": 4.375,
+      "place": "0.60/0.18/0.48",
+      "place_end": "0.60/0.18/0.48",
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S08",
+      "kind": "talk",
+      "engine": "kling_avatar",
+      "scene": "GRASS_FLOWERS",
+      "cast": [
+        {
+          "char": "snail",
+          "variant": "default",
+          "art": "snail_side",
+          "framing": "medium",
+          "side": "left",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [],
+      "lines": [
+        "L066_snail"
+      ],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Snail: an orange-shelled cartoon snail with big googly eyes and a tiny top hat. Snail talks (expressive), his mouth/beak opening and closing in time with the speech, with small natural head and body movements while he says: \"Ah, these birds are big trouble makers, mun.\" Only Snail is speaking. The camera stays still. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [],
+      "source_line": 66,
+      "duration": 3.84,
+      "gen_seconds": 3.84,
+      "prompt_key": "snail_closing_v2",
+      "acting": "expressive",
+      "start_cast": null,
+      "zoom": 1.0,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "reuse": "",
+      "reuse_from": 0.0,
+      "line_at": {},
+      "fx": "",
+      "fx_args": {},
+      "out": 0.0,
+      "place": "",
+      "place_end": "",
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S09",
+      "kind": "endcard",
+      "engine": "local_endcard",
+      "scene": "END_CARD",
+      "cast": [],
+      "end_cast": [],
+      "lines": [],
+      "sfx": [
+        {
+          "name": "whoosh",
+          "at": 0.15
+        },
+        {
+          "name": "thud",
+          "at": 0.75
+        },
+        {
+          "name": "pop",
+          "at": 1.9
+        }
+      ],
+      "prompt": "",
+      "camera": "static",
+      "motion": [],
+      "source_line": 73,
+      "duration": 4.0,
+      "gen_seconds": 0.0,
+      "prompt_key": "",
+      "acting": "",
+      "start_cast": null,
+      "zoom": 1.0,
+      "min_secs": 4.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "reuse": "",
+      "reuse_from": 0.0,
+      "line_at": {},
+      "fx": "",
+      "fx_args": {},
+      "out": 0.0,
+      "place": "",
+      "place_end": "",
+      "card": "rule",
+      "card_text": "RULE NUMBER ONE... | LOOK UP! \ud83d\udc46 | Tag a friend who'd be worm #5 \ud83d\udc1b",
+      "emoji": "",
+      "backdrop": "GRASS_SIGN_LOW"
+    }
+  ],
+  "jobs": [
+    {
+      "shot": "S01a",
+      "endpoint": "kling3-action",
+      "cost": 0.336,
+      "request_hash": "fal:1dadd9b24440473fa9dd1a34"
+    },
+    {
+      "shot": "S01b",
+      "endpoint": "kling-avatar",
+      "cost": 0.3372,
+      "request_hash": "fal:967ca67f86876bddd7666f41"
+    },
+    {
+      "shot": "S02",
+      "endpoint": "kling3-action",
+      "cost": 0.252,
+      "request_hash": "fal:c7b87180209dd14972c3b61f"
+    },
+    {
+      "shot": "S03",
+      "endpoint": "kling3-action",
+      "cost": 0.252,
+      "request_hash": "fal:ba2a75a9988ae62eac15b927"
+    },
+    {
+      "shot": "S05",
+      "endpoint": "kling3-action",
+      "cost": 0.252,
+      "request_hash": "fal:69a950b96a6d09446c7723db"
+    },
+    {
+      "shot": "S06",
+      "endpoint": "kling3-action",
+      "cost": 0.504,
+      "request_hash": "fal:9f0d9f49a4e3c19590320a2b"
+    },
+    {
+      "shot": "S07",
+      "endpoint": "kling3-action",
+      "cost": 0.42,
+      "request_hash": "fal:47e7357eeddf16009dbc45d2"
+    },
+    {
+      "shot": "S08",
+      "endpoint": "kling-avatar",
+      "cost": 0.2248,
+      "request_hash": "fal:dfc0d47e4ca7a9e0d62c87b6"
+    }
+  ]
+}

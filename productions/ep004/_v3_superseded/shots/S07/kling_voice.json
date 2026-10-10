@@ -1,0 +1,22 @@
+{
+  "source": {
+    "seconds": 2.821,
+    "lead_silence": 0.05,
+    "tail_silence": 0.061,
+    "peak_db": -3.3,
+    "clipped": 0,
+    "noise_floor_db": -65.9
+  },
+  "prepared": {
+    "seconds": 2.81,
+    "lead_silence": 0.05,
+    "tail_silence": 0.04,
+    "peak_db": -1.5,
+    "clipped": 0,
+    "noise_floor_db": -61.8
+  },
+  "head_trim": 0.0,
+  "lufs": -16.2,
+  "source_sha256": "e2d1329e3447146da514ad1656046105ef776b1d6fc7d79302c192038095910a",
+  "source_path": "/Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/audio/originals/L028_snail.wav"
+}

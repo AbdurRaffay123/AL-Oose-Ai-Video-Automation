@@ -1,0 +1,8 @@
+studio/tests/test_grounding.py::test_every_background_has_a_ground_zone PASSED [ 14%]
+studio/tests/test_grounding.py::test_point_in_polygon PASSED             [ 28%]
+studio/tests/test_grounding.py::test_rejected_ep004_s07_feet_on_the_stump_rim_fail PASSED [ 42%]
+studio/tests/test_grounding.py::test_feet_on_flat_grass_pass PASSED      [ 57%]
+studio/tests/test_grounding.py::test_feet_on_leaves_or_cut_off_or_no_floor_fail PASSED [ 71%]
+studio/tests/test_grounding.py::test_only_script_tagged_airborne_poses_are_exempt PASSED [ 85%]
+studio/tests/test_grounding.py::test_contact_shadow_sits_under_the_soles PASSED [100%]
+============================== 7 passed in 1.06s ===============================

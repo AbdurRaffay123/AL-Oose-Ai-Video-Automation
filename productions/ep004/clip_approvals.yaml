@@ -1,0 +1,42 @@
+# Owner-approved generated clips (`bbtb approve-clip`). A new take needs a new approval.
+S01a:
+  approved: '2026-10-07'
+  note: 'v5 approved as-is by the owner: laughing faces, one ball, all 4 in place;
+    slowed 0.82x under the narration (clip_fixes)'
+  request_hash: fal:1dadd9b24440473fa9dd1a34
+S01b:
+  approved: '2026-10-07'
+  note: 'v7 Avatar approved as-is by the owner: still, on model; eyes narrow on the
+    growl at 3.95 s; beak closed; uses 0-5.4 s of the 7.2 s clip'
+  request_hash: fal:967ca67f86876bddd7666f41
+S02:
+  approved: '2026-10-06'
+  note: 'used 0-1.8 s only (cut:1.8): ends on the open-mouth shout, before the 2.0
+    s smear and the white eyes'
+  request_hash: fal:c7b87180209dd14972c3b61f
+S03:
+  approved: '2026-10-07'
+  note: 'approved with option A free fix: hold frame at 0.29s over 0.33-0.50s smear
+    (clip_fixes.yaml hold_frames [8,12])'
+  request_hash: fal:ba2a75a9988ae62eac15b927
+S05:
+  approved: '2026-10-06'
+  note: trim:0.79 (starts on f19, the first frame with sharp body + wings; hard cut
+    from S04 into the impact puff), used to the end
+  request_hash: fal:69a950b96a6d09446c7723db
+S06:
+  approved: '2026-10-07'
+  note: 'punch-in rebuild (clip_fixes.yaml edit + tint_eyes): 0.75x calm | 1.15x calm
+    | 1.3x eyes pop | 1.45x gasp tinted pale green; 4.33 s'
+  request_hash: fal:9f0d9f49a4e3c19590320a2b
+S07:
+  approved: '2026-10-06'
+  note: out:4.375 (ends on f104, last sharp badge after the beak closes at f101);
+    soft badge 2.75-3.08 s accepted as motion smear; BURP SFX at 3.05 s (beak opens
+    f73)
+  request_hash: fal:47e7357eeddf16009dbc45d2
+S08:
+  approved: '2026-10-07'
+  note: 'approved as-is by the owner: on model, pale-green eyes, calm (lips barely
+    move); his original recording carries the line'
+  request_hash: fal:dfc0d47e4ca7a9e0d62c87b6

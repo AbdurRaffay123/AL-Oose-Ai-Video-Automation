@@ -8,14 +8,18 @@ variants:
   default:
     identity_prompt: >-
       a round chubby yellow cartoon bird with a brown leather aviator helmet and big round goggles,
-      small orange beak, sleepy half-closed eyes, green sneakers
-    poses: {}          # TODO M7: cut from Big-Pea-Reference-Sheet / book crops
+      small orange beak, sleepy half-closed eyes, small yellow wing feathers, green sneakers
+    poses:             # Jason's Big Pea reference sheet (EP004, 2026-10-06; red test passed)
+      front: bigpea_front
+      34right: bigpea_34right
+    facing: {front: front, 34right: right}
     expressions: {}
 voice:
   originals:
     "Why are you still here?": audio.big-pea.bigpea-why-are-you-still-here
     "You are very annoying.": audio.big-pea.bigpea-you-are-very-annoying
     "Go away, I'm hungry!": audio.big-pea.bigpea-go-away-stop-following-me   # file is misnamed (Whisper-verified)
+    "Mwah-ha-ha-ha!": audio.big-pea.bigpea-evil-laughjentry   # the evil laugh (EP004 hook)
   clone_reference:    # spoken clips only (laugh excluded)
     - audio.big-pea.bigpea-why-are-you-still-here
     - audio.big-pea.bigpea-you-are-very-annoying

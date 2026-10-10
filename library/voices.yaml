@@ -107,21 +107,33 @@ characters:
         36.Snail - Go ON!!! -Shooo you SILLY BIRDS!!!!.wav.'
     provider: elevenlabs
     rights_confirmed: true
-    rights_confirmed_at: '2026-10-03T18:17:17'
-    approved: false
+    rights_confirmed_at: '2026-10-07T00:57:49'
+    approved: true
     elevenlabs:
-      voice_id: QjFbUJVm3vUxlxuBOery
+      voice_id: yhIWNEcHGKN35cMcxZxi
+      ref_version: 2
+      reference_file: library/derived/voice_refs/snail_v2.wav
+      reference_seconds: 6.66
       source_files:
       - 34.Snail - Ah - These Birds are big trouble makers mun...wav
       - 36.Snail - Go ON!!! -Shooo you SILLY BIRDS!!!!.wav
       source_sha256: 1be4c47ce0270c94
-      cloned_at: '2026-10-03T18:17:17'
+      cloned_at: '2026-10-07T00:57:49'
       settings:
         stability: 0.45
         similarity_boost: 0.85
         style: 0.3
         use_speaker_boost: true
         speed: 1.0
+      replaced_voice_id: QjFbUJVm3vUxlxuBOery
+      replaced_voice_deleted_at: '2026-10-07T00:57:51'
+      test:
+        voice_id: yhIWNEcHGKN35cMcxZxi
+        text: WATCH OUT!
+        file: /Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/reviews/voice_test/elevenlabs/approved/snail_test_2fd6725e.wav
+        generated_at: '2026-10-07T00:58:03'
+    approved_at: '2026-10-07T01:06:13'
+    approved_after_test: /Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/reviews/voice_test/elevenlabs/approved/snail_test_2fd6725e.wav
   young_saul:
     assessment:
       verdict: insufficient

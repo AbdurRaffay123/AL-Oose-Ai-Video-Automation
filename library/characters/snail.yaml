@@ -6,9 +6,12 @@ default_variant: default
 variants:
   default:
     identity_prompt: "an orange-shelled cartoon snail with big googly eyes and a tiny top hat"
-    poses: {}          # no dedicated art; only book pages 12/14
+    poses:             # book p.14 (EP004, 2026-10-06): cut over grass, bubble tail erased; red test passed
+      side: snail_side
+    facing: {side: right}
     expressions: {}
 voice:
+  denoise_originals: true   # light hiss in the pauses (about -46 dB): denoise + gate, speech level unchanged
   originals:
     "Ah, these birds are big trouble makers, mun.": audio.snail.34-snail-ah-these-birds-are-big-trouble-makers-mun
     "Go on! Shoo, you silly birds!": audio.snail.36-snail-go-on-shooo-you-silly-birds

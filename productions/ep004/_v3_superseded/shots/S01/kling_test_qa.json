@@ -1,0 +1,51 @@
+{
+  "shot": "S01",
+  "clip": "/Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/shots/S01/kling_test.mp4",
+  "verdict": "FAIL",
+  "consistency": 0.9,
+  "rows": [
+    {
+      "check": "Duration matches audio",
+      "expected": "~1.95s",
+      "actual": "2.13s",
+      "result": "PASS"
+    },
+    {
+      "check": "Resolution",
+      "expected": "720x1280",
+      "actual": "720x1280 @ 30 fps",
+      "result": "PASS"
+    },
+    {
+      "check": "First frame on-model",
+      "expected": "matches keyframe",
+      "actual": "score 9.2/10 (err 6.9)",
+      "result": "PASS"
+    },
+    {
+      "check": "Monocle on left eye (not mirrored)",
+      "expected": "Yes",
+      "actual": "same side as keyframe",
+      "result": "PASS"
+    },
+    {
+      "check": "Beak moves in speech",
+      "expected": "Yes",
+      "actual": "face motion 37.1 (background 1.3), sync with voice r=0.08",
+      "result": "WARN"
+    },
+    {
+      "check": "No watermark",
+      "expected": "Clean",
+      "actual": "no static overlay in the corners",
+      "result": "PASS"
+    },
+    {
+      "check": "No style drift",
+      "expected": "Consistent",
+      "actual": "consistency 0.9/10 (body min 1.5, face median 0.0)",
+      "result": "FAIL"
+    }
+  ],
+  "sheet": "/Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/shots/S01/kling_test_qa.jpg"
+}

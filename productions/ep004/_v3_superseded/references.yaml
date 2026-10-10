@@ -1,0 +1,10 @@
+# EP004 references (Kling 3.0 Standard shots only; Avatar takes none). Billy refs lead with head close-ups (chin).
+S02:
+  big_pea:
+    note: peers into the mine cart, then straightens up (3/4, facing right)
+    frontal: bigpea_34right
+    refs: [[bigpea_head_neutral, bigpea_head_angry], [bigpea_turn_front, bigpea_turn_sideright], [bigpea_detail_goggles, bigpea_detail_wing, bigpea_detail_shoe]]
+  bad_billy:
+    note: looks behind the signpost, grumpy (3/4 left)
+    frontal: billy_tophat_34left
+    refs: [[billy_head_neutral, billy_head_suspicious], [billy_turn_34left, billy_turn_front], [billy_detail_monocle, billy_detail_badge, billy_detail_wing, billy_detail_beak]]

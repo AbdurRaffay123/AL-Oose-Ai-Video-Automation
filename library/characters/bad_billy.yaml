@@ -27,7 +27,10 @@ variants:
       scroll-faceright: billy_tophat_scroll_faceright
       fly-saul-down: billy_tophat_fly_saul_down      # EP002: flying with Saul on his back (wing down)
       fly-saul-up: billy_tophat_fly_saul_up          # (wing up)
+      watch-down: billy_tophat_bust_lookdown   # look-down head on the 3/4-right body (EP004 S01b)
+      landing-approach1: billy_tophat_landing_approach1  # landing sheet 'Approach 1': fast dive, body level (EP004 S04a)
       landing-approach: billy_tophat_landing_approach  # landing sheet: coming in to land
+      landing-approach4: billy_tophat_landing_approach4  # signed-off landing sheet 'Approach 4': feet just above the grass (EP004 S05)
       landing-touchdown: billy_tophat_landing_touchdown
       landing-fall: billy_tophat_landing_fall        # tripped, tumbling, top hat flying off (hatless head: owner rejected it 2026-10-04, don't use)
       landing-trip1: billy_tophat_landing_trip1      # tripping, hat on
@@ -62,7 +65,10 @@ variants:
       scroll-faceright: right
       fly-saul-down: right
       fly-saul-up: right
+      watch-down: right
+      landing-approach1: right
       landing-approach: right
+      landing-approach4: right
       landing-touchdown: right
       landing-fall: right
       landing-trip1: right
@@ -92,7 +98,7 @@ variants:
       right: [billy_tophat_head_skeptical, billy_tophat_head_talking]
     tease_face: images.characters.bad-billy.billy-s-head   # end-card tease: official head art (owner 2026-10-05: face only)
     open_mouth: [talking, angry, shock]   # heads drawn with the beak open (poor first frames for lip sync)
-    face: {billy_tophat_34left: [0.38, 0.30], billy_tophat_34right: [0.62, 0.30]}   # push-in anchor between eye and beak (EP003: keeps the whole beak in a close-up)
+    face: {billy_tophat_34left: [0.38, 0.30], billy_tophat_34right: [0.62, 0.30], billy_tophat_bust_lookdown: [0.60, 0.30]}   # push-in anchor between eye and beak (EP003: keeps the whole beak in a close-up)
     kling_body:       # Kling 3.0 talking shots start from the full sheet pose facing the same way (no pasted head)
       {right: billy_tophat_34right, left: billy_tophat_34left, front: billy_tophat_front}
   goggles:
@@ -110,6 +116,7 @@ voice:
     "Who are you and what do you want?": audio.bad-billy.badbilly-who-are-you-and-what-do-u-want
     "Go away! Stop following us!": audio.bad-billy.badbilly-goawaystopfollowingus
     "I'll get you!": audio.bad-billy.badbilly-i-ll-get-you
+    "Arrrr!": audio.bad-billy.badbilly-grunchy-growl-arrrrrr   # EP004: only the last growl is used (audio/retimed)
   clone_reference:    # ALL 7 clips (owner decision 2026-10-03). Note: bad-billy-voice.wav is an exact
                       # compilation of the other 6 (verified by cross-correlation), so it adds no new material.
     - audio.bad-billy.badbilly-who-are-you-and-what-do-u-want

@@ -1,0 +1,175 @@
+{
+  "title": "TEST Kling O3 vs Kling 3.0 Standard: EP001 Billy at the rocks",
+  "meta": {
+    "format": "9:16",
+    "resolution": "720p",
+    "music": null,
+    "budget": 1.0,
+    "fps": 24,
+    "captions": "off",
+    "model": "ltx-2-3-pro",
+    "talking_engine": "ltx_a2v",
+    "action_engine": "kling3_action",
+    "spend_cap": 1.0,
+    "session_cap": 1.0,
+    "negatives": "billy_hands",
+    "keyframes": null,
+    "elements": "on",
+    "bg_element": null,
+    "shot_cap": 0.4
+  },
+  "approval_code": "14FF659C",
+  "new_cost": 0.34,
+  "shots": [
+    {
+      "id": "S01",
+      "kind": "action",
+      "engine": "kling3_action",
+      "scene": "BIG_WORM_HOLE",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_34left",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_34left",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "lines": [],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Bad Billy: a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black striped shorts, blue and red sneakers, long yellow feather wings used like hands. Bad Billy looks around the rocks for the worm, suspicious. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [
+        "loop",
+        "pose:billy_tophat_34left"
+      ],
+      "source_line": 11,
+      "duration": 4.0,
+      "gen_seconds": 4.0,
+      "prompt_key": "test_o3_suspicious",
+      "acting": "Bad Billy looks around the rocks for the worm, suspicious.",
+      "start_cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_34left",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "zoom": 1.55,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "reuse": "",
+      "reuse_from": 0.0,
+      "line_at": {},
+      "fx": "",
+      "fx_args": {
+        "id": "S01",
+        "gen": "4"
+      },
+      "out": 0.0,
+      "place": "",
+      "place_end": "",
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    },
+    {
+      "id": "S02",
+      "kind": "action",
+      "engine": "kling3_action",
+      "scene": "BIG_WORM_HOLE",
+      "cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_34left",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "end_cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_34left",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "lines": [],
+      "sfx": [],
+      "prompt": "2D hand-drawn children's picture-book cartoon animation in exactly the same art style, colours and line work as the input image. Smooth, gentle, readable cartoon motion. Bad Billy: a lanky yellow cartoon bird with a long orange beak, tall black top hat with a crack and a round silver badge with a red letter B, wild brown and orange head feathers, a monocle on his left eye, curly blue moustache whiskers, dark red vest, belt with a gold buckle, red and black striped shorts, blue and red sneakers, long yellow feather wings used like hands. Bad Billy looks around the rocks for the worm, suspicious. Keep every character's design exactly as in the input image: same costume, colours, proportions and accessories. No new characters, no text, no logos, no scene change.",
+      "camera": "static",
+      "motion": [
+        "loop",
+        "pose:billy_tophat_34left"
+      ],
+      "source_line": 12,
+      "duration": 4.0,
+      "gen_seconds": 4.0,
+      "prompt_key": "test_o3_suspicious",
+      "acting": "Bad Billy looks around the rocks for the worm, suspicious.",
+      "start_cast": [
+        {
+          "char": "bad_billy",
+          "variant": null,
+          "art": "billy_tophat_34left",
+          "framing": "medium",
+          "side": "right",
+          "mirror": false,
+          "role": ""
+        }
+      ],
+      "zoom": 1.55,
+      "min_secs": 0.0,
+      "cut": 0.0,
+      "trim": 0.0,
+      "reuse": "",
+      "reuse_from": 0.0,
+      "line_at": {},
+      "fx": "",
+      "fx_args": {
+        "id": "S02",
+        "gen": "4"
+      },
+      "out": 0.0,
+      "place": "",
+      "place_end": "",
+      "card": "",
+      "card_text": "",
+      "emoji": "",
+      "backdrop": ""
+    }
+  ],
+  "jobs": [
+    {
+      "shot": "S02",
+      "endpoint": "kling3-action",
+      "cost": 0.336,
+      "request_hash": "fal:2a15f762258cf1f7fa3e4c7f"
+    }
+  ]
+}

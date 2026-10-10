@@ -13,13 +13,13 @@
     "spend_cap": 8.0,
     "session_cap": 5.0,
     "negatives": "billy_hands,saul_body",
-    "keyframes": null,
+    "keyframes": "locked",
     "elements": "on",
     "bg_element": "on",
     "shot_cap": 0.7
   },
-  "approval_code": "7B78FC61",
-  "new_cost": 1.55,
+  "approval_code": "A8ADBABB",
+  "new_cost": 0.38,
   "shots": [
     {
       "id": "S01",
@@ -175,7 +175,7 @@
       "source_line": 23,
       "duration": 3.0,
       "gen_seconds": 3.0,
-      "prompt_key": "saul_pop",
+      "prompt_key": "saul_pop_v1",
       "acting": "Young Saul pops up out of the hollow stump with his yellow ball.",
       "start_cast": null,
       "zoom": 1.0,
@@ -190,7 +190,7 @@
     {
       "id": "S05",
       "kind": "talk",
-      "engine": "kling_avatar",
+      "engine": "kling3_talk_std",
       "scene": "GRASS_SIGN",
       "cast": [
         {
@@ -212,14 +212,14 @@
       "camera": "static",
       "motion": [],
       "source_line": 26,
-      "duration": 1.8,
-      "gen_seconds": 1.8,
-      "prompt_key": "saul_balltime",
+      "duration": 3.0,
+      "gen_seconds": 3.0,
+      "prompt_key": "saul_balltime_v2",
       "acting": "expressive",
       "start_cast": null,
       "zoom": 1.0,
       "min_secs": 0.0,
-      "cut": 1.6,
+      "cut": 0.0,
       "trim": 0.0,
       "card": "",
       "card_text": "",
@@ -333,7 +333,7 @@
       "source_line": 36,
       "duration": 5.0,
       "gen_seconds": 5.0,
-      "prompt_key": "saul_fear",
+      "prompt_key": "saul_fear_v1",
       "acting": "Young Saul looks up at the tree and trembles with fear.",
       "start_cast": [
         {
@@ -387,34 +387,10 @@
   ],
   "jobs": [
     {
-      "shot": "S01",
-      "endpoint": "kling3-talk",
-      "cost": 0.504,
-      "request_hash": "fal:af31030b3afcb9716f9cb1ec"
-    },
-    {
-      "shot": "S04",
-      "endpoint": "kling3-action",
-      "cost": 0.252,
-      "request_hash": "fal:24de31e1902edc53ebfd76dc"
-    },
-    {
       "shot": "S05",
-      "endpoint": "kling-avatar",
-      "cost": 0.1124,
-      "request_hash": "fal:2449251fc1bcbe70e847bad7"
-    },
-    {
-      "shot": "S07",
       "endpoint": "kling3-talk",
       "cost": 0.378,
-      "request_hash": "fal:c670d250cc32e3355bc408de"
-    },
-    {
-      "shot": "S08",
-      "endpoint": "kling3-action",
-      "cost": 0.42,
-      "request_hash": "fal:18579f3d57a2c547c9178ed3"
+      "request_hash": "fal:05920c089d76871ad1dea647"
     }
   ]
 }

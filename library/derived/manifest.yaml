@@ -74,6 +74,81 @@ bigguy_talking:
   - 115
   - 123
   status: draft
+bigpea_34right:
+  box:
+  - 262
+  - 162
+  - 488
+  - 436
+  file: library/derived/cutouts/bigpea_34right.png
+  method: cutout.extract (border flood-fill, largest component)
+  parent: images.characters.big-pea.big-pea-reference-sheet
+  parent_sha256: 88233aeb49f361118ebff25a9b5171c980590174343a0478b5983895c36a586d
+  sha256: 6bdd2022d42e0b24ab844c4d0efd2dec44d88afe98c16f7d494a0547afa66c5e
+  size:
+  - 220
+  - 266
+  status: draft
+bigpea_front:
+  box:
+  - 22
+  - 162
+  - 246
+  - 436
+  file: library/derived/cutouts/bigpea_front.png
+  method: cutout.extract (border flood-fill, largest component)
+  parent: images.characters.big-pea.big-pea-reference-sheet
+  parent_sha256: 88233aeb49f361118ebff25a9b5171c980590174343a0478b5983895c36a586d
+  sha256: c6bec1fd5d3f92ed6636dce6b488a202d306ece308a39e790c2f82bcab7ef554
+  size:
+  - 210
+  - 270
+  status: draft
+bigpea_head_angry:
+  box:
+  - 884
+  - 512
+  - 1076
+  - 682
+  file: library/derived/cutouts/bigpea_head_angry.png
+  method: cutout.extract (border flood-fill, largest component)
+  parent: images.characters.big-pea.big-pea-reference-sheet
+  parent_sha256: 88233aeb49f361118ebff25a9b5171c980590174343a0478b5983895c36a586d
+  sha256: 52b6f72e06dad46750b868da3d74b8c1cacad6331268ed5fd7d69eee94bb101f
+  size:
+  - 176
+  - 166
+  status: draft
+bigpea_sideleft:
+  box:
+  - 522
+  - 158
+  - 722
+  - 436
+  file: library/derived/cutouts/bigpea_sideleft.png
+  method: cutout.extract (border flood-fill, largest component)
+  parent: images.characters.big-pea.big-pea-reference-sheet
+  parent_sha256: 88233aeb49f361118ebff25a9b5171c980590174343a0478b5983895c36a586d
+  sha256: 6d8a3eac36c56598342afd33491b4e5af3c7802bf641a996f36b53a17f167788
+  size:
+  - 197
+  - 275
+  status: draft
+bigpea_sideright:
+  box:
+  - 752
+  - 160
+  - 1002
+  - 436
+  file: library/derived/cutouts/bigpea_sideright.png
+  method: cutout.extract (border flood-fill, largest component)
+  parent: images.characters.big-pea.big-pea-reference-sheet
+  parent_sha256: 88233aeb49f361118ebff25a9b5171c980590174343a0478b5983895c36a586d
+  sha256: 18fb89b26f8925c84befaba4c2ae15567c9be53fe318e5d06bb2a1342d2374d1
+  size:
+  - 242
+  - 276
+  status: draft
 billy_tophat_34left:
   box:
   - 225
@@ -84,7 +159,7 @@ billy_tophat_34left:
   method: cutout.extract (border flood-fill, largest component)
   parent: images.sheets.bad-billy-key-frames-sheet
   parent_sha256: 1a47f0ea76c18cf35c4a7fc7c4a644a178a1e77c7e6fe655cfc76207a5fd6e18
-  sha256: bba513cdba37131801d8f382f36fd40ac42aa8d6d7a3c4f60b88aa924de8d383
+  sha256: 49f14541336f8c4e33fc2f7e3163cbd3b302700a54fa6eb170076359e5e41fdc
   size:
   - 235
   - 353
@@ -219,7 +294,7 @@ billy_tophat_head_lookdown:
   method: cutout.extract (border flood-fill, largest component)
   parent: images.sheets.bad-billy-facial-expressions-final-v-2
   parent_sha256: a01abc3d776157c127cd00c94aeecc16ee21641128a19e728eac3f3103943848
-  sha256: 1faefa76edcd66de21268b19a5f123dc0df66cff444dea1701730793cdae3f0a
+  sha256: 50de871f67d108b20b6ee2c4ca1608d9e77fe825813460d6cb0b593412f6feb8
   size:
   - 163
   - 169
@@ -279,7 +354,7 @@ billy_tophat_head_shock:
   method: cutout.extract (border flood-fill, largest component)
   parent: images.sheets.bad-billy-facial-expressions-final-v-2
   parent_sha256: a01abc3d776157c127cd00c94aeecc16ee21641128a19e728eac3f3103943848
-  sha256: 0f7c2a076feb17337b42260871cb1eb82dd1b05853e4a01c4fad676c1758857d
+  sha256: 20ea75a12345978fbff5315ed5bd5b7967fe7bffd7a585afa1a6a622c0b2dc11
   size:
   - 187
   - 213
@@ -324,7 +399,7 @@ billy_tophat_head_suspicious:
   method: cutout.extract (border flood-fill, largest component)
   parent: images.sheets.bad-billy-facial-expressions-final-v-2
   parent_sha256: a01abc3d776157c127cd00c94aeecc16ee21641128a19e728eac3f3103943848
-  sha256: b55bd53e12d6b78f191e95b06a20a632b8caa6bd21944ba28a24caaf5711c8cd
+  sha256: 29454b841fc96b66e6e9643e3478213a0ff3803062cd93383cc47854b22953cc
   size:
   - 171
   - 188
@@ -384,10 +459,40 @@ billy_tophat_landing_approach:
   method: cutout.extract (border flood-fill, largest component)
   parent: images.sheets.landing-sheet-v-777
   parent_sha256: 8820f982c806bb5e7a5083e7e97a654163a38b72105ac70912e7ebbff19e12c0
-  sha256: aa9cafb2587289d7275a2b49bf6c6bf033ab32ef057e3e60b1c5a390960c9e35
+  sha256: 6caa26abf67c7fef5fcb1c467878453f0412410a7b708ce6df01ba6bbd077efe
   size:
   - 282
   - 267
+  status: draft
+billy_tophat_landing_approach1:
+  box:
+  - 15
+  - 140
+  - 330
+  - 460
+  file: library/derived/cutouts/billy_tophat_landing_approach1.png
+  method: cutout.extract (border flood-fill, largest component)
+  parent: images.sheets.landing-sheet-v-777
+  parent_sha256: 8820f982c806bb5e7a5083e7e97a654163a38b72105ac70912e7ebbff19e12c0
+  sha256: bd4ac4ada11c61d7250eafa4bfbddded586b6b6378503ed2b44f4f66d025987e
+  size:
+  - 275
+  - 203
+  status: draft
+billy_tophat_landing_approach4:
+  box:
+  - 905
+  - 150
+  - 1190
+  - 440
+  file: library/derived/cutouts/billy_tophat_landing_approach4.png
+  method: cutout.extract (border flood-fill, largest component)
+  parent: character-facials-sheet.whatsapp-image-2026-10-05-at-02-40-11
+  parent_sha256: b6dc28f70284c933692412af033491e0b9f4c52f72ef31efc147c86b6a7a9a1b
+  sha256: 672f26f1c04749db983269da2755375c2e85c7549ef834b1242ff49ff9dda6f6
+  size:
+  - 285
+  - 274
   status: draft
 billy_tophat_landing_fall:
   box:
@@ -429,7 +534,7 @@ billy_tophat_landing_trip1:
   method: cutout.extract (border flood-fill, largest component)
   parent: images.sheets.landing-sheet-v-777
   parent_sha256: 8820f982c806bb5e7a5083e7e97a654163a38b72105ac70912e7ebbff19e12c0
-  sha256: 460a0b0f63231854495f22f994448fc75f013d3495fd782a35326a1b458c0d31
+  sha256: 4046725cfbbe52832b6984bcf7130eb077e494360eb73a0f3ac48a65092e8832
   size:
   - 305
   - 249
@@ -444,7 +549,7 @@ billy_tophat_landing_trip2:
   method: cutout.extract (border flood-fill, largest component)
   parent: images.sheets.landing-sheet-v-777
   parent_sha256: 8820f982c806bb5e7a5083e7e97a654163a38b72105ac70912e7ebbff19e12c0
-  sha256: ab085ca03e1617a39c1909329ac43b88c927b4ab6ffc1ff8831460c3edea4d40
+  sha256: 3dcb86f4918f0b2866a2bdf2fbe115b99b009d668d514f6c16e1f10b3d2d7390
   size:
   - 329
   - 260
@@ -459,7 +564,7 @@ billy_tophat_scroll_faceright:
   method: cutout.extract (border flood-fill, largest component)
   parent: images.scenes.reading-the-scroll-v-2
   parent_sha256: 0772d0b5deed1022d197cc2198798ffa787916e9390a437fb06f1fc89bb9d547
-  sha256: 77562f21a0ab8dbbd991e96240ca5fd142649c858be1ceaeca8c2d34801f17e3
+  sha256: 540a04438fa93f76c00f658232f96089419b20f1b468112c3ef96fc8b59f0fcc
   size:
   - 289
   - 379
@@ -489,7 +594,7 @@ billy_tophat_scroll_reading:
   method: cutout.extract (border flood-fill, largest component)
   parent: images.scenes.reading-the-scroll-v-2
   parent_sha256: 0772d0b5deed1022d197cc2198798ffa787916e9390a437fb06f1fc89bb9d547
-  sha256: ffa465fb4dc161877facf467af527d90f0d45b3e8ff913e0641c5e4bed42e1ee
+  sha256: ffbe3d2bb50e4bc6a9980915fd9cbda464b38bc87000ddcca4b76a27c8aab58b
   size:
   - 257
   - 378
@@ -504,7 +609,7 @@ billy_tophat_scroll_recover:
   method: cutout.extract (border flood-fill, largest component)
   parent: images.scenes.reading-the-scroll-v-2
   parent_sha256: 0772d0b5deed1022d197cc2198798ffa787916e9390a437fb06f1fc89bb9d547
-  sha256: eb272b1f50ff45e6caa4de2ca21fef331eb34f73c865615fde6d461ae9182bc4
+  sha256: f62deb2168773ffd5b1533e4c3178bfbba504c1374ddd0d90c2c678963ab9bcd
   size:
   - 261
   - 379
@@ -534,7 +639,7 @@ billy_tophat_sideleft:
   method: cutout.extract (border flood-fill, largest component)
   parent: images.sheets.bad-billy-key-frames-sheet
   parent_sha256: 1a47f0ea76c18cf35c4a7fc7c4a644a178a1e77c7e6fe655cfc76207a5fd6e18
-  sha256: 32ed88e0860ed739d05c743a90da69f691ce7063b200b370c2d5005e0957d052
+  sha256: 40434d4c25da10f1048e50b5f38e8b6e4005daeb9126315913e09ea63b0416e5
   size:
   - 202
   - 358
@@ -549,10 +654,25 @@ billy_tophat_sideright:
   method: cutout.extract (border flood-fill, largest component)
   parent: images.sheets.bad-billy-key-frames-sheet
   parent_sha256: 1a47f0ea76c18cf35c4a7fc7c4a644a178a1e77c7e6fe655cfc76207a5fd6e18
-  sha256: 0a2eba91be7a5798ec7b15983f08f44e9ec2ae025e811ada93e5f8bf418085f0
+  sha256: 41df0bd1275a906db3174a3fc5aa2d7878f3dcd7d84dcd4393d094b29f1df11c
   size:
   - 224
   - 356
+  status: draft
+prop_blue_ball:
+  box:
+  - 300
+  - 270
+  - 450
+  - 420
+  file: library/derived/cutouts/prop_blue_ball.png
+  method: cutout.extract (border flood-fill, largest component)
+  parent: images.scenes.worm-s-getting-eaten
+  parent_sha256: 91d1d35aacf3b700a7bdc0aa15a9ee5bd02381c37a87e50203a478accf58bf2d
+  sha256: 5586527be911131b702d0398a5cc5535f837dd04fce3762dde10a1be06ad9449
+  size:
+  - 114
+  - 115
   status: draft
 prop_scroll_open:
   box:
@@ -688,4 +808,79 @@ saul_wave:
   size:
   - 172
   - 177
+  status: draft
+snail_side:
+  box:
+  - 150
+  - 1300
+  - 1330
+  - 2090
+  file: library/derived/cutouts/snail_side.png
+  method: cutout.extract (border flood-fill, largest component)
+  parent: book.bad-billy-the-bird-story@p14
+  parent_sha256: 744d9a19c3916ef30e892b19d069df21fa4a52bb4ea0dcd50c50bb81b73823ce
+  sha256: 6c4f1146f731666bb95a2c5c5cfa2d707bb9e03a5b4f8e993ea7e2563d3dd8aa
+  size:
+  - 1079
+  - 759
+  status: draft
+worm_ball_kid:
+  box:
+  - 60
+  - 0
+  - 437
+  - 728
+  file: library/derived/cutouts/worm_ball_kid.png
+  method: cutout.extract (border flood-fill, largest component)
+  parent: images.scenes.worm-s-getting-eaten
+  parent_sha256: 91d1d35aacf3b700a7bdc0aa15a9ee5bd02381c37a87e50203a478accf58bf2d
+  sha256: e37d6da6ab8108df3c378bfdad50473f99f76bb6f020cd3c73641fec1266d6a6
+  size:
+  - 305
+  - 385
+  status: draft
+worm_bow:
+  box:
+  - 437
+  - 0
+  - 803
+  - 728
+  file: library/derived/cutouts/worm_bow.png
+  method: cutout.extract (border flood-fill, largest component)
+  parent: images.scenes.worm-s-getting-eaten
+  parent_sha256: 91d1d35aacf3b700a7bdc0aa15a9ee5bd02381c37a87e50203a478accf58bf2d
+  sha256: 4508d8993c94915164ea4e9f9461443ec51323db56285e213773dc1e06132cb2
+  size:
+  - 355
+  - 321
+  status: draft
+worm_cap:
+  box:
+  - 1240
+  - 0
+  - 1560
+  - 728
+  file: library/derived/cutouts/worm_cap.png
+  method: cutout.extract (border flood-fill, largest component)
+  parent: images.scenes.worm-s-getting-eaten
+  parent_sha256: 91d1d35aacf3b700a7bdc0aa15a9ee5bd02381c37a87e50203a478accf58bf2d
+  sha256: 527a39b4e17532f54068e29987e3245f4cb7ca82ddc3e82e84c7c4f57a4dc692
+  size:
+  - 224
+  - 330
+  status: draft
+worm_tophat:
+  box:
+  - 803
+  - 0
+  - 1240
+  - 728
+  file: library/derived/cutouts/worm_tophat.png
+  method: cutout.extract (border flood-fill, largest component)
+  parent: images.scenes.worm-s-getting-eaten
+  parent_sha256: 91d1d35aacf3b700a7bdc0aa15a9ee5bd02381c37a87e50203a478accf58bf2d
+  sha256: cf8e6e5edb9035c79dbf4bd6b8a59d4ea28a148924cd7b45624a9cb21155a68e
+  size:
+  - 376
+  - 440
   status: draft

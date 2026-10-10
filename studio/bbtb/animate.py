@@ -116,6 +116,7 @@ def render(shot: Shot, chars: dict, size: tuple[int, int], dst: Path,
 
     enter = next((m for m in shot.motion if m.startswith("enter-")), None)
     glide = next((m for m in shot.motion if m.startswith("pass-")), None)   # smooth glide in from off-screen
+    creep = next((m for m in shot.motion if m.startswith("creep-")), None)  # snail pace: linear over the whole shot
     t_glide = min(max(t_swap, 0.9), shot.duration)
     shake = "shake" in shot.motion
     rng = random.Random(7)
@@ -140,6 +141,11 @@ def render(shot: Shot, chars: dict, size: tuple[int, int], dst: Path,
                     dy -= 3                                                              # nod while talking
                 if swapped is not None and p["index"] == 0 and 0 <= t - t_swap < 4 / FPS:
                     dy -= int(0.012 * H * math.sin(math.pi * (t - t_swap) * FPS / 4))     # little hop on pose change
+                if creep and p["index"] == 0:
+                    k = min(t / max(shot.duration * 0.92, 0.1), 1.0)
+                    start_x = (W + 20) if creep == "creep-left" else (-p["art"].width - 20)
+                    dx += int((1 - k) * (start_x - p["x"]))
+                    dy = 0                                                               # no bob: it slides
                 if glide and p["index"] == 0 and t < t_glide:
                     k = _ease_out(t / t_glide)
                     start_x = (-p["art"].width - 20) if glide == "pass-right" else (W + 20)
@@ -193,4 +199,44 @@ def render_card(shot: Shot, chars: dict, size: tuple[int, int], dst: Path) -> Pa
         proc.wait()
     if proc.returncode != 0:
         raise RuntimeError(f"end card encode failed for {shot.id}")
+    return dst
+
+
+PARALLAX = {"char_dx": 30, "bg_dx": -15, "char_scale": 0.05}   # owner 2026-10-06: real depth, never a flat zoom
+
+
+def render_parallax(shot: Shot, chars: dict, size: tuple[int, int], dst: Path) -> Path:
+    """Narrator hold shots as layered motion: the background drifts 15 px left while the character drifts 30 px right
+    and grows 1.00 -> 1.05 (anchored at the feet), eased. Composed from the originals at a slightly larger size so the
+    background never shows an edge. Without a character only the background moves (a still - flagged by preprod)."""
+    W, H = size
+    m = 1.06
+    Wb, Hb = round(W * m), round(H * m)
+    bg, placed = keyframes.layout(shot.scene, shot.cast, chars, (Wb, Hb), zoom=shot.zoom)
+    frames = max(1, round(shot.duration * FPS))
+    base_ox, base_oy = (Wb - W) // 2 - PARALLAX["bg_dx"] // 2, (Hb - H) // 2
+    proc = subprocess.Popen(
+        ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24",
+         "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "medium", "-crf", "16",
+         "-pix_fmt", "yuv420p", str(dst)], stdin=subprocess.PIPE)
+    try:
+        for f in range(frames):
+            k = 0.5 - 0.5 * math.cos(math.pi * f / max(frames - 1, 1))            # ease in-out
+            ox = int(round(base_ox - PARALLAX["bg_dx"] * k))                       # window moves right = bg moves left
+            canvas = bg.crop((ox, base_oy, ox + W, base_oy + H)).convert("RGBA")
+            for p in sorted(placed, key=lambda q: q["feet"]):
+                s = 1 + PARALLAX["char_scale"] * k
+                art = p["art"].resize((max(1, round(p["art"].width * s)), max(1, round(p["art"].height * s))), Image.BILINEAR)
+                cx = p["x"] + p["art"].width / 2 - ox + PARALLAX["char_dx"] * k
+                feet = p["feet"] - base_oy
+                x, y = int(round(cx - art.width / 2)), int(round(feet - art.height))
+                if p["framing"] != "closeup" and p.get("shadow", True):
+                    keyframes._shadow(canvas, int(cx), feet - 4, int(art.width * 0.8))
+                canvas.alpha_composite(art, (x, y)) if 0 <= x and 0 <= y else canvas.paste(art, (x, y), art)
+            proc.stdin.write(canvas.convert("RGB").tobytes())
+    finally:
+        proc.stdin.close()
+        proc.wait()
+    if proc.returncode != 0:
+        raise RuntimeError(f"parallax encode failed for {shot.id}")
     return dst

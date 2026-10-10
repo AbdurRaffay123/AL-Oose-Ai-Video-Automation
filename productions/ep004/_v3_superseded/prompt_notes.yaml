@@ -1,0 +1,40 @@
+S01:
+  emotion: villainous glee (the hook)
+  action: leans forward with a sly grin, evil laugh, body shakes with each ha, goggles glint (Avatar, his ORIGINAL laugh)
+  background: cave tunnel, signpost side (BG_CAVE_TUNNEL, book p.37) - new location
+  avoid: Avatar takes no negative prompt - keep the prompt simple; check frames for a melting body or a lost crest
+  preserve: aviator helmet, blue goggles, orange beak, crest, green sneakers
+  reviewed: claude
+  owner_ok: false
+S02:
+  emotion: two hungry villains searching, grumpy
+  action: Big Pea pushes his goggles up and peers into the dark corners, then shakes his head (no mine cart in frame); Billy looks behind the signpost left/right then frowns; both end in their start poses (end frame = start frame, tag loop)
+  background: cave tunnel (same as S01, wider two-shot)
+  avoid: Billy hands/fists (billy_hands negative), monocle on the right eye, extra characters, text on the signpost
+  preserve: Billy's LEFT-eye monocle, badge, folded wings; Big Pea's goggles and helmet
+  reviewed: claude
+  owner_ok: false
+S04:
+  emotion: annoyed
+  action: Big Pea glares to the right, says "You are very annoying." grumpily, folds wings, taps a sneaker (Avatar, ORIGINAL line)
+  background: cave tunnel, mine-cart side (BG_CAVE_TUNNEL_CART, book p.37) - owner option 1
+  avoid: no negative possible on Avatar; frames checked by the owner
+  preserve: helmet, goggles, beak
+  reviewed: claude
+  owner_ok: false
+S05:
+  emotion: fed up
+  action: Big Pea, front view, "Why are you still here?" with a huff (Avatar, ORIGINAL line)
+  background: cave tunnel, mine-cart side
+  avoid: as S04
+  preserve: as S04
+  reviewed: claude
+  owner_ok: false
+S07:
+  emotion: scolding, grumpy old snail
+  action: the Snail's blue lips flap with the words, googly eyes bulge, stretches up on "Go ON!" and settles (Avatar, ORIGINAL line, denoised)
+  background: cave tunnel
+  avoid: fast movement (he is a snail); no extra characters
+  preserve: orange shell, green face, googly eyes, tiny top hat, blue lips
+  reviewed: claude
+  owner_ok: false

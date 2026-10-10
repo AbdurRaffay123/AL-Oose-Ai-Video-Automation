@@ -127,6 +127,11 @@ ACTION [wide, end: BIG GUY arms-up]: The Big Guy bursts out.  ← character appe
   images. Build them for free with `./bbtb references <script.md>`. Turbo (`kling3`) can't take references.
 - **Finished episodes:** header `keyframes: locked` keeps the exact keyframes the paid clips were made from, so
   rebuilt cut-outs never orphan a clip.
+- **Reuse (free):** `ACTION [reuse:EP001_S07, from:2.5]: …` plays a library clip under the narration;
+  `BILLY [reuse:EP001_S08, canon:p31]: Oh POOP!` reuses a talking clip WITH its own approved line (same words required).
+  See `library/clips/CLIP_INVENTORY.md`.
+- **Owner frame review:** `./bbtb review <script>` writes `reviews/<shot>_frames.jpg` (every 0.5 s);
+  `./bbtb approve-clip <script> S01,S04` records the owner's approval. The final can't be assembled before it.
 - **Edit tags:** `cut:<s>` (use a clip up to <s>, then hold the end frame), `secs:<s>` (minimum length), `silent`
   (card text on screen only), `show:<text>` (card's on-screen text differs from the spoken line), `noend`
   (Kling 3.0 Standard talk without the end frame).

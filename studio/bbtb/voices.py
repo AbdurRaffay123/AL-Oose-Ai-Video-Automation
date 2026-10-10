@@ -209,6 +209,19 @@ def clone(char_id: str, char: dict, confirm_rights: bool, client: elevenlabs.Cli
     return voice_id, True
 
 
+def build_reference(char_id: str, char: dict, ref: Path) -> Path:
+    """All clone_reference clips, silence-trimmed and joined; denoised too when the character is marked
+    `voice.denoise_originals` (owner 2026-10-07: the Snail's first clone was built from his noisy, undenoised clips)."""
+    files = source_files(char)
+    denoise = bool(char.get("voice", {}).get("denoise_originals"))
+    ref.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory() as td:          # trimmed parts are temporary; only the joined ref is kept
+        parts = [media.to_wav(f, Path(td) / f"{char_id}_{i}.wav", trim_silence=True, denoise=denoise)
+                 for i, f in enumerate(files)]
+        media.concat_audio(parts, ref, gap=0.25, max_seconds=120.0)
+    return ref
+
+
 def reclone(char_id: str, char: dict, confirm_rights: bool, client: elevenlabs.Client | None = None) -> dict:
     """Replace a character's clone with a new one made from ALL its current `clone_reference` clips,
     joined into library/derived/voice_refs/<char>_v<N>.wav. Order is safe: the NEW voice is created
@@ -224,9 +237,7 @@ def reclone(char_id: str, char: dict, confirm_rights: bool, client: elevenlabs.C
         raise RuntimeError(f"{char['display_name']} has no clips in voice.clone_reference")
     version = int(el.get("ref_version", 1)) + 1
     ref = REF_DIR / f"{char_id}_v{version}.wav"
-    with tempfile.TemporaryDirectory() as td:          # trimmed parts are temporary; only the joined ref is kept
-        parts = [media.to_wav(f, Path(td) / f"{char_id}_{i}.wav", trim_silence=True) for i, f in enumerate(files)]
-        media.concat_audio(parts, ref, gap=0.25, max_seconds=120.0)
+    build_reference(char_id, char, ref)
     client = client or elevenlabs.Client()
     new_id = client.clone(f"BBTB {char['display_name']} v{version}", [ref],
                           description=f"Bad Billy the Bird - {char['display_name']} (AL-Oose), reference v{version}")
@@ -433,7 +444,8 @@ def render_lines(lines: list[Line], chars: dict, audio_dir: Path, ledger: Ledger
         if p["provider"] == "original":
             dst = orig_dir / f"{ln.id}.wav"
             dst.parent.mkdir(parents=True, exist_ok=True)
-            media.to_wav(registry.path_of(p["asset"]), dst, trim_silence=True)
+            media.to_wav(registry.path_of(p["asset"]), dst, trim_silence=True,
+                         denoise=bool(chars[ln.speaker].get("voice", {}).get("denoise_originals")))
             entry["asset"] = p["asset"]
         elif _cached(store, p):
             dst = lines_dir / f"{ln.id}.wav"

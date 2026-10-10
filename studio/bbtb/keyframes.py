@@ -64,8 +64,7 @@ def cutout(art_id: str) -> Image.Image:
     return Image.open(DERIVED / "cutouts" / f"{art_id}.png").convert("RGBA")
 
 
-def plate(scene: str, size: tuple[int, int], zoom: float = 1.0, bias_x: float = 0.0) -> Image.Image:
-    """Crop the scene's background plate to the output aspect around its focus point."""
+def plate_source(scene: str) -> Image.Image:
     bgs = backgrounds()
     if scene not in bgs:
         raise KeyError(f"unknown scene background '{scene}'. Known: {', '.join(bgs)}")
@@ -74,20 +73,33 @@ def plate(scene: str, size: tuple[int, int], zoom: float = 1.0, bias_x: float = 
         path = LIBRARY / spec["file"]
         if not path.exists():
             raise FileNotFoundError(f"background plate {spec['file']} is missing: run `./bbtb plates` (free)")
-        src = Image.open(path).convert("RGB")
-    else:
-        src = Image.open(registry.path_of(spec["asset"])).convert("RGB")
+        return Image.open(path).convert("RGB")
+    return Image.open(registry.path_of(spec["asset"])).convert("RGB")
+
+
+def plate_window(scene: str, src_size: tuple[int, int], size: tuple[int, int], zoom: float = 1.0,
+                 bias_x: float = 0.0) -> tuple[float, float, float, float]:
+    """(x0, y0, w, h) in source pixels: the part of the plate that fills a frame of `size` (also used to map
+    keyframe points onto ground_zones.yaml, which is in source fractions)."""
+    sw, sh = src_size
     W, H = size
     aspect = W / H
-    ch = src.height / zoom
+    ch = sh / zoom
     cw = ch * aspect
-    if cw > src.width:
-        cw = src.width / zoom
+    if cw > sw:
+        cw = sw / zoom
         ch = cw / aspect
-    fx, fy = spec.get("focus", [src.width / 2, src.height / 2])
+    fx, fy = backgrounds()[scene].get("focus", [sw / 2, sh / 2])
     fx += bias_x * cw
-    x0 = min(max(fx - cw / 2, 0), src.width - cw)
-    y0 = min(max(fy - ch / 2, 0), src.height - ch)
+    x0 = min(max(fx - cw / 2, 0), sw - cw)
+    y0 = min(max(fy - ch / 2, 0), sh - ch)
+    return x0, y0, cw, ch
+
+
+def plate(scene: str, size: tuple[int, int], zoom: float = 1.0, bias_x: float = 0.0) -> Image.Image:
+    """Crop the scene's background plate to the output aspect around its focus point."""
+    src = plate_source(scene)
+    x0, y0, cw, ch = plate_window(scene, src.size, size, zoom, bias_x)
     return src.crop((int(x0), int(y0), int(x0 + cw), int(y0 + ch))).resize(size, Image.LANCZOS)
 
 
@@ -134,15 +146,26 @@ def _shadow(canvas: Image.Image, cx: int, feet_y: int, width: int) -> None:
     canvas.alpha_composite(sh.filter(ImageFilter.GaussianBlur(width / 18)))
 
 
+def parse_place(text: str) -> tuple[float, float, float, bool] | None:
+    """Script tag pos:/endpos: '<centre x>/<top y>/<height>[/air]' as fractions of the frame (EP004: the dive must
+    run top-left -> bottom-right, which the automatic ground/air placement can't express)."""
+    if not text:
+        return None
+    parts = [x.strip() for x in text.split("/")]
+    x, y, h = (float(v) for v in parts[:3])
+    return x, y, h, len(parts) > 3 and parts[3].lower() == "air"
+
+
 def layout(scene: str, cast: list[OnScreen], chars: dict, size: tuple[int, int],
-           art_images: dict[int, Image.Image] | None = None, zoom: float = 1.0) -> tuple[Image.Image, list[dict]]:
+           art_images: dict[int, Image.Image] | None = None, zoom: float = 1.0,
+           place: str = "") -> tuple[Image.Image, list[dict]]:
     """Background plate + where each character goes. art_images overrides the art for cast index i
     (used by the animator for mouth/pose swaps). Returns (background RGBA, placements).
     zoom > 1 is a camera push-in (script tag zoom:<f>): the frame is composed at zoom x the size from the
     originals and a window around the first character's face is cut out, so nothing is upscaled."""
     if zoom > 1.001:
         W, H = size
-        big, placed = layout(scene, cast, chars, (round(W * zoom), round(H * zoom)), art_images)
+        big, placed = layout(scene, cast, chars, (round(W * zoom), round(H * zoom)), art_images, place=place)
         p = placed[0] if placed else None
         o = cast[0] if cast else None
         fx, fy = ((chars[o.char]["variants"].get(o.variant or chars[o.char].get("default_variant"), {})
@@ -154,11 +177,14 @@ def layout(scene: str, cast: list[OnScreen], chars: dict, size: tuple[int, int],
         if p:                                              # keep the hat top inside the 4:5 safe area if possible
             oy = min(oy, p["top"] - 0.16 * H)
         oy = int(min(max(oy, 0), big.height - H))
+        bw = placed[0]["window"] if placed else None
         for q in placed:
             q["x"] -= ox
             q["top"] -= oy
             q["feet"] -= oy
             q["zoomed"] = True
+            q["window"] = (bw[0] + ox / big.width * bw[2], bw[1] + oy / big.height * bw[3],
+                           W / big.width * bw[2], H / big.height * bw[3])
         return big.crop((ox, oy, ox + W, oy + H)), placed
     W, H = size
     framing = cast[0].framing if cast else "wide"
@@ -166,6 +192,9 @@ def layout(scene: str, cast: list[OnScreen], chars: dict, size: tuple[int, int],
     if framing != "wide" and cast:
         bias = {"left": -0.12, "right": 0.12, "center": 0.0}[cast[0].side]
     canvas = plate(scene, size, FRAMING_ZOOM[framing], bias).convert("RGBA")
+    src_size = plate_source(scene).size
+    x0, y0, cw, ch = plate_window(scene, src_size, size, FRAMING_ZOOM[framing], bias)
+    window = (x0 / src_size[0], y0 / src_size[1], cw / src_size[0], ch / src_size[1])   # frame -> source fractions
     if framing == "closeup":
         canvas = canvas.filter(ImageFilter.GaussianBlur(3))   # shallow depth of field
 
@@ -207,9 +236,18 @@ def layout(scene: str, cast: list[OnScreen], chars: dict, size: tuple[int, int],
         x = cx - art.width // 2
         if art.width < W and not partner:
             x = min(max(x, 8), W - art.width - 8)  # keep the whole character in frame
+        exact = parse_place(place) if i == 0 else None
+        if exact:                                  # tag pos:/endpos: overrides the automatic placement
+            px, py, ph, in_air = exact
+            art = _scaled(cutout(o.art) if not (art_images and i in art_images) else art_images[i], int(ph * H))
+            h, airborne = art.height, in_air
+            x, top = int(px * W - art.width / 2), int(py * H)
         placed.append({"index": i, "feet": top + art.height, "x": x, "top": top, "art": art,
                        "framing": "closeup" if is_bust else o.framing, "scale": h / max(art.height, 1),
-                       "shadow": not airborne})
+                       "shadow": not airborne, "tagged_air": bool(exact and exact[3]), "window": window,
+                       "group": bool(chars[o.char].get("group")),
+                       "members": ([m.resize(art.size, Image.LANCZOS) for m in _members(o.art)]
+                                   if chars[o.char].get("group") else None)})
     return canvas, placed
 
 
@@ -218,13 +256,35 @@ def draw(canvas: Image.Image, placed: list[dict], offsets: dict[int, tuple[int, 
     for p in sorted(placed, key=lambda p: p["feet"]):          # lower feet = in front
         dx, dy = (offsets or {}).get(p["index"], (0, 0))
         if p["framing"] != "closeup" and p.get("shadow", True):
-            _shadow(out, p["x"] + dx + p["art"].width // 2, p["feet"] - 4, int(p["art"].width * 0.8))
+            from . import grounding                    # contact shadow centred under the soles (owner 2026-10-06)
+            if p.get("group"):                         # one shadow under each member of a group figure
+                for m in (p.get("members") or grounding.members(p["art"])):
+                    mp = grounding.soles(m, p["x"] + dx, p["top"] + dy)
+                    if mp:
+                        xs = [q[0] for q in mp]
+                        _shadow(out, int(sum(xs) / len(xs)), max(q[1] for q in mp) + 2, int(max((max(xs) - min(xs)) * 1.35, 40)))
+                out.alpha_composite(p["art"], (p["x"] + dx, p["top"] + dy))
+                continue
+            pts = grounding.soles(p["art"], p["x"] + dx, p["top"] + dy)
+            if pts:
+                xs = [q[0] for q in pts]
+                span = max(xs) - min(xs)
+                _shadow(out, int(sum(xs) / len(xs)), max(q[1] for q in pts) + 2,
+                        int(max(span * 1.35, p["art"].width * 0.35)))
+            else:
+                _shadow(out, p["x"] + dx + p["art"].width // 2, p["feet"] - 4, int(p["art"].width * 0.8))
         out.alpha_composite(p["art"], (p["x"] + dx, p["top"] + dy))
     return out
 
 
-def compose(scene: str, cast: list[OnScreen], chars: dict, size: tuple[int, int], zoom: float = 1.0) -> Image.Image:
-    canvas, placed = layout(scene, cast, chars, size, zoom=zoom)
+def _members(art_id: str) -> list[Image.Image]:
+    from .cutout import composite_members
+    return composite_members(art_id)
+
+
+def compose(scene: str, cast: list[OnScreen], chars: dict, size: tuple[int, int], zoom: float = 1.0,
+            place: str = "") -> Image.Image:
+    canvas, placed = layout(scene, cast, chars, size, zoom=zoom, place=place)
     return draw(canvas, placed).convert("RGB")
 
 
@@ -315,7 +375,79 @@ def title_background(frame: Image.Image, size: tuple[int, int]) -> Image.Image:
     return bg
 
 
+VERSUS = {"left": "bigpea_34right", "right": "billy_tophat_34left"}   # versus card cut-outs (both face the middle)
+
+
+def versus_layers(scene: str, size: tuple[int, int], text: str, left: str = "", right: str = "") -> dict:
+    """Card 'versus' (EP004): two characters slam in from the sides, a VS pops, the question builds word by word.
+    Text: '<question> | <call to action>' (the second part appears after the question)."""
+    W, H = size
+    bg = plate(scene, size).convert("RGB").filter(ImageFilter.GaussianBlur(14))
+    bg = Image.blend(bg, Image.new("RGB", size, (10, 6, 20)), 0.45)
+    over = Image.new("RGBA", size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(over)
+    d.polygon([(0, 0), (int(W * 0.62), 0), (int(W * 0.38), H), (0, H)], fill=(255, 120, 20, 70))      # warm side
+    d.polygon([(int(W * 0.62), 0), (W, 0), (W, H), (int(W * 0.38), H)], fill=(20, 170, 200, 70))     # cool side
+    for k in range(18):                                                                            # burst rays
+        a = 2 * math.pi * k / 18
+        d.polygon([(W / 2, H * 0.45), (W / 2 + 1400 * math.cos(a), H * 0.45 + 1400 * math.sin(a)),
+                   (W / 2 + 1400 * math.cos(a + 0.08), H * 0.45 + 1400 * math.sin(a + 0.08))], fill=(255, 255, 255, 18))
+    bg = bg.convert("RGBA")
+    bg.alpha_composite(over)
+    def fig(cut_id: str, h: int) -> Image.Image:
+        im = cutout(cut_id)
+        return im.resize((round(im.width * h / im.height), h), Image.LANCZOS)
+    L = fig(left or VERSUS["left"], int(H * 0.30))
+    R = fig(right or VERSUS["right"], int(H * 0.40))
+    parts = [p.strip() for p in text.split("|")]
+    q_words = parts[0].split()
+    pt = int(W * 0.078)
+    vs = text_block(size, ["VS"], int(W * 0.24), (255, 214, 0, 255), stroke=10)
+    cta = text_block(size, [parts[1]], int(W * 0.06), (255, 255, 255, 255), stroke=6) if len(parts) > 1 else None
+    return {"bg": bg, "L": L, "R": R, "vs": vs, "cta": cta, "q": q_words, "pt": pt}
+
+
+def versus_frame(V: dict, t: float, duration: float) -> Image.Image:
+    W, H = V["bg"].size
+    canvas = V["bg"].copy()
+    floor_y = int(H * 0.79)
+    shake = 0
+    for t0 in (0.25, 0.75):                                     # impact shakes as each one lands
+        if t0 <= t < t0 + 0.25:
+            shake = int(12 * (1 - (t - t0) / 0.25) * (1 if int(t * 40) % 2 else -1))
+    bob = lambda ph: int(4 * math.sin(2 * math.pi * 1.4 * t + ph))
+    kl = _ease_back((t - 0.05) / 0.3)                           # left slams in
+    xl = int(-V["L"].width + (W * 0.05 + V["L"].width) * min(kl, 1.15))
+    canvas.alpha_composite(V["L"], (xl + shake, floor_y - V["L"].height + bob(0)))
+    kr = _ease_back((t - 0.55) / 0.3)                           # right slams in
+    xr = int(W - (W * 0.05 + V["R"].width) * min(kr, 1.15))
+    canvas.alpha_composite(V["R"], (xr + shake, floor_y - V["R"].height + bob(1.5)))
+    if t >= 1.0:                                                # VS pops with a flash
+        if t < 1.08:
+            canvas.alpha_composite(Image.new("RGBA", (W, H), (255, 255, 255, 140)))
+        s = 0.6 + 0.4 * _ease_back((t - 1.0) / 0.25) + 0.04 * math.sin(2 * math.pi * 2 * t)
+        _paste_scaled(canvas, V["vs"], ((W - V["vs"].width) // 2, int(H * 0.265)), s)
+    n = int(max(0.0, t - 1.4) / 0.32) + 1 if t >= 1.4 else 0    # the question, one word every 0.32 s
+    if n:
+        words = V["q"][:n]
+        font = ImageFont.truetype(FONT_ROUNDED, V["pt"])
+        probe = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
+        lines = _wrap(probe, " ".join(words), font, W * 0.9)
+        layer = text_block((W, H), lines, V["pt"], (255, 255, 255, 255), stroke=7)
+        _paste_scaled(canvas, layer, ((W - layer.width) // 2, int(H * 0.155)), 1.0)
+    t_cta = 1.4 + 0.32 * len(V["q"]) + 0.2
+    if V["cta"] is not None and t >= t_cta:
+        pulse = 1 + 0.05 * math.sin(2 * math.pi * 1.6 * (t - t_cta))
+        _paste_scaled(canvas, V["cta"], ((W - V["cta"].width) // 2, int(H * 0.805)),
+                      _ease_back((t - t_cta) / 0.3) * pulse)
+    return canvas.convert("RGB")
+
+
 def card_layers(shot, chars: dict, size: tuple[int, int]):
+    if shot.card == "rule":
+        return rule_layers(shot.backdrop, size, shot.card_text)
+    if shot.card == "versus":
+        return versus_layers(shot.backdrop, size, shot.card_text)
     if shot.card == "title":
         return title_layers(size, shot.card_text)
     if shot.card == "tease":
@@ -324,6 +456,10 @@ def card_layers(shot, chars: dict, size: tuple[int, int]):
 
 
 def card_frame(shot, L, t: float) -> Image.Image:
+    if shot.card == "rule":
+        return rule_frame(L, t, shot.duration)
+    if shot.card == "versus":
+        return versus_frame(L, t, shot.duration)
     if shot.card == "title":                     # keyframe / preview frame (the video itself is built by ffmpeg)
         import subprocess, io
         raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", f"{min(t, TITLE_FOOTAGE - 0.05):.3f}", "-i",
@@ -537,4 +673,113 @@ def book_frame(L: dict, t: float) -> Image.Image:
     if L["hand"] is not None and t > t_follow + 0.25:
         hx, hy = pos["hand"]
         _paste_scaled(canvas, L["hand"], (hx, hy + int(14 * (1 - tap)) + 6), 1.0, min(1.0, (t - t_follow - 0.25) / 0.2))
+    return canvas.convert("RGB")
+
+
+RULE_HEAD = "billy_tophat_head_suspicious"           # EP004 end card: Billy's official suspicious head (no redraw)
+
+
+def rule_layers(scene: str, size: tuple[int, int], text: str) -> dict:
+    """Card 'rule' (EP004 v4): 'RULE NUMBER ONE...' slams in word by word, 'LOOK UP! 👆' punches in with a flash and
+    spinning rays, Billy's official suspicious head slides up from the bottom, then the share line pops in a panel.
+    Text: '<rule> | <punch> | <share>'. The backdrop uses the scene's `wide:` view (GRASS_SIGN_LOW -> GRASS_SIGN)."""
+    W, H = size
+    spec = backgrounds().get(scene, {})
+    bg = plate(spec.get("wide", scene), size).convert("RGB").filter(ImageFilter.GaussianBlur(8))
+    bg = Image.blend(bg, Image.new("RGB", size, (16, 8, 30)), 0.28).convert("RGBA")
+    parts = [p.strip() for p in text.split("|")] + ["", "", ""]
+    probe = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
+    pt = int(W * 0.105)
+    font = ImageFont.truetype(FONT_ROUNDED, pt)
+    rows, row = [], []                                 # the rule on as few lines as fit 88% of the width
+    for w in parts[0].split():
+        if row and probe.textlength(" ".join(row + [w]), font=font) > W * 0.88:
+            rows.append(row); row = []
+        row.append(w)
+    rows.append(row)
+    gap = int(probe.textlength(" ", font=font))
+    words = [[text_block(size, [w], pt, (255, 255, 255, 255), stroke=8) for w in r] for r in rows]
+    punch_txt, punch_emo = _emoji_split(parts[1])
+    ppt = int(W * 0.18)                                # LOOK UP! + its emoji must fit 90% of the width
+    while punch_txt and ppt > 30 and probe.textlength(punch_txt, font=ImageFont.truetype(FONT_ROUNDED, ppt)) + \
+            (ppt * 0.9 if punch_emo else 0) > W * 0.86:
+        ppt -= 2
+    punch = text_block(size, [punch_txt], ppt, (255, 214, 0, 255), stroke=11) if punch_txt else None
+    share_txt, share_emo = _emoji_split(parts[2])
+    spt = int(W * 0.075)
+    share = (text_block(size, _wrap(probe, share_txt, ImageFont.truetype(FONT_ROUNDED, spt), W * 0.82), spt,
+                        (255, 255, 255, 255), stroke=5, panel=True) if share_txt else None)
+    head = cutout(RULE_HEAD)
+    hh = int(H * 0.24)                                 # ~1.5x the official ~200 px head: larger goes soft
+    head = head.resize((round(head.width * hh / head.height), hh), Image.LANCZOS)
+    rays = Image.new("RGBA", (int(W * 1.6), int(W * 1.6)), (0, 0, 0, 0))
+    dr = ImageDraw.Draw(rays)
+    c = rays.width / 2
+    for k in range(16):
+        a0 = 2 * math.pi * k / 16
+        dr.polygon([(c, c), (c + c * 1.4 * math.cos(a0), c + c * 1.4 * math.sin(a0)),
+                    (c + c * 1.4 * math.cos(a0 + 0.14), c + c * 1.4 * math.sin(a0 + 0.14))], fill=(255, 214, 0, 46))
+    return {"bg": bg, "words": words, "gap": gap, "pt": pt, "punch": punch,
+            "punch_emoji": emoji_image(punch_emo, int(ppt * 0.8)) if punch_emo else None,
+            "rule_bottom": int(H * 0.155) + len(rows) * int(pt * 1.12),
+            "share": share, "share_emoji": emoji_image(share_emo, int(W * 0.11)) if share_emo else None,
+            "head": head, "rays": rays}
+
+
+RULE_TIMES = {"words": (0.1, 0.18), "punch": 0.7, "head": 1.25, "share": 1.85}   # owner 2026-10-07: 5-6 s card   # SFX in the script hit these
+
+
+def rule_frame(R: dict, t: float, duration: float) -> Image.Image:
+    W, H = R["bg"].size
+    canvas = R["bg"].copy()
+    t0, step = RULE_TIMES["words"]
+    tp = RULE_TIMES["punch"]
+    if t >= tp:                                        # slow spinning rays behind LOOK UP!
+        k = min(1.0, (t - tp) / 0.3)
+        r = R["rays"].rotate(18 * (t - tp), resample=Image.BICUBIC)
+        r.putalpha(r.split()[3].point(lambda v: int(v * k)))
+        canvas.alpha_composite(r, ((W - r.width) // 2, R["rule_bottom"] + int(H * 0.07) - r.height // 2))
+    flat = [w for row in R["words"] for w in row]
+    shake = 0
+    for k in range(len(flat)):                         # a tiny shake as each word lands
+        tk = t0 + k * step
+        if tk <= t < tk + 0.12:
+            shake = int(9 * (1 - (t - tk) / 0.12) * (1 if int(t * 50) % 2 else -1))
+    n = 0
+    for ri, row in enumerate(R["words"]):
+        total = sum(w.width for w in row) + R["gap"] * (len(row) - 1)
+        x = (W - total) // 2
+        y = int(H * 0.155) + ri * int(R["pt"] * 1.12)
+        for w in row:
+            tk = t0 + n * step
+            if t >= tk:
+                _paste_scaled(canvas, w, (x + shake, y), 1.0 + 0.7 * max(0.0, 1 - (t - tk) / 0.15))
+            x += w.width + R["gap"]
+            n += 1
+    if R["punch"] is not None and t >= tp:
+        if t < tp + 0.07:
+            canvas.alpha_composite(Image.new("RGBA", (W, H), (255, 255, 255, 130)))
+        s = _ease_back((t - tp) / 0.25) + 0.03 * math.sin(2 * math.pi * 1.5 * (t - tp))
+        em = R["punch_emoji"]
+        px = (W - R["punch"].width - (em.width + 10 if em else 0)) // 2
+        py = R["rule_bottom"] + int(H * 0.02)
+        _paste_scaled(canvas, R["punch"], (px, py), s)
+        if em is not None:                             # the finger keeps pointing UP: a small upward bounce
+            bounce = int(14 * abs(math.sin(2 * math.pi * 1.2 * (t - tp))))
+            _paste_scaled(canvas, em, (px + R["punch"].width + 10, py - bounce), s)
+    th = RULE_TIMES["head"]
+    if t >= th:                                        # Billy's head slides up from the bottom and settles
+        k = min(_ease_back((t - th) / 0.4), 1.08)
+        top = int(H - (H - H * 0.61) * k) + int(4 * math.sin(2 * math.pi * 0.9 * (t - th)))
+        head = R["head"].rotate(3 * math.sin(2 * math.pi * 0.6 * (t - th)), resample=Image.BICUBIC, expand=False)
+        canvas.alpha_composite(head, ((W - head.width) // 2, top))
+    ts = RULE_TIMES["share"]
+    if R["share"] is not None and t >= ts:
+        pulse = 1 + 0.03 * math.sin(2 * math.pi * 1.4 * (t - ts))
+        sx, sy = (W - R["share"].width) // 2, R["rule_bottom"] + int(H * 0.17)
+        _paste_scaled(canvas, R["share"], (sx, sy), _ease_back((t - ts) / 0.3) * pulse)
+        if R["share_emoji"] is not None and t >= ts + 0.3:   # the worm wiggles at the panel corner
+            em = R["share_emoji"].rotate(12 * math.sin(2 * math.pi * 2.0 * (t - ts)), resample=Image.BICUBIC, expand=True)
+            canvas.alpha_composite(em, (min(W - em.width - 6, sx + R["share"].width - em.width // 2),
+                                        sy + R["share"].height - em.height // 2))
     return canvas.convert("RGB")

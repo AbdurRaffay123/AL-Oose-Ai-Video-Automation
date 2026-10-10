@@ -24,7 +24,7 @@ LTX_I2V_DURATIONS = (6, 8, 10)          # ltx-2-3-pro allowed values
 A2V_MAX_SECONDS = 20.0                  # ltx-2-3-pro audio-to-video at 720p/1080p
 WAN_MAX_SECONDS = 15.0                  # Wan 2.7 image-to-video: duration 2-15 s
 SPECIAL_SCENES = {"END_CARD"}
-CARDS = {"tease", "book", "title"}  # END_CARD moments (tag card:<name>); title = the BBTB title video + text
+CARDS = {"tease", "book", "title", "versus", "rule"}  # END_CARD moments (tag card:<name>); title = the BBTB title video + text
 
 STYLE = ("2D hand-drawn children's picture-book cartoon animation in exactly the same art style, "
          "colours and line work as the input image. Smooth, gentle, readable cartoon motion.")
@@ -68,6 +68,15 @@ class Shot:
                                                          # drawn end frame (impact shake on the next SFX); free edit
     trim: float = 0.0                                    # seconds cut from the START of the generated clip in the
                                                          # edit (tag trim:<s>; free, never changes the paid request)
+    reuse: str = ""                                      # tag reuse:<CLIP_ID>: plays a library clip (library/clips/)
+    reuse_from: float = 0.0                              # tag from:<s>: start time inside the reused clip
+    line_at: dict = field(default_factory=dict)          # voice-over start times {line id: s} (tag say:<s>)
+    fx: str = ""                                         # tag fx:<name>: free local animation (localanim.py)
+    fx_args: dict = field(default_factory=dict)          # bubble:/numbers:/ball:/billy:/burst: (localanim overlays)
+    out: float = 0.0                                     # tag out:<s>: the shot ENDS at <s> of the source clip (hard cut
+                                                         # to the next shot, no held still - owner 2026-10-06)
+    place: str = ""                                      # tag pos:<x>/<top>/<h>[/air]: exact first-frame placement
+    place_end: str = ""                                  # tag endpos:...: exact last-frame placement (EP004 dive)
     card: str = ""                                       # END_CARD moment: tease | book ("" = classic end card)
     card_text: str = ""                                  # the narrator line, also shown on screen
     emoji: str = ""                                      # on-screen only (tag emoji:<e>)
@@ -87,12 +96,14 @@ class Line:
     source: str = "unmarked"
 
 
-ENGINE_TAGS = {"local", "ltx", "kling", "kling3", "kling3std", "wan"}
+ENGINE_TAGS = {"local", "ltx", "kling", "kling3", "kling3std", "wan", "o3"}   # o3: Kling O3 on a kling3std action
 # Kling 3.0 talking engines: Kling speaks the line, ElevenLabs Voice Changer re-voices it. Turbo, or Standard
 # (owner 2026-10-05: Standard adds a negative prompt and an end frame; tag kling3std).
 KLING3_TALK_ENGINES = ("kling3_talk", "kling3_talk_std")
 KLING3_DURATIONS = range(3, 16)                          # Kling 3.0: 3-15 whole seconds
-MOTION_TAGS = {"enter-left", "enter-right", "shake", "far", "wide", "medium", "pass-left", "pass-right", "noend"}
+FX_KEYS = {"fx", "bubble", "numbers", "ball", "billy", "burst", "id", "say", "gen"}    # localanim.py tags (owner 2026-10-07)
+MOTION_TAGS = {"enter-left", "enter-right", "shake", "far", "wide", "medium", "pass-left", "pass-right", "noend",
+               "parallax", "loop", "creep-left", "creep-right"}
 
 
 def acting_of(direction: list[str]) -> list[str]:
@@ -103,7 +114,12 @@ def acting_of(direction: list[str]) -> list[str]:
             and not d.lower().startswith("with:") and not d.lower().startswith("zoom:")
             and not d.lower().startswith("card:") and not d.lower().startswith("emoji:")
             and not d.lower().startswith("cut:") and not d.lower().startswith("secs:") and d.lower() != "silent"
-            and not d.lower().startswith("show:")]
+            and not d.lower().startswith("show:") and not d.lower().startswith("neg:") and d.lower() != "refs"
+            and not d.lower().startswith("reuse:") and not d.lower().startswith("from:")
+            and not d.lower().startswith("pos:") and not d.lower().startswith("endpos:")
+            and not d.lower().startswith("backdrop:") and not d.lower().startswith("out:") and d.lower() != "over"
+            and d.lower() != "avatar" and not d.lower().startswith("refvideo:") and not d.lower().startswith("never:")
+            and not d.lower().split(":", 1)[0] in FX_KEYS]
 
 
 def tag_value(direction: list[str], key: str) -> str:
@@ -136,7 +152,8 @@ def line_id(e: Event) -> str:
 
 def lines_of(script: Script) -> list[Line]:
     return [Line(line_id(e), e.speaker, e.text, acting_of(e.direction), e.line_no, e.source)
-            for e in script.events if e.kind in ("dialogue", "narration") and "silent" not in e.direction]
+            for e in script.events if e.kind in ("dialogue", "narration") and "silent" not in e.direction
+            and not (e.kind == "dialogue" and tag_value(e.direction, "reuse"))]   # a reused talking clip brings its line
 
 
 def _variant(char: dict, variant: str | None) -> dict:
@@ -225,6 +242,7 @@ def plan(script: Script, chars: dict) -> list[Shot]:
     shots: list[Shot] = []
     pending_sfx: list[str] = []
     pending_narration: list[str] = []
+    pending_at: dict[str, float] = {}
     def new_shot(**kw) -> Shot:
         s = Shot(id=f"S{len(shots) + 1:02d}", **kw)
         s.sfx, pending_sfx[:] = list(pending_sfx), []
@@ -246,18 +264,21 @@ def plan(script: Script, chars: dict) -> list[Shot]:
         nxt = next((x for x in events[i + 1:] if x.kind != "sfx"), None)
 
         if e.kind == "sfx":
-            at = 0.0
+            at, vol = 0.0, None
             for d in e.direction:
                 m = re.match(r"at\s+([0-9.]+)$", d)
                 if m:
                     at = float(m.group(1))
-            pending_sfx.append({"name": e.text, "at": at})
+                v = re.match(r"vol\s+([0-9.]+)$", d)          # SFX [at 0.2, vol 0.1]: per-sound level (default 0.8)
+                if v:
+                    vol = float(v.group(1))
+            pending_sfx.append({"name": e.text, "at": at, **({"vol": vol} if vol is not None else {})})
             continue
         if e.kind == "music":
             continue  # music changes are handled by the audio bed
 
         if e.scene in SPECIAL_SCENES:
-            card = tag_value(e.direction, "card") if e.kind == "narration" else ""
+            card = tag_value(e.direction, "card") if e.kind in ("narration", "dialogue") else ""
             if card:
                 if card not in CARDS:
                     raise ValueError(f"line {e.line_no}: unknown end card '{card}' (use {', '.join(sorted(CARDS))})")
@@ -267,7 +288,10 @@ def plan(script: Script, chars: dict) -> list[Shot]:
                 if "silent" in e.direction:              # on screen only: no voice, so no new recording needed
                     s.lines = []
                 s.min_secs = secs_of(e.direction)
-                s.backdrop = next((x.scene for x in reversed(shots) if x.scene not in SPECIAL_SCENES), "")
+                if tag_value(e.direction, "id"):
+                    s.id = tag_value(e.direction, "id")
+                s.backdrop = tag_value(e.direction, "backdrop") or next(                # tag backdrop:<SCENE>
+                    (x.scene for x in reversed(shots) if x.scene not in SPECIAL_SCENES), "")
                 continue
             if e.kind == "narration":
                 pending_narration.append(line_id(e))
@@ -276,9 +300,29 @@ def plan(script: Script, chars: dict) -> list[Shot]:
                 s.lines, pending_narration[:] = list(pending_narration), []
             continue
 
-        if e.kind == "narration":
+        clip = tag_value(e.direction, "reuse") if e.kind in ("dialogue", "action") else ""
+        if clip:                                         # free: an existing clip from library/clips/clips.yaml
+            if e.kind == "dialogue":
+                flush_narration(e.scene)
+            s = new_shot(kind="talk" if e.kind == "dialogue" else "action",
+                         engine="reuse_talk" if e.kind == "dialogue" else "reuse_clip", scene=e.scene, source_line=e.line_no)
+            s.reuse = clip
+            s.reuse_from = float(tag_value(e.direction, "from") or 0)
+            s.min_secs = secs_of(e.direction)
+            if e.kind == "dialogue":
+                s.lines = [line_id(e)]
+            else:
+                s.lines, pending_narration[:] = list(pending_narration), []
+            s.acting = e.text
+            continue
+
+        over = e.kind == "dialogue" and "over" in e.direction    # voice-over on the next action (owner 2026-10-07)
+        if e.kind == "narration" or over:
             pending_narration.append(line_id(e))
-            ahead = next((x for x in events[i + 1:] if x.kind not in ("sfx", "narration")), None)
+            if tag_value(e.direction, "say"):
+                pending_at[line_id(e)] = float(tag_value(e.direction, "say"))
+            ahead = next((x for x in events[i + 1:] if x.kind not in ("sfx", "narration")
+                          and not (x.kind == "dialogue" and "over" in x.direction)), None)
             if not (ahead and ahead.kind == "action" and ahead.scene == e.scene):   # several narration lines
                 flush_narration(e.scene)                                           # may ride on one action
             continue
@@ -360,7 +404,8 @@ def plan(script: Script, chars: dict) -> list[Shot]:
                 for o in cast + end_cast:
                     o.side = "center"
             prompt = f"{STYLE} {identity(chars, cast + end_cast)} {e.text} {LOCK}"
-            motion = [d for d in e.direction if d in ("enter-left", "enter-right", "shake", "pass-left", "pass-right")]
+            motion = [d for d in e.direction if d in ("enter-left", "enter-right", "shake", "pass-left", "pass-right",
+                                                      "loop", "creep-left", "creep-right")]
             for d in e.direction:                       # pose change "a>b" for the first cast member
                 if ">" in d and cast:
                     b = d.split(">", 1)[1].strip()
@@ -368,7 +413,9 @@ def plan(script: Script, chars: dict) -> list[Shot]:
                     if b not in poses:
                         raise ValueError(f"line {e.line_no}: unknown pose '{b}' for {chars[cast[0].char]['display_name']}")
                     motion.append(f"pose:{poses[b]}")
-            engine = ("local_anim" if "local" in e.direction else "kling3_action" if "kling3" in e.direction
+            engine = ("kling_avatar" if "avatar" in e.direction           # EP004 S01b: Avatar driven by a voice-over line
+                      else "local_still" if "parallax" in e.direction        # free layered parallax (owner 2026-10-06)
+                      else "local_anim" if "local" in e.direction else "kling3_action" if "kling3" in e.direction
                       else "ltx_i2v" if "ltx" in e.direction else script.meta.get("action_engine", "ltx_i2v"))
             if engine == "local_anim" and end_cast:
                 raise ValueError(f"line {e.line_no}: 'end:' needs LTX (remove 'local') - local animation can't morph between frames")
@@ -380,6 +427,13 @@ def plan(script: Script, chars: dict) -> list[Shot]:
             s.cut = cut_of(e.direction)
             s.min_secs = secs_of(e.direction)
             s.zoom = zoom_of(e.direction)
+            s.line_at = {lid: pending_at.pop(lid) for lid in s.lines if lid in pending_at}
+            if tag_value(e.direction, "id"):                 # tag id:<ID> pins the shot id (paid clips, approvals)
+                s.id = tag_value(e.direction, "id")
+            s.place, s.place_end = tag_value(e.direction, "pos"), tag_value(e.direction, "endpos")
+            s.out = float(tag_value(e.direction, "out") or 0)
+            s.fx = tag_value(e.direction, "fx")
+            s.fx_args = {k: tag_value(e.direction, k) for k in FX_KEYS - {"fx"} if tag_value(e.direction, k)}
             s.acting = e.text
             if engine == "kling3_action":
                 # first frame -> last frame: an entrance starts on the empty scene and ends with the character
@@ -410,15 +464,25 @@ def apply_durations(shots: list[Shot], line_seconds: dict[str, float], pad: floa
         if s.engine in KLING3_TALK_ENGINES:
             s.gen_seconds = float(max(3, min(15, math.ceil(voiced - pad * len(s.lines) - 1e-6))))
             s.duration = round(s.gen_seconds - s.trim, 3)
-        elif s.engine == "kling3_action":
-            s.gen_seconds = float(max(3, min(15, math.ceil(voiced + pad - 1e-6))))
+        elif s.engine == "kling3_action":           # tag secs:<s> = minimum generated length (EP004 S07: a 5 s beat list)
+            s.gen_seconds = float(max(3, min(15, math.ceil(max(voiced + pad, s.min_secs) - 1e-6))))
+            if s.fx_args.get("gen"):                 # tag gen:<s>: force the generated length (owner: less time to drift)
+                s.gen_seconds = float(max(3, min(15, int(float(s.fx_args["gen"])))))
             s.duration = round(s.gen_seconds - s.trim, 3)
+            if s.out:                                # tag out:<s>: end the shot there (the paid request is unchanged)
+                if not s.trim < s.out <= s.gen_seconds:
+                    raise ValueError(f"{s.id}: out:{s.out:g} must be after trim:{s.trim:g} and within {s.gen_seconds:g} s")
+                s.duration = round(s.out - s.trim, 3)
         elif s.engine == "wan_talk":                  # Wan 2.7: whole seconds 2-15, driven by the line audio
             s.duration = round(voiced + pad, 2)
             s.gen_seconds = float(max(2, math.ceil(voiced - pad * len(s.lines) - 1e-6)))
             if s.gen_seconds > WAN_MAX_SECONDS:
                 raise ValueError(f"{s.id}: line is {s.gen_seconds:.0f}s; Wan 2.7 allows at most "
                                  f"{WAN_MAX_SECONDS:.0f}s. Split the line in the script.")
+        elif s.engine == "kling_avatar" and s.kind == "action" and s.line_at:   # driven by a timed voice-over line
+            end = max([(s.line_at.get(l, 0.15) + line_seconds[l]) for l in s.lines] + [s.min_secs])
+            s.duration = round(end + pad, 2)
+            s.gen_seconds = s.duration
         elif s.engine in ("ltx_a2v", "kling_avatar"):
             s.duration = round(voiced + pad, 2)
             s.gen_seconds = s.duration
@@ -437,7 +501,9 @@ def apply_durations(shots: list[Shot], line_seconds: dict[str, float], pad: floa
             s.duration = round(max(voiced + 0.8, 4.0 if s.card else 3.5, s.min_secs), 2)
         elif s.engine == "local_anim":
             s.duration = round(max(voiced + pad, 2.0, s.min_secs), 2)
+        elif s.engine in ("reuse_clip", "reuse_talk"):    # pipeline caps this to what the clip offers
+            s.duration = round(max(voiced + pad, 1.0, s.min_secs), 2)
         else:
             s.duration = round(max(voiced + pad, 1.5), 2)
-        if s.trim and (not s.engine.startswith("kling3") or s.duration < 1.0):
+        if s.trim and (not s.engine.startswith("kling3") or s.duration < (0.5 if s.out else 1.0)):  # out: = cut on the action
             raise ValueError(f"{s.id}: trim:{s.trim:g} only works on Kling 3.0 shots and must leave at least 1 s")

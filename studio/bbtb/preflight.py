@@ -119,12 +119,24 @@ def keyframe_checks(prod, shot, frame: Path | None = None, cast: list | None = N
     img = Image.open(first).convert("RGB")
     W, H = prod.size
     out.append(Check("resolution", "PASS" if img.size == (W, H) else "FAIL", f"{img.size[0]}x{img.size[1]}"))
+    for o in cast or []:                               # Jason 2026-10-06: mandatory red-background white test
+        from . import cutout
+        r = cutout.red_test(o.art)
+        out.append(Check("red test (white)", "PASS" if r["ok"] else "FAIL",
+                         f"{o.art}: no white on red ({r['kept']} approved white details)" if r["ok"] else
+                         f"{o.art}: {len(r['undecided'])} undecided white patch(es) at {r['undecided'][:3]}, edge white "
+                         f"{r['edge_white']}px - review with `bbtb cutouts --review {o.art}`"))
     if img.size != (W, H) or not cast:
         return out
     kf = np.asarray(img)
     on = cast[0]
     char = prod.chars[on.char]
-    _, placed = keyframes.layout(shot.scene, cast, prod.chars, (W, H), zoom=shot.zoom)
+    bg_plate, placed = keyframes.layout(shot.scene, cast, prod.chars, (W, H), zoom=shot.zoom,
+                                        place=shot.place_end if cast is shot.end_cast else shot.place)
+    from . import grounding                       # owner 2026-10-06: feet on the flat walkable ground, or FAIL
+    for idx, status, detail in grounding.check(shot.scene, placed, bg_plate):
+        name = prod.chars[cast[idx].char]["display_name"]
+        out.append(Check("grounding", status, f"{name}: {detail}"))
     p = placed[0]
 
     te, fe = mirror_score(kf, p)
@@ -231,10 +243,11 @@ def audio_stats(path: Path) -> dict:
             "clipped": int((np.abs(x) >= 0.999).sum()), "noise_floor_db": round(float(quiet.mean()), 1)}
 
 
-def prepare_audio(src: Path, dst: Path) -> dict:
-    """Trimmed (KEEP_EDGE s each end) and -16 LUFS copy for upload. Returns stats incl. head_trim."""
+def prepare_audio(src: Path, dst: Path, keep_lead: bool = False) -> dict:
+    """Trimmed (KEEP_EDGE s each end) and -16 LUFS copy for upload. Returns stats incl. head_trim.
+    keep_lead: the leading silence is part of the timing (an Avatar driver track) and is kept."""
     st = audio_stats(src)
-    head = max(st["lead_silence"] - KEEP_EDGE, 0.0)
+    head = 0.0 if keep_lead else max(st["lead_silence"] - KEEP_EDGE, 0.0)
     keep = st["seconds"] - head - max(st["tail_silence"] - KEEP_EDGE, 0.0)
     dst.parent.mkdir(parents=True, exist_ok=True)
     cut = dst.with_suffix(".cut.wav")
@@ -251,7 +264,8 @@ def audio_checks(prod, shot, prepared: dict | None) -> list[Check]:
     out: list[Check] = []
     if not shot.lines:
         return [Check("line audio", "FAIL", "talking shot without a line")]
-    lid = shot.lines[0]
+    drv = (prepared or {}).get("driver") or {}
+    lid = drv.get("line") or shot.lines[0]
     e = prod.lines.get(lid) or {}
     path = Path(e.get("path", ""))
     if not path.exists():
@@ -266,8 +280,12 @@ def audio_checks(prod, shot, prepared: dict | None) -> list[Check]:
     if prepared is None:
         return out
     s, p = prepared["source"], prepared["prepared"]
-    out.append(Check("silence trimmed", "PASS" if max(p["lead_silence"], p["tail_silence"]) <= MAX_EDGE_SILENCE else "FAIL",
-                     f"was {s['lead_silence']:.2f}s / {s['tail_silence']:.2f}s, now {p['lead_silence']:.2f}s / {p['tail_silence']:.2f}s"))
+    if drv:
+        out.append(Check("driver timing", "PASS", f"{p['lead_silence']:.2f}s silence, then {lid} (starts at {drv['start']:g}s "
+                                                    f"in the shot); the narrator is NOT fed to Avatar"))
+    else:
+        out.append(Check("silence trimmed", "PASS" if max(p["lead_silence"], p["tail_silence"]) <= MAX_EDGE_SILENCE else "FAIL",
+                         f"was {s['lead_silence']:.2f}s / {s['tail_silence']:.2f}s, now {p['lead_silence']:.2f}s / {p['tail_silence']:.2f}s"))
     out.append(Check("no clipping", "PASS" if s["clipped"] < 3 else "WARN",
                      f"source peak {s['peak_db']} dBFS, {s['clipped']} clipped samples"))
     out.append(Check("low noise", "PASS" if s["noise_floor_db"] < -50 else "WARN", f"floor {s['noise_floor_db']} dBFS"))

@@ -499,6 +499,22 @@ def test_negative_sets_are_opt_in_so_finished_episodes_keep_their_requests(tmp_p
     assert "fists" not in pipeline.kling3_job(prod, shots[0]).extra["negative_prompt"]
 
 
+def test_negative_set_drop_removes_contradicting_shared_terms(tmp_path, monkeypatch):
+    """A dive is airborne and the landing skids: the shared "floating, sliding" must not contradict the prompt."""
+    import yaml
+    from bbtb.paths import LIBRARY
+    real = yaml.safe_load((LIBRARY / "kling_prompts.yaml").read_text())
+    real["negative_sets"]["t_dive"] = {"character": "bad_billy", "text": "hat flying off", "drop": ["floating", "sliding"]}
+    monkeypatch.setattr(pipeline.yaml, "safe_load", lambda text, _r=real: _r)
+    s = parse("# T\nformat: 9:16\n## SCENE BIG_WORM_HOLE\n"
+              "ACTION [wide, enter-right, prompt:billy_walk, neg:t_dive]: Bad Billy walks in.\n", CHARS)
+    shots = sh.plan(s, CHARS)
+    sh.apply_durations(shots, {})
+    prod = pipeline.Production(s, tmp_path, CHARS, shots, {}, (720, 1280), Ledger(tmp_path / "l.jsonl"))
+    neg = pipeline.shot_negative(prod, shots[0], "floating, hovering, sliding, text")
+    assert neg == "hovering, text, hat flying off"
+
+
 def test_kling3_standard_talk_noend_drops_only_the_end_frame(tmp_path):
     s = parse("# T\nformat: 9:16 negatives: billy_hands\n## SCENE GRASS_FLOWERS\n"
               "BILLY [tophat, 34left, surprised, kling3std, noend, prompt:billy_outraged]: REALLY?! Who dares talk to me?\n", CHARS)
@@ -595,4 +611,241 @@ def test_references_for_the_wrong_character_are_refused(tmp_path, monkeypatch):
     monkeypatch.setattr(references, "paths", lambda root, sid: [{"char": "young_saul", "frontal": f, "refs": [r]}])
     prod, shot = _std_prod(tmp_path, "elements: on")
     with pytest.raises(RuntimeError, match="references.yaml lists"):
+        pipeline.kling3_job(prod, shot)
+
+
+def test_saul_identity_carries_the_big_eye_rule_and_the_eye_negative_exists():
+    import yaml
+    from bbtb.paths import LIBRARY
+    c = yaml.safe_load((LIBRARY / "kling_prompts.yaml").read_text())
+    saul = " ".join(c["official_identity"]["young_saul"].split())
+    assert "ENORMOUS ROUND EYES" in saul and "LARGE and ROUND" in saul and "never flat" in saul
+    assert "ball" not in saul.lower()                    # the ball is per-shot, or Kling adds it everywhere
+    assert "beady eyes" in c["negative_sets"]["saul_eyes"]["text"]
+
+
+def test_kling3_action_honours_secs_as_minimum_length():
+    s = parse("# T\nformat: 9:16 action_engine: kling3\n## SCENE GRASS_FLOWERS\n"
+              "ACTION [medium, kling3std, 34left>34left, loop, secs:5]: Bad Billy pats his tummy.\n", CHARS)
+    shots = sh.plan(s, CHARS)
+    sh.apply_durations(shots, {})
+    assert shots[0].engine == "kling3_action" and shots[0].gen_seconds == 5.0
+    s = parse("# T\nformat: 9:16 action_engine: kling3\n## SCENE GRASS_FLOWERS\nACTION [medium, kling3std, 34left>34left, loop]: Bad Billy pats.\n", CHARS)
+    shots = sh.plan(s, CHARS)
+    sh.apply_durations(shots, {})
+    assert shots[0].gen_seconds == 3.0                       # unchanged without the tag
+
+
+def test_pos_tags_place_start_and_end_frames_exactly():
+    from bbtb import keyframes
+    assert keyframes.parse_place("0.36/0.16/0.24/air") == (0.36, 0.16, 0.24, True)
+    assert keyframes.parse_place("") is None
+    s = parse("# T\nformat: 9:16 action_engine: kling3\n## SCENE GRASS_FLOWERS\n"
+              "ACTION [wide, kling3std, landing-approach1>landing-approach, pos:0.36/0.16/0.24/air, "
+              "endpos:0.62/0.52/0.30/air]: Bad Billy dives.\n", CHARS)
+    shot = sh.plan(s, CHARS)[0]
+    assert (shot.place, shot.place_end) == ("0.36/0.16/0.24/air", "0.62/0.52/0.30/air")
+    assert "pos:0.36/0.16/0.24/air" not in sh.acting_of(s.events[0].direction)
+    _, start = keyframes.layout(shot.scene, shot.cast, CHARS, (720, 1280), place=shot.place)
+    _, end = keyframes.layout(shot.scene, shot.end_cast, CHARS, (720, 1280), place=shot.place_end)
+    assert start[0]["top"] == int(0.16 * 1280) and not start[0]["shadow"]
+    assert end[0]["top"] > start[0]["top"] and end[0]["x"] > start[0]["x"]     # top-left -> bottom-right
+
+
+def test_rule_end_card_is_dynamic_and_planned():
+    from bbtb import keyframes
+    s = parse("# T\nformat: 9:16\n## SCENE GRASS_SIGN_LOW\nACTION [wide, local]: Bad Billy stands.\n## SCENE END_CARD\n"
+              "NARRATOR [production, card:rule, silent, show:RULE NUMBER ONE... | LOOK UP! 👆 | Tag a friend, secs:12]: x\n", CHARS)
+    shots = sh.plan(s, CHARS)
+    sh.apply_durations(shots, {})
+    card = shots[-1]
+    assert card.card == "rule" and card.lines == [] and card.duration == 12 and card.backdrop == "GRASS_SIGN_LOW"
+    R = keyframes.card_layers(card, CHARS, (720, 1280))
+    early, late = (keyframes.card_frame(card, R, t) for t in (0.1, 5.0))
+    assert early.size == (720, 1280) and early.tobytes() != late.tobytes()     # it moves, never a still
+
+
+def test_retimed_line_replaces_audio_by_exact_text(tmp_path):
+    import wave
+    (tmp_path / "audio" / "retimed").mkdir(parents=True)
+    w = wave.open(str(tmp_path / "audio" / "retimed" / "x.wav"), "wb")
+    w.setnchannels(1); w.setsampwidth(2); w.setframerate(48000); w.writeframes(b"\0\0" * 48000 * 2); w.close()
+    (tmp_path / "audio" / "retimed.yaml").write_text('"One, two.": retimed/x.wav\n')
+    lines = {"L1": {"text": "One, two.", "path": "orig.wav", "seconds": 0.6, "final": True},
+             "L2": {"text": "Other.", "path": "o2.wav", "seconds": 1.0, "final": True}}
+    pipeline.apply_retimed(tmp_path, lines)
+    assert lines["L1"]["seconds"] == 2.0 and lines["L1"]["retimed_from"] == "orig.wav" and lines["L2"]["path"] == "o2.wav"
+
+
+def test_out_tag_ends_the_shot_without_changing_the_paid_request(tmp_path):
+    base = ("# T\nformat: 9:16 action_engine: kling3\n## SCENE GRASS_FLOWERS\n"
+            "ACTION [medium, kling3std, 34left>34left, loop, secs:5{tags}]: Bad Billy burps.\n")
+    plain, cut = (sh.plan(parse(base.format(tags=t), CHARS), CHARS)[0] for t in ("", ", trim:0.5, out:4.375"))
+    for s in (plain, cut):
+        sh.apply_durations([s], {})
+    assert plain.duration == 5.0 and cut.duration == 3.875 and cut.gen_seconds == plain.gen_seconds == 5.0
+    assert "out:4.375" not in sh.acting_of(parse(base.format(tags=", out:4.375"), CHARS).events[0].direction)
+
+
+def test_clipfix_edit_and_eye_tint():
+    from bbtb import clipfix
+    fr = np.zeros((48, 64, 32, 3), np.uint8)
+    for i in range(48):
+        fr[i] = i                                           # frame i is filled with value i
+    fr[10:20, 10:20, 5:15] = 250                            # a "white eye" in frames 10-19
+    clipfix.tint_eyes(fr, {"frames": [10, 19], "box": [5, 10, 15, 20], "color": [205, 254, 194]})
+    assert fr[12, 15, 10, 1] > fr[12, 15, 10, 0] and fr[12, 15, 10, 0] < 230          # white -> pale green
+    segs = [{"from": 0.0, "to": 0.5, "speed": 0.75}, {"from": 1.0, "to": 1.25, "hold": 3, "zoom": 1.3}]
+    out = clipfix.edit_frames(fr, segs, 24)
+    assert len(out) == 16 + 6 + 3 and clipfix.edit_seconds(segs) == round(25 / 24, 3)
+    assert out[0][0, 0, 0] == 0 and out[16][0, 0, 0] == 24                            # second slice starts at 1.0 s
+
+
+def test_localanim_numbers_spec_and_grounded_worms():
+    from bbtb import grounding, keyframes, localanim
+    items, x, y, pop = localanim._numbers("1@1.625|2@2.042|4!@2.875@x0.85/y0.66/pop1.4")
+    assert items == [("1", 1.625), ("2", 2.042), ("4!", 2.875)] and (x, y, pop) == (0.85, 0.66, 1.4)
+    size = (360, 640)
+    bg = keyframes.plate("GRASS_STUMP", size).convert("RGBA")
+    src = keyframes.plate_source("GRASS_STUMP").size
+    x0, y0, cw, ch = keyframes.plate_window("GRASS_STUMP", src, size)
+    win = (x0 / src[0], y0 / src[1], cw / src[0], ch / src[1])
+    placed = [{"index": i, "art": a, "x": int(cx * size[0] - a.width / 2), "top": int(feet * size[1]) - a.height,
+               "framing": "medium", "window": win} for i, (a, cx, feet) in enumerate(localanim._worm_layers(size))]
+    assert all(s == "PASS" for _, s, _ in grounding.check("GRASS_STUMP", placed, bg))     # worms on the flat grass
+    assert len(list(localanim.worms_play(size, 0.25))) == 6
+
+
+def test_voiceover_say_and_pinned_ids():
+    from bbtb import assemble
+    s = parse("# T\nformat: 9:16 action_engine: kling3\n## SCENE GRASS_FLOWERS\n"
+              "NARRATOR [production]: Hello there.\n"
+              "BILLY [tophat, over, say:2.5, production]: Arrrr!\n"
+              "ACTION [medium, kling3std, id:S01b, 34left>34left, loop]: Bad Billy watches.\n", CHARS)
+    shots = sh.plan(s, CHARS)
+    assert len(shots) == 1 and shots[0].id == "S01b" and shots[0].engine == "kling3_action"
+    narr, growl = shots[0].lines
+    assert shots[0].line_at == {growl: 2.5}
+    offs = dict(assemble.line_offsets(shots[0], {narr: 1.0, growl: 1.3}))
+    assert offs[growl] == 2.5 and offs[narr] == assemble.LEAD["kling3_action"]
+
+
+def test_only_matches_pinned_ids_case_insensitively(tmp_path, monkeypatch):
+    s = parse("# T\nformat: 9:16 action_engine: kling3\n## SCENE GRASS_FLOWERS\n"
+              "ACTION [medium, kling3std, id:S01b, 34left>34left, loop]: Bad Billy watches.\n", CHARS)
+    shots = sh.plan(s, CHARS)
+    assert shots[0].id == "S01b" and shots[0].id.upper() in {x.strip().upper() for x in ["s01b"]}
+
+
+def test_avatar_action_is_driven_by_the_on_screen_line_only(tmp_path):
+    s = parse("# T\nformat: 9:16\n## SCENE GRASS_FLOWERS\n"
+              "NARRATOR [production]: Hello there.\n"
+              "BILLY [tophat, over, say:3.95, production]: Arrrr!\n"
+              "ACTION [medium, avatar, id:S01b, 34left>34left]: Bad Billy watches.\n", CHARS)
+    shot = sh.plan(s, CHARS)[0]
+    narr, growl = shot.lines
+    sh.apply_durations([shot], {narr: 3.56, growl: 1.35})
+    assert shot.engine == "kling_avatar" and shot.kind == "action" and shot.duration == round(3.95 + 1.35 + 0.25, 2)
+    prod = pipeline.Production(s, tmp_path, CHARS, [shot],
+                               {narr: {"text": "Hello there.", "speaker": "narrator", "seconds": 3.56},
+                                growl: {"text": "Arrrr!", "speaker": "bad_billy", "seconds": 1.35}},
+                               (720, 1280), Ledger(tmp_path / "l.jsonl"))
+    assert pipeline.avatar_driver(prod, shot) == (growl, 3.95)      # never the narrator
+
+
+def test_sfx_vol_tag_sets_the_level():
+    s = parse("# T\nformat: 9:16 action_engine: kling3\n## SCENE GRASS_FLOWERS\n"
+              "SFX [at 0.2, vol 0.1]: giggles\nSFX [at 1.0]: pop\n"
+              "ACTION [medium, kling3std, 34left>34left, loop]: Bad Billy watches.\n", CHARS)
+    shot = sh.plan(s, CHARS)[0]
+    assert shot.sfx == [{"name": "giggles", "at": 0.2, "vol": 0.1}, {"name": "pop", "at": 1.0}]
+
+
+# ---------------------------------------------------------------- Kling O3 reference-to-video (owner 2026-10-08)
+
+def _o3_prod(tmp_path, monkeypatch, video_secs=3.0, tags="o3, refvideo:refs/billy.mp4", n_refs=2):
+    from bbtb import media, references
+    from PIL import Image
+    s = parse("# T\nformat: 9:16 action_engine: kling3 negatives: billy_hands elements: on\n## SCENE BIG_WORM_HOLE\n"
+              f"ACTION [medium, kling3std, refs, {tags}, prompt:billy_full_v3, 34left>34left, zoom:1.55, loop, gen:4]: "
+              "Bad Billy looks around.\n".replace(", , ", ", "), CHARS)
+    shots = sh.plan(s, CHARS)
+    sh.apply_durations(shots, {})
+    root = tmp_path / "test_o3"
+    (root / "keyframes").mkdir(parents=True)
+    (root / "refs").mkdir()
+    (root / "refs" / "billy.mp4").write_bytes(b"fake mp4")
+    f, r = tmp_path / "f.png", tmp_path / "r.jpg"
+    Image.new("RGB", (600, 600), "white").save(f); Image.new("RGB", (800, 500), "white").save(r)
+    monkeypatch.setattr(references, "paths", lambda root_, sid: [{"char": "bad_billy", "frontal": f, "refs": [r] * n_refs}])
+    monkeypatch.setattr(media, "duration", lambda p: video_secs)
+    return pipeline.Production(s, root, CHARS, shots, {}, (720, 1280), Ledger(root / "l.jsonl")), shots[0]
+
+
+def test_o3_job_same_keyframes_no_negative_field_and_reference_video(tmp_path, monkeypatch):
+    prod, shot = _o3_prod(tmp_path, monkeypatch)
+    j = pipeline.kling3_job(prod, shot)
+    assert j.model == fal.KLING_O3_R2V and "negative_prompt" not in j.extra
+    assert j.extra == {"duration": "4", "aspect_ratio": "9:16", "generate_audio": False}
+    assert "Never: " in j.prompt and "@Element1 is Bad Billy" in j.prompt     # blocking list folded into the prompt
+    assert set(j.files) == {"start_image_url", "end_image_url"}               # same start/end keyframe as Kling 3.0
+    assert len(j.elements) == 2 and len(j.elements[0]["refs"]) == 2
+    assert j.cost == round(0.084 * 4, 4)
+
+
+def test_o3_reference_video_must_be_3_to_10_seconds(tmp_path, monkeypatch):
+    prod, shot = _o3_prod(tmp_path, monkeypatch, video_secs=2.5)
+    with pytest.raises(RuntimeError, match="3-10.05 s"):
+        pipeline.kling3_job(prod, shot)
+
+
+def test_o3_body_sends_the_element_video_and_the_control_shot_is_unchanged(tmp_path, monkeypatch):
+    from PIL import Image
+    monkeypatch.setenv("FAL_AI_API_KEY", "abc:def-test-key-123")
+    prod, shot = _o3_prod(tmp_path, monkeypatch)
+    j = pipeline.kling3_job(prod, shot)
+    for p in j.files.values():
+        Path(p).parent.mkdir(parents=True, exist_ok=True); Image.new("RGB", (720, 1280), "white").save(p)
+    sent = {}
+
+    class S:
+        def post(self, url, **kw):
+            sent.update(kw["json"], url=url)
+            return FakeResp(200, {"request_id": "r", "status_url": "s", "response_url": "r"})
+    fal.Client(prod.ledger, session=S(), approval_code="CODE").submit(j)
+    assert sent["url"].endswith(fal.KLING_O3_R2V) and "negative_prompt" not in sent
+    assert set(sent["elements"][0]) == {"frontal_image_url", "reference_image_urls"}      # image element: no video
+    assert set(sent["elements"][1]) == {"video_url"}                                      # video element: video only
+    assert sent["elements"][1]["video_url"].startswith("data:video/mp4;base64,")
+    control_prod, control_shot = _o3_prod(tmp_path / "c", monkeypatch, tags="")
+    c = pipeline.kling3_job(control_prod, control_shot)
+    assert c.model == fal.KLING3_STD and "negative_prompt" in c.extra and "video" not in c.elements[0]
+
+
+def test_o3_prompt_over_the_2500_character_limit_is_refused_before_sending(tmp_path, monkeypatch):
+    prod, shot = _o3_prod(tmp_path, monkeypatch)
+    shot.prompt_key = "billy_full_v3"
+    monkeypatch.setattr(pipeline, "O3_PROMPT_MAX", 500)
+    with pytest.raises(RuntimeError, match="limit 500"):
+        pipeline.kling3_job(prod, shot)
+
+
+def test_o3_never_tag_uses_the_short_o3_list_instead_of_the_full_negative(tmp_path, monkeypatch):
+    prod, shot = _o3_prod(tmp_path, monkeypatch, tags="o3, refvideo:refs/billy.mp4, never:o3_never_billy")
+    monkeypatch.setattr(pipeline, "O3_PROMPT_MAX", 10_000)          # this stand-in template is longer than the test one
+    j = pipeline.kling3_job(prod, shot)
+    assert "Never: human hands or fingers, fists" in j.prompt and "feet off the ground" not in j.prompt
+    assert j.prompt.endswith(". @Element1 is Bad Billy; @Element2 is a video of him.")
+
+
+def test_o3_reference_video_is_its_own_element_and_the_4_item_limit_holds(tmp_path, monkeypatch):
+    """fal 422 (2026-10-10): an element is images OR a video. @Element1 = Billy's images, @Element2 = the clip."""
+    prod, shot = _o3_prod(tmp_path, monkeypatch)
+    j = pipeline.kling3_job(prod, shot)
+    assert "video" not in j.elements[0] and set(j.elements[1]) == {"video"}
+    assert fal.element_files(j.elements[1]) == [prod.root / "refs" / "billy.mp4"]
+    assert j.prompt.endswith(". @Element1 is Bad Billy; @Element2 is a video of him.")
+    assert pipeline.O3_PROMPT_MAX == 2400                                       # 100 spare under fal's 2500
+    prod, shot = _o3_prod(tmp_path / "b", monkeypatch, n_refs=3)                 # 2 elements + 3 refs = 5 > 4
+    with pytest.raises(RuntimeError, match="at most 4"):
         pipeline.kling3_job(prod, shot)

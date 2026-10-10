@@ -319,3 +319,19 @@ The full rotation is in `docs/CTA_STRATEGY.md`.
 - **Easy answers get comments:** YES/NO, a name, an emoji. Keep on-screen text to two short lines, drawn locally.
 - **Visual-only CTAs** (`silent` / `show:`) can be changed for free after the voices are rendered. Spoken ones need a
   new voice render and approval code.
+
+---
+
+## Section 9: The two things Jason checks first (2026-10-06)
+- **Billy's chin:** no white under the beak. Every cut-out passes the red-background test (`./bbtb cutouts`) before it
+  goes into a keyframe; pre-flight blocks it otherwise.
+- **Saul's eyes:** ENORMOUS and ROUND in every frame. Use `{identity_young_saul}` (it carries the big-eye rule), the
+  `saul_eyes` negative set (`negatives: billy_hands,saul_body,saul_eyes`), and references that start with one large face
+  close-up. `./bbtb preprod` marks a Saul shot NO-GO without them.
+
+See `docs/CHARACTER_BIBLE.md` and `docs/LESSONS_LEARNED.md`.
+
+## Grounding before prompting (owner, 2026-10-06)
+GROUNDING RULE (owner, repeated 5+ times): every standing character's feet must sit on the flat walkable ground defined in ground_zones.yaml. Never on rims, ledges, edges, leaves or dark areas. Pre-flight blocks any keyframe that fails. Check the FEET panel on every approval card before approving.
+Kling copies the keyframe: a prompt can't fix feet that the start frame puts on a rim. Fix the keyframe (and pick a
+plate with open flat ground) before writing a word of the prompt.

@@ -422,3 +422,221 @@ def test_reference_grids_stay_inside_klings_aspect_limit():
     for names in (["billy_head_neutral"] * n for n in (1, 2, 3, 4)):
         g = references.grid(names)
         assert references.aspect_ok(g), (len(names), g.size)
+
+
+def test_red_test_fails_undecided_white_and_passes_once_decided(tmp_path, monkeypatch):
+    """Jason 2026-10-06: sheet white trapped inside a moustache curl showed under Billy's chin in every clip."""
+    from PIL import Image, ImageDraw
+    from bbtb import cutout
+    im = Image.new("RGBA", (100, 100), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    d.ellipse((5, 5, 95, 95), fill=(240, 200, 0, 255))              # body
+    d.ellipse((30, 30, 60, 60), fill=(40, 170, 190, 255))           # a curl...
+    d.ellipse((36, 36, 54, 54), fill=(255, 255, 255, 255))          # ...with sheet white trapped inside
+    monkeypatch.setattr(cutout, "_cut_spec", lambda cid: {})
+    r = cutout.red_test("x", im)
+    assert not r["ok"] and len(r["undecided"]) == 1                 # undecided white blocks the cut-out
+    monkeypatch.setattr(cutout, "_cut_spec", lambda cid: {"keep_white": [[0.45, 0.45]]})
+    assert cutout.red_test("x", im)["ok"]                           # approved as art -> passes
+
+
+def test_locked_episode_references_cannot_be_rebuilt():
+    import subprocess, sys
+    from bbtb.paths import LIBRARY
+    r = subprocess.run([sys.executable, "-m", "bbtb.cli", "references", str(LIBRARY.parent / "productions/ep003/script.md")],
+                       capture_output=True, text=True, cwd=LIBRARY.parent, env={"PYTHONPATH": str(LIBRARY.parent / "studio"), "PATH": "/usr/bin:/bin"})
+    assert r.returncode != 0 and "locked" in (r.stderr + r.stdout)
+
+
+def test_trapped_white_fix_replaces_only_white_below_the_chin_line():
+    import numpy as np
+    from bbtb import clipfix
+    fr = np.full((200, 200, 3), (240, 200, 0), np.uint8)          # yellow bird
+    fr[40:60, 80:120] = 255                                        # eye white, above the chin line
+    fr[130:150, 80:120] = 252                                      # trapped sheet white, below it
+    plate = np.full((200, 200, 3), (90, 60, 30), np.uint8)         # tree trunk
+    out, n = clipfix.trapped_white_frame(fr, plate, (0, 0, 200, 200), below_y=100)
+    assert n > 0 and (out[140, 100] == plate[140, 100]).all()      # chin white -> background
+    assert (out[50, 100] == 255).all()                             # the eye white is untouched
+
+
+def test_keep_collar_keeps_the_shirt_collar_and_still_removes_the_chin_white():
+    """EP001 S06 (owner 2026-10-08): the white collar points between the vest and the tie are Billy's costume."""
+    import numpy as np
+    from bbtb import clipfix
+    fr = np.full((200, 200, 3), (240, 200, 0), np.uint8)          # yellow bird
+    fr[120:200, 60:140] = (90, 20, 25)                             # dark-red vest
+    fr[120:170, 97:104] = (215, 62, 20)                            # red-orange tie
+    fr[120:135, 88:97] = 252                                       # collar point left of the tie
+    fr[120:135, 104:113] = 252                                     # collar point right of the tie
+    fr[110:140, 20:50] = 252                                       # trapped sheet white beside the neck
+    plate = np.full((200, 200, 3), (90, 60, 30), np.uint8)
+    out, _ = clipfix.trapped_white_frame(fr, plate, (0, 0, 200, 200), below_y=100, keep_collar=True)
+    assert (out[125, 30] == plate[125, 30]).all()                  # chin white -> background
+    assert (out[127, 92] >= 245).all() and (out[127, 108] >= 245).all()   # both collar points stay white
+    assert (out[150, 100] == (215, 62, 20)).all()                  # the tie is untouched
+    old, _ = clipfix.trapped_white_frame(fr, plate, (0, 0, 200, 200), below_y=100)
+    assert (old[127, 92] == plate[127, 92]).all()                  # default (EP003) behaviour is unchanged
+
+
+def test_keep_scroll_keeps_the_cream_paper_and_still_removes_the_chin_white():
+    """EP001 S05 (owner 2026-10-08): the open scroll's cream paper touches the trapped white; it must not be blended."""
+    import numpy as np
+    from bbtb import clipfix
+    fr = np.full((200, 200, 3), (240, 200, 0), np.uint8)          # yellow bird
+    fr[140:200, 20:120] = (240, 220, 180)                          # big cream scroll paper (6,000 px)
+    fr[110:140, 30:80] = 252                                       # trapped sheet white, touching the paper's top edge
+    plate = np.full((200, 200, 3), (60, 140, 40), np.uint8)
+    out, _ = clipfix.trapped_white_frame(fr, plate, (0, 0, 200, 200), below_y=100, keep_scroll=True)
+    assert (out[125, 50] == plate[125, 50]).all()                  # chin white -> background
+    assert (out[140:200, 20:120] == fr[140:200, 20:120]).all()     # every paper pixel identical
+    old, _ = clipfix.trapped_white_frame(fr, plate, (0, 0, 200, 200), below_y=100)
+    assert (old[141, 50] != fr[141, 50]).any()                     # default (EP003/S06) blends the paper edge, as before
+
+
+YELLOW, WHITE, GREEN = (250, 205, 40), (250, 250, 250), (60, 140, 40)
+
+
+def _wing(sliver=True, blob=False):
+    """Two yellow feathers on green grass, a 2 px sheet-white gap between them (or a solid white blob)."""
+    import numpy as np
+    fr = np.zeros((120, 120, 3), np.uint8); fr[:] = GREEN
+    fr[20:100, 30:50] = YELLOW
+    fr[20:100, 52:72] = YELLOW
+    if sliver:
+        fr[25:95, 50:52] = WHITE
+    if blob:
+        fr[40:60, 85:105] = WHITE                     # a glove / sneaker toe: a solid blob, must survive
+    plate = np.zeros_like(fr); plate[:] = GREEN
+    return fr, plate
+
+
+def test_feather_white_fills_the_sliver_from_the_plate():
+    import numpy as np
+    from bbtb import clipfix
+    fr, plate = _wing()
+    out, n = clipfix.sliver_white_frame(fr, plate, (0, 0, 120, 120), "yellow")
+    assert n >= 140                                   # the 2 x 70 px sliver
+    assert abs(out[25:95, 50:52].astype(int) - np.array(GREEN)).max() < 40
+    assert (out[20:100, 30:48] == YELLOW).all()       # the feathers themselves are never touched
+
+
+def test_feather_white_keeps_solid_white_blobs_and_respects_the_box():
+    from bbtb import clipfix
+    fr, plate = _wing(sliver=True, blob=True)
+    out, _ = clipfix.sliver_white_frame(fr, plate, (0, 0, 120, 120), "yellow")
+    assert (out[42:58, 87:103] == WHITE).all()        # a blob is not a sliver
+    out2, n2 = clipfix.sliver_white_frame(fr, plate, (80, 0, 120, 120), "yellow")
+    assert n2 == 0 and (out2 == fr).all()             # outside the box nothing changes
+
+
+def test_feather_white_no_op_on_a_clean_frame():
+    from bbtb import clipfix
+    fr, plate = _wing(sliver=False)
+    out, n = clipfix.sliver_white_frame(fr, plate, (0, 0, 120, 120), "yellow")
+    assert n == 0 and (out == fr).all()
+
+
+def test_hold_frames_replaces_a_blink_with_the_last_good_frame(tmp_path):
+    import subprocess
+    import numpy as np
+    from PIL import Image
+    from bbtb import clipfix
+    W, H = 64, 64
+    frames = np.zeros((10, H, W, 3), np.uint8)
+    for i in range(10):
+        frames[i] = i * 20                                         # every frame different
+    src = tmp_path / "c.mp4"
+    p = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", "24",
+                          "-i", "-", "-c:v", "libx264", "-crf", "0", "-pix_fmt", "yuv444p", str(src)], stdin=subprocess.PIPE)
+    p.stdin.write(frames.tobytes()); p.stdin.close(); p.wait()
+    out = clipfix.apply(src, Image.new("RGB", (W, H)), {"hold_frames": [[4, 6]]}, tmp_path / "o.mp4")
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(out), "-f", "rawvideo", "-pix_fmt", "rgb24", "-"],
+                         capture_output=True).stdout
+    got = np.frombuffer(raw, np.uint8).reshape(-1, H, W, 3)[:, 32, 32, 0].astype(int)
+    assert len(got) == 10 and abs(got[4] - got[3]) <= 3 and abs(got[6] - got[3]) <= 3 and abs(got[7] - 140) <= 6
+
+
+REUSE_SCRIPT = """# R
+## SCENE BIG_WORM_HOLE
+NARRATOR [production]: Then out shot The Big Guy.
+ACTION [reuse:EP001_S07, from:2.5]: The Big Guy bursts out.
+BILLY [reuse:EP001_S08, canon:p31]: Oh POOP!
+"""
+
+
+def test_reuse_tags_plan_free_shots_and_bring_their_own_line():
+    s = parse(REUSE_SCRIPT, characters=CHARS)
+    shots = sh.plan(s, CHARS)
+    assert [x.engine for x in shots] == ["reuse_clip", "reuse_talk"]
+    assert shots[0].reuse == "EP001_S07" and shots[0].reuse_from == 2.5 and len(shots[0].lines) == 1
+    assert all("Oh POOP" not in l.text for l in sh.lines_of(s))          # the reused clip brings its own audio
+    from bbtb import cliplib
+    e = cliplib.entry("EP001_S08")
+    with pytest.raises(ValueError, match="same words"):
+        cliplib.talk_audio(e, "Oh no!")
+    assert cliplib.talk_audio(e, "Oh POOP!")[0].exists()
+    with pytest.raises(ValueError, match="marked 'no'"):
+        cliplib.entry("WANTEST2_S01")
+
+
+def test_review_gate_blocks_unapproved_takes(tmp_path):
+    from bbtb import review
+    assert not review.approved(tmp_path, "S01", "fal:abc")
+    review.approve(tmp_path, "S01", "fal:abc", "ok")
+    assert review.approved(tmp_path, "S01", "fal:abc") and not review.approved(tmp_path, "S01", "fal:new-take")
+
+
+def test_parallax_moves_the_character_and_the_background(tmp_path):
+    import subprocess
+    import numpy as np
+    from bbtb import animate
+    s = parse("# P\n## SCENE BIG_WORM_HOLE\nBILLY [tophat, 34left, suspicious, local]: Hi.\nNARRATOR: Billy waited.\n",
+              characters=CHARS)
+    hold = sh.plan(s, CHARS)[-1]
+    assert hold.engine == "local_still" and hold.cast
+    hold.duration = 1.0
+    out = animate.render_parallax(hold, CHARS, (180, 320), tmp_path / "p.mp4")
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(out), "-f", "rawvideo", "-pix_fmt", "rgb24", "-"],
+                         capture_output=True).stdout
+    f = np.frombuffer(raw, np.uint8).reshape(-1, 320, 180, 3).astype(int)
+    assert len(f) == 24 and np.abs(f[-1] - f[0]).mean() > 2                # it really moves (not a still)
+
+
+# ---------------------------------------------------------------- under_white (EP001 S03, owner 2026-10-10)
+import numpy as np
+
+from bbtb.clipfix import under_white_frame
+
+U_PINK, U_OUTLINE, U_WHITE, U_GRASS = (240, 170, 210), (60, 20, 40), (245, 245, 240), (90, 170, 40)
+
+
+def _saul(strip=True, glove=False, lone=False):
+    fr = np.zeros((120, 120, 3), np.uint8); fr[:] = U_GRASS
+    fr[20:60, 20:100] = U_PINK                          # Saul's body
+    fr[60:62, 20:100] = U_OUTLINE                       # his dark outline
+    if strip:
+        fr[62:64, 30:90] = U_WHITE                      # sheet-white strip between the outline and the grass
+    if glove:
+        fr[40:60, 100:120] = U_WHITE                    # a white glove: a solid blob, must survive
+    if lone:
+        fr[90:92, 30:90] = U_WHITE                      # a white line on open grass, nothing above it
+    plate = np.zeros_like(fr); plate[:] = U_GRASS
+    return fr, plate
+
+
+def test_under_white_fills_the_strip_with_grass_and_keeps_saul_and_his_glove():
+    fr, plate = _saul(glove=True)
+    out, n = under_white_frame(fr, plate, (0, 0, 120, 120))
+    assert n >= 120 and (out[62:64, 30:90] == U_GRASS).all()       # strip -> grass
+    assert (out[20:60, 20:100] == U_PINK).all() and (out[60:62, 20:100] == U_OUTLINE).all()
+    assert (out[40:60, 100:120] == U_WHITE).all()                   # the glove is a blob, not a strip
+
+
+def test_under_white_ignores_white_with_no_body_above_and_respects_the_box():
+    fr, plate = _saul(strip=False, lone=True)
+    out, n = under_white_frame(fr, plate, (0, 0, 120, 120))
+    assert n == 0 and (out == fr).all()
+    fr, plate = _saul()
+    out, n = under_white_frame(fr, plate, (0, 0, 120, 50))       # box above the strip
+    assert n == 0 and (out == fr).all()

@@ -1,0 +1,52 @@
+{
+ "S01": {
+  "engine": "fal-ai/kling-video/ai-avatar/v2/standard",
+  "seconds": 2,
+  "cost": 0.1124,
+  "prompt": "Static camera. Big Pea: a round, chubby yellow cartoon bird with a brown leather aviator helmet, round blue-lens goggles, a small orange beak, sleepy half-closed eyes, a yellow head crest, small yellow wings with feather tips and green sneakers, facing right, in a dim underground cave. He leans forward slowly with a sly, villainous grin and gives a big evil laugh in the rhythm of the audio: his beak opens and closes on every 'ha', his round body shakes with each laugh and his shoulders bounce. His goggles catch the light. He stays on the ground. Flat 2D picture-book cartoon style throughout, same colours, same line weight and same proportions from the first to the last frame. No new characters, no text.",
+  "negative": "(Kling Avatar takes no negative prompt)",
+  "card": "productions/ep004/reviews/approval/S01_approval.jpg",
+  "audio": "/Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/shots/S01/kling_voice.wav",
+  "elements": 0
+ },
+ "S02": {
+  "engine": "fal-ai/kling-video/v3/standard/image-to-video",
+  "seconds": 5,
+  "cost": 0.42,
+  "prompt": "Static camera. Two cartoon villains search a cave for food. On the left, Big Pea: a round, chubby yellow cartoon bird with a brown leather aviator helmet, round blue-lens goggles, a small orange beak, sleepy half-closed eyes, a yellow head crest, small yellow wings with feather tips and green sneakers, facing right; on the right, Bad Billy, a cartoon bird villain with a black top hat (silver badge with a red letter B), a monocle on his LEFT eye, an orange beak, teal moustache curls, a dark red vest and teal-and-red sneakers, facing left. The performance, in order: Big Pea pushes his goggles up, bends forward and peers into the dark corners, then straightens up and shakes his head; at the same time Billy leans to look behind the wooden signpost, his head turning left and right, then turns back with a grumpy frown. Both end exactly in their starting poses. Neither speaks. Billy's wings stay folded at his sides: no hands, no fingers. The monocle stays on Billy's LEFT eye. Both keep their feet on the ground. Flat 2D picture-book cartoon style throughout, same colours, same line weight and same proportions from the first to the last frame. No new characters, no text. Character references: @Element1 is Big Pea, @Element2 is Bad Billy. Keep every character exactly as in their reference images: same design, colours, proportions and details.",
+  "negative": "floating, hovering, sliding, feet off the ground, flickering, morphing, melting, smearing, extra limbs, extra characters, text, captions, watermark, logo, blur, distortion, 3D render, realistic, style change, monocle on the right eye, mirrored character, human hands, human fingers, fists, clenched hands, fingers spread, arms, human limbs, hand gestures",
+  "card": "productions/ep004/reviews/approval/S02_approval.jpg",
+  "audio": "",
+  "elements": 2
+ },
+ "S04": {
+  "engine": "fal-ai/kling-video/ai-avatar/v2/standard",
+  "seconds": 3,
+  "cost": 0.1686,
+  "prompt": "Static camera. Big Pea: a round, chubby yellow cartoon bird with a brown leather aviator helmet, round blue-lens goggles, a small orange beak, sleepy half-closed eyes, a yellow head crest, small yellow wings with feather tips and green sneakers, facing right, in a sandy cave beside an old wooden mine cart. He glares to the right at someone annoying him, his eyes narrowing, and says the words in the audio grumpily: his beak opens and closes in the rhythm of the words. He folds his little wings across his tummy, taps one green sneaker and gives a small huff. Flat 2D picture-book cartoon style throughout, same colours, same line weight and same proportions from the first to the last frame. No new characters, no text.",
+  "negative": "(Kling Avatar takes no negative prompt)",
+  "card": "productions/ep004/reviews/approval/S04_approval.jpg",
+  "audio": "/Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/shots/S04/kling_voice.wav",
+  "elements": 0
+ },
+ "S05": {
+  "engine": "fal-ai/kling-video/ai-avatar/v2/standard",
+  "seconds": 3,
+  "cost": 0.1686,
+  "prompt": "Static camera. Big Pea: a round, chubby yellow cartoon bird with a brown leather aviator helmet, round blue-lens goggles, a small orange beak, sleepy half-closed eyes, a yellow head crest, small yellow wings with feather tips and green sneakers, facing the camera, in a sandy cave beside an old wooden mine cart. He glares to the right at someone annoying him, his eyes narrowing, and says the words in the audio grumpily: his beak opens and closes in the rhythm of the words. He folds his little wings across his tummy, taps one green sneaker and gives a small huff. Flat 2D picture-book cartoon style throughout, same colours, same line weight and same proportions from the first to the last frame. No new characters, no text.",
+  "negative": "(Kling Avatar takes no negative prompt)",
+  "card": "productions/ep004/reviews/approval/S05_approval.jpg",
+  "audio": "/Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/shots/S05/kling_voice.wav",
+  "elements": 0
+ },
+ "S07": {
+  "engine": "fal-ai/kling-video/ai-avatar/v2/standard",
+  "seconds": 3,
+  "cost": 0.1686,
+  "prompt": "Static camera. the Snail: a cartoon snail with a big orange spiral shell, a green face, two huge pale-green googly eyes on stalks, a tiny black top hat and big shiny blue lips, facing right, in a cave tunnel. He scolds someone off to the right, in the rhythm of the audio: his big blue lips open and close on every word, his googly eyes bulge and his eye stalks wobble, and his body stretches up out of the shell on 'Go ON!' and settles back. He does not move fast: he is a snail. Flat 2D picture-book cartoon style throughout, same colours, same line weight and same proportions from the first to the last frame. No new characters, no text.",
+  "negative": "(Kling Avatar takes no negative prompt)",
+  "card": "productions/ep004/reviews/approval/S07_approval.jpg",
+  "audio": "/Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/shots/S07/kling_voice.wav",
+  "elements": 0
+ }
+}

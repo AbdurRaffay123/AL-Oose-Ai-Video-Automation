@@ -1,0 +1,8 @@
+file '/Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/shots/S01/local.mp4'
+file '/Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/_work/preview/S02_storyboard.mp4'
+file '/Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/shots/S03/local.mp4'
+file '/Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/shots/S04/local.mp4'
+file '/Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/shots/S05/local.mp4'
+file '/Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/shots/S06/local.mp4'
+file '/Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/shots/S07/local.mp4'
+file '/Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/shots/S08/local.mp4'

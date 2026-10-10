@@ -1,0 +1,22 @@
+# Free render-time fixes for EP004's paid clips (the paid clips are never modified). Owner 2026-10-06.
+S06:
+  # Kling turned the Snail's eyes white in the gasp: tint them back to his official pale green (sampled from f40).
+  tint_eyes:
+    - {frames: [96, 131], box: [300, 600, 640, 1000], color: [205, 254, 194]}
+  # The count as on-the-beat PUNCH-IN cuts from the clean moments only (nothing from 2.1-3.3 s or 3.55-3.95 s).
+  # seg 1 is slowed to 0.75x: the clean calm material (0-2.05 s) must cover the narration intro + "one" AND a
+  # different slice for "two".
+  edit:
+    - {from: 0.0,   to: 1.55,  speed: 0.75, zoom: 1.0}                          # intro + "One..." CHOMP (calm, trembling)
+    - {from: 1.55,  to: 2.05,  zoom: 1.15, center: [440, 830]}                  # "two..." CHOMP (different calm slice)
+    - {from: 3.375, to: 3.542, speed: 0.75, hold: 3, zoom: 1.3, center: [440, 830]}   # "three..." CHOMP (eyes pop wide)
+    - {from: 4.0,   to: 5.458, zoom: 1.45, center: [440, 830]}                  # "FOUR!" GULP (the gasp, tinted)
+S01a:
+  # owner 2026-10-07: generated at 4 s (less drift); the p.12 narration runs 4.71 s with its lead, so the clip is slowed
+  # gently to 0.82x (4.88 s on screen) instead of freezing the last frame.
+  edit:
+    - {from: 0.0, to: 4.0, speed: 0.82}
+S03:
+  # owner 2026-10-07 (option A): the bow and top-hat worms ghost 0.33-0.50 s as the scream starts; hold the clean
+  # frame at 0.29 s (f7) over f8-f12. Free; the paid clip is untouched.
+  hold_frames: [[8, 12]]

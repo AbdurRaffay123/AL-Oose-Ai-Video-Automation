@@ -74,6 +74,21 @@ BG_MEADOW_SIGN_FLOWERS:
   size:
   - 1425
   - 1620
+BG_OAK_MEADOW_TALL:
+  crop:
+  - 0
+  - 0
+  - 1564
+  - 2780
+  file: library/backgrounds/BG_OAK_MEADOW_TALL.png
+  method: bgplates.build (crop only, no painting)
+  parent: book.bad-billy-the-bird-story
+  parent_sha256: 744d9a19c3916ef30e892b19d069df21fa4a52bb4ea0dcd50c50bb81b73823ce
+  pdf_page: 12
+  sha256: 8b35201db215075581532dc568b64f1735452d3d88ffadc2e1de046f214f4ad1
+  size:
+  - 1564
+  - 2780
 BG_OAK_TREEHOUSE:
   crop:
   - 0
@@ -176,6 +191,20 @@ GRASS_SIGN:
   size:
   - 883
   - 1570
+GRASS_SIGN_LOW:
+  crop:
+  - 369
+  - 600
+  - 889
+  - 1578
+  file: library/backgrounds/GRASS_SIGN_LOW.png
+  method: bgplates.build (crop only, no painting)
+  parent: images.backgrounds.bg
+  parent_sha256: 0bdd9f7a1ebb9a81e0a326b80ed329c99502c04ab85d78c81506e29493397738
+  sha256: 22b1110a662c8b877be2902c40456cb6e4f1fc0b4c1518b6ac888b0e8e34d2ac
+  size:
+  - 520
+  - 978
 GRASS_STUMP:
   crop:
   - 480

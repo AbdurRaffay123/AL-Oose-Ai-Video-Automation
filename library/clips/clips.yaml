@@ -1,0 +1,519 @@
+# Clip library (2026-10-06). reusable: A = reuse freely, B = only with its own line/context, C = has a known flaw,
+# no = rejected/test. Script tag `reuse:<ID>` plays a clip for free (studio/bbtb/pipeline.py). Sheets: library/clips/sheets/.
+EP001_S01:
+  path: productions/ep001-big-guy/shots/S01/kling3.mp4
+  duration: 3.04
+  scene: BIG_WORM_HOLE
+  characters: Billy
+  shows: Empty rocks 0–1.5 s, then Billy walks in from the right and stops by the worm hole
+  talking: 'no'
+  reusable: A
+  notes: Great establishing/arrival shot at the rocks. Chin white (needs clip fix).
+  cost: 0.252
+  sheet: library/clips/sheets/EP001_S01.jpg
+  chin_white: true
+EP001_S02:
+  path: productions/ep001-big-guy/shots/S02/kling_avatar.mp4
+  duration: 4.8
+  scene: BIG_WORM_HOLE
+  characters: Billy
+  shows: Billy at the rocks, suspicious, says 'Well, where is the worm?…' (head sway)
+  talking: Billy (canon p28)
+  reusable: B
+  notes: 'Talking: reuse only with its own line. Chin white.'
+  cost: 0.281
+  sheet: library/clips/sheets/EP001_S02.jpg
+  chin_white: true
+  audio: productions/ep001-big-guy/audio/lines/L012_bad_billy.wav
+  audio_lead: 0.15
+  line: Well, where is the worm? Is he scared to appear?!
+EP001_S03:
+  path: productions/ep001-big-guy/shots/S03/kling_avatar.mp4
+  duration: 5.07
+  scene: BIG_WORM_HOLE
+  characters: Saul
+  shows: Saul holds the scroll and talks, gloved hand gestures
+  talking: Saul (adapted p28)
+  reusable: B
+  notes: 'Talking: reuse only with its own line. On model, big eyes.'
+  cost: 0.3372
+  sheet: library/clips/sheets/EP001_S03.jpg
+  audio: productions/ep001-big-guy/audio/lines/L013_young_saul.wav
+  audio_lead: 0.15
+  line: Don't sweat. He is sure to be near. But you can't see him yet until you read this scroll here.
+EP001_S04:
+  path: productions/ep001-big-guy/shots/S04/kling3.mp4
+  duration: 3.04
+  scene: BIG_WORM_HOLE
+  characters: Billy
+  shows: Billy taunts 'Silly little worm!', leans, wing gestures, dust at his feet
+  talking: Billy (canon p29)
+  reusable: B
+  notes: Talking. Chin white.
+  cost: 0.336
+  sheet: library/clips/sheets/EP001_S04.jpg
+  chin_white: true
+  audio: productions/ep001-big-guy/shots/S04/voice_revoiced.wav
+  audio_lead: 0.0
+  line: Silly little worm!
+EP001_S04_take-05fe599f:
+  path: productions/ep001-big-guy/shots/S04/takes/kling3_05fe599f/kling3.mp4
+  duration: 3.04
+  scene: BIG_WORM_HOLE
+  characters: Billy
+  shows: First take of the taunt (facing the wrong way)
+  talking: Billy
+  reusable: 'no'
+  notes: Rejected take.
+  cost: 0.336
+  sheet: library/clips/sheets/EP001_S04_take-05fe599f.jpg
+EP001_S05:
+  path: productions/ep001-big-guy/shots/S05/kling3.mp4
+  duration: 3.04
+  scene: BIG_WORM_HOLE
+  characters: Billy
+  shows: Billy picks up the scroll and unrolls it, reading
+  talking: 'no'
+  reusable: A
+  notes: Silent action; good for any 'reads the scroll' beat. Chin white.
+  cost: 0.252
+  sheet: library/clips/sheets/EP001_S05.jpg
+  chin_white: true
+EP001_S06:
+  path: productions/ep001-big-guy/shots/S06/kling_avatar.mp4
+  duration: 9.87
+  scene: BIG_WORM_HOLE
+  characters: Billy
+  shows: Billy reads the scroll aloud, 'Hey Big Guy!…' (9.9 s)
+  talking: Billy (canon p29)
+  reusable: B
+  notes: Talking, long. Chin white.
+  cost: 0.562
+  sheet: library/clips/sheets/EP001_S06.jpg
+  chin_white: true
+  audio: productions/ep001-big-guy/audio/lines/L017_bad_billy.wav
+  audio_lead: 0.15
+  line: Hey Big Guy! Hey Big Guy! Hey, big juicy worm! Come out of your hole, and I'll watch you squirm.
+EP001_S07:
+  path: productions/ep001-big-guy/shots/S07/kling3.mp4
+  duration: 5.04
+  scene: BIG_WORM_HOLE
+  characters: Big Guy
+  shows: Ground shakes (0–2 s), hole opens, the Big Guy bursts up and roars with arms up (2.5–5 s)
+  talking: 'no'
+  reusable: A
+  notes: 'Best hook clip we own: huge, funny, on model. 2.5–5.0 s is the burst.'
+  cost: 0.42
+  sheet: library/clips/sheets/EP001_S07.jpg
+  best: 2.5-5.0
+EP001_S08:
+  path: productions/ep001-big-guy/shots/S08/kling3.mp4
+  duration: 3.04
+  scene: BIG_WORM_HOLE
+  characters: Billy
+  shows: Billy terrified, 'Oh POOP!', jumps back with a dust puff
+  talking: Billy (canon p31)
+  reusable: A
+  notes: Short, funny, high energy; reuse WITH its line. Chin white.
+  cost: 0.336
+  sheet: library/clips/sheets/EP001_S08.jpg
+  chin_white: true
+  audio: productions/ep001-big-guy/shots/S08/voice_revoiced.wav
+  audio_lead: 0.0
+  line: Oh POOP!
+EP001_S08_take-938a67ae:
+  path: productions/ep001-big-guy/shots/S08/takes/kling3_938a67ae/kling3.mp4
+  duration: 3.04
+  scene: BIG_WORM_HOLE
+  characters: Billy
+  shows: First 'Oh POOP!' take (smiling, not scared)
+  talking: Billy
+  reusable: 'no'
+  notes: Rejected take.
+  cost: 0.336
+  sheet: library/clips/sheets/EP001_S08_take-938a67ae.jpg
+EP001_S09:
+  path: productions/ep001-big-guy/shots/S09/kling3.mp4
+  duration: 6.04
+  scene: BIG_WORM_HOLE
+  characters: Billy
+  shows: Billy shocked, 'This worm is a worm of super-duper size!…', backs away
+  talking: Billy (adapted p31)
+  reusable: A
+  notes: Reuse WITH its line. Chin white.
+  cost: 0.672
+  sheet: library/clips/sheets/EP001_S09.jpg
+  chin_white: true
+  audio: productions/ep001-big-guy/shots/S09/voice_revoiced.wav
+  audio_lead: 0.0
+  line: This worm is a worm of super-duper size! He's too big to eat, way too massive for me!
+EP002_S01:
+  path: productions/ep002/shots/S01/kling3.mp4
+  duration: 6.04
+  scene: GRASS_STUMP
+  characters: Saul + Billy
+  shows: Saul with his ball faces looming Billy, 'Excuse me, Bad Billy…'
+  talking: Saul (canon p20)
+  reusable: C
+  notes: Saul's eyes droop ~5 s (owner flagged). Avoid.
+  cost: 0.672
+  sheet: library/clips/sheets/EP002_S01.jpg
+  eye_drift: true
+  audio: productions/ep002/shots/S01/voice_revoiced.wav
+  audio_lead: 0.0
+  line: Excuse me, Bad Billy, I have something to say. If you give me a chance, I will tell you, okay?
+EP002_S02:
+  path: productions/ep002/shots/S02/kling3.mp4
+  duration: 4.04
+  scene: GRASS_FLOWERS
+  characters: Billy
+  shows: Billy 'REALLY?!', jerk back then settle (low energy)
+  talking: Billy
+  reusable: B
+  notes: Talking; on model, no hands. Chin white.
+  cost: 0.504
+  sheet: library/clips/sheets/EP002_S02.jpg
+  chin_white: true
+  audio: productions/ep002/shots/S02/voice_revoiced.wav
+  audio_lead: 0.0
+  line: REALLY?! Who dares talk to me?
+EP002_S02_take-834ca51e:
+  path: productions/ep002/shots/S02/takes/kling3_834ca51e/kling3.mp4
+  duration: 4.04
+  scene: GRASS_FLOWERS
+  characters: Billy
+  shows: Redesigned Billy walks off on a dirt path
+  talking: Billy
+  reusable: 'no'
+  notes: Rejected (off model).
+  cost: 0.504
+  sheet: library/clips/sheets/EP002_S02_take-834ca51e.jpg
+EP002_S02_take-bb7a5dd5:
+  path: productions/ep002/shots/S02/takes/kling3_bb7a5dd5/kling3.mp4
+  duration: 4.04
+  scene: GRASS_FLOWERS
+  characters: Billy
+  shows: Big outraged performance but wings become fists
+  talking: Billy
+  reusable: 'no'
+  notes: Rejected (hands).
+  cost: 0.448
+  sheet: library/clips/sheets/EP002_S02_take-bb7a5dd5.jpg
+EP002_S03:
+  path: productions/ep002/shots/S03/kling_avatar.mp4
+  duration: 7.2
+  scene: GRASS_SIGN
+  characters: Saul
+  shows: Saul pitches The Big Guy, gestures with gloves (7.2 s)
+  talking: Saul (adapted p21)
+  reusable: B
+  notes: Talking; eyes OK.
+  cost: 0.3372
+  sheet: library/clips/sheets/EP002_S03.jpg
+  audio: productions/ep002/audio/lines/L028_young_saul.wav
+  audio_lead: 0.16
+  line: Have you seen The Big Guy? He is huge like a tree. A far bigger dinner than fifty of me!
+EP002_S04:
+  path: productions/ep002/shots/S04/kling_avatar.mp4
+  duration: 4.8
+  scene: GRASS_FLOWERS
+  characters: Billy
+  shows: Billy 'Okay. But if this is a trick…' with a POINTING HAND
+  talking: Billy
+  reusable: 'no'
+  notes: Human hand 1.3–2.5 s. Avoid.
+  cost: 0.281
+  sheet: library/clips/sheets/EP002_S04.jpg
+  audio: productions/ep002/audio/lines/L031_bad_billy.wav
+  audio_lead: 0.15
+  line: Okay. But if this is a trick, you won't get away, as I'm awfully quick!
+EP002_S05:
+  path: productions/ep002/shots/S05/kling3.mp4
+  duration: 4.04
+  scene: SKY_SHIP
+  characters: Saul + Billy
+  shows: Saul riding on Billy's back in the pastel sky, 'Oh wow!'
+  talking: Saul (adapted p23)
+  reusable: B
+  notes: Talking; two short laughing squints.
+  cost: 0.448
+  sheet: library/clips/sheets/EP002_S05.jpg
+  eye_drift: true
+  audio: productions/ep002/shots/S05/voice_revoiced.wav
+  audio_lead: 0.0
+  line: Oh wow! I always wanted to fly!
+EP002_removed-S05_flight_kling:
+  path: productions/ep002/shots/_removed/S05_flight_kling/kling3.mp4
+  duration: 7.04
+  scene: FLOATING_ISLAND
+  characters: Billy + Saul
+  shows: Billy flies past the floating tree island with Saul on his back, steady flapping (7 s)
+  talking: 'no'
+  reusable: A
+  notes: Silent flight; owner called it 'boring' as a 7 s shot, fine as a 2–3 s cutaway.
+  cost: 0.588
+  sheet: library/clips/sheets/EP002_removed-S05_flight_kling.jpg
+EP002_removed-S07_crash_kling:
+  path: productions/ep002/shots/_removed/S07_crash_kling/kling3.mp4
+  duration: 6.04
+  scene: BIG_WORM_HOLE
+  characters: Billy
+  shows: Billy swoops in and skids (0–3.2 s), then MELTS (3.3–5.2 s)
+  talking: 'no'
+  reusable: B
+  notes: Use 0–3.2 s ONLY (swoop + skid).
+  cost: 0.504
+  sheet: library/clips/sheets/EP002_removed-S07_crash_kling.jpg
+  best: 0-3.2
+EP003_S01:
+  path: productions/ep003/shots/S01/kling3.mp4
+  duration: 4.04
+  scene: BG_OAK_TREEHOUSE
+  characters: Billy
+  shows: 'Billy at the oak: swoon, hugs tummy, wing fling ''My tummy… EMPTY again!'''
+  talking: Billy (production)
+  reusable: B
+  notes: Talking; chin white removed by EP003 clip_fixes.
+  cost: 0.504
+  sheet: library/clips/sheets/EP003_S01.jpg
+  chin_white: true
+  audio: productions/ep003/shots/S01/voice_revoiced.wav
+  audio_lead: 0.0
+  line: My tummy... it's EMPTY again!
+EP003_S01_take-1c84e2d0:
+  path: productions/ep003/shots/S01/takes/kling3_1c84e2d0/kling3.mp4
+  duration: 4.04
+  scene: BG_OAK_TREEHOUSE
+  characters: Billy
+  shows: Calm version of the tummy line, CLEAN chin
+  talking: Billy
+  reusable: B
+  notes: Talking; clean keyframe. Less energy.
+  cost: 0.504
+  sheet: library/clips/sheets/EP003_S01_take-1c84e2d0.jpg
+EP003_S01_take-9d0c84d3:
+  path: productions/ep003/shots/S01/takes/kling3_9d0c84d3/kling3.mp4
+  duration: 4.04
+  scene: BG_OAK_TREEHOUSE
+  characters: Billy
+  shows: Over-the-top version of the tummy line
+  talking: Billy
+  reusable: C
+  notes: 'Owner: over-reaction. Clean chin.'
+  cost: 0.504
+  sheet: library/clips/sheets/EP003_S01_take-9d0c84d3.jpg
+EP003_S04:
+  path: productions/ep003/shots/S04/kling3.mp4
+  duration: 3.04
+  scene: GRASS_STUMP
+  characters: Saul
+  shows: Empty meadow, Saul pops out of the stump with his ball and lands
+  talking: 'no'
+  reusable: A
+  notes: Silent action; blink at 1.58–1.92 s (hold frames 38–46).
+  cost: 0.252
+  sheet: library/clips/sheets/EP003_S04.jpg
+  hold_frames:
+  - - 38
+    - 46
+EP003_S05:
+  path: productions/ep003/shots/S05/kling_avatar.mp4
+  duration: 2.13
+  scene: GRASS_SIGN
+  characters: Saul
+  shows: Saul with ball, 'Ball time!' (Avatar)
+  talking: Saul
+  reusable: C
+  notes: Squint from 0.60 s; only 0–0.56 s usable.
+  cost: 0.1124
+  sheet: library/clips/sheets/EP003_S05.jpg
+  best: 0-0.56
+  audio: productions/ep003/audio/lines/L026_young_saul.wav
+  audio_lead: 0.15
+  line: Ball time, everybody!
+EP003_S05_take-05920c08:
+  path: productions/ep003/shots/S05/takes/kling3_05920c08/kling3.mp4
+  duration: 3.04
+  scene: GRASS_SIGN
+  characters: Saul
+  shows: Saul 'Ball time!' (Standard)
+  talking: Saul
+  reusable: 'no'
+  notes: Eyes droop 37% of frames.
+  cost: 0.378
+  sheet: library/clips/sheets/EP003_S05_take-05920c08.jpg
+EP003_S07:
+  path: productions/ep003/shots/S07/kling3.mp4
+  duration: 3.04
+  scene: BG_OAK_TREEHOUSE
+  characters: Billy
+  shows: Billy at the oak, sly 'Lunch… is served!'
+  talking: Billy (production)
+  reusable: B
+  notes: Talking; chin white removed by EP003 clip_fixes.
+  cost: 0.378
+  sheet: library/clips/sheets/EP003_S07.jpg
+  chin_white: true
+  audio: productions/ep003/shots/S07/voice_revoiced.wav
+  audio_lead: 0.0
+  line: Lunch... is served!
+EP003_S08:
+  path: productions/ep003/shots/S08/kling3.mp4
+  duration: 5.04
+  scene: GRASS_STUMP
+  characters: Saul
+  shows: Saul looks up, eyes widen, gasps and trembles (silent, 5 s)
+  talking: 'no'
+  reusable: A
+  notes: Silent fear reaction; hold frames 32–37, 60–70, 104–107 (blinks).
+  cost: 0.42
+  sheet: library/clips/sheets/EP003_S08.jpg
+  hold_frames:
+  - - 32
+    - 37
+  - - 60
+    - 70
+  - - 104
+    - 107
+WANTEST1_S01:
+  path: productions/test-wan27-ep001-s02/shots/S01/wan.mp4
+  duration: 5.04
+  scene: BIG_WORM_HOLE
+  characters: Billy
+  shows: 'Wan 2.7 test: Billy talks, very static'
+  talking: Billy
+  reusable: 'no'
+  notes: Test only.
+  cost: 0.5
+  sheet: library/clips/sheets/WANTEST1_S01.jpg
+WANTEST2_S01:
+  path: productions/test-wan27-ep001-s02-v2/shots/S01/wan.mp4
+  duration: 5.04
+  scene: BIG_WORM_HOLE
+  characters: Billy
+  shows: 'Wan 2.7 MAX ENERGY test: off model'
+  talking: Billy
+  reusable: 'no'
+  notes: Test only.
+  cost: 0.5
+  sheet: library/clips/sheets/WANTEST2_S01.jpg
+
+# EP004 "WATCH OUT!" (registered 2026-10-10): all 8 owner-approved takes. Made from clean cut-outs (red test passed),
+# so no chin white. `pose` = the cut-out(s) used as start>end keyframe; `scene` = the plate.
+EP004_S01a:
+  path: productions/ep004/shots/S01a/kling3.mp4
+  duration: 4.04
+  scene: GRASS_STUMP
+  pose: worms_group_ball>worms_group_ball
+  characters: Worms (4)
+  shows: The four naughty worms play ball at the stump, open-mouthed laughter, one ball, all four stay in place
+  talking: 'no'
+  reusable: A
+  notes: Silent group action (giggles were an SFX). Faint glove trail under the tuft worm 2.9-3.3 s. In EP004 it plays at
+    0.82x (clip_fixes edit). Lower bodies are Jason's curled tails (no legs).
+  cost: 0.336
+  sheet: library/clips/sheets/EP004_S01a.jpg
+EP004_S01b:
+  path: productions/ep004/shots/S01b/kling_test.mp4
+  duration: 7.2
+  scene: BG_OAK_TREEHOUSE
+  pose: billy_tophat_34right (1.55x head-and-chest push-in)
+  characters: Billy
+  shows: Billy head-and-chest on the treehouse porch, very still, looking down at the meadow; eyes half-closed, pop wide,
+    then narrow menacingly on his growl
+  talking: 'no'
+  reusable: A
+  notes: Kling Avatar driven by his growl, beak stays closed, so it reuses as a silent "Billy watching" beat. Use 0-5.4 s
+    only (Avatar padded a frozen 2 s at the end). Eyes half-closed 0-2.2 s.
+  cost: 0.3372
+  sheet: library/clips/sheets/EP004_S01b.jpg
+  best: 0.0-5.4
+EP004_S02:
+  path: productions/ep004/shots/S02/kling3.mp4
+  duration: 3.04
+  scene: GRASS_FLOWERS
+  pose: snail_side>snail_side
+  characters: Snail
+  shows: The Snail looks up at the tree, his eyes snap wide and he shouts (silent, open mouth)
+  talking: 'no'
+  reusable: B
+  notes: Use 0-1.8 s ONLY (ends on the open-mouth shout; white eyes and smear from 2.0 s). Silent clip; EP004 laid his
+    cloned "WATCH OUT!" over it plus a speech bubble.
+  cost: 0.252
+  sheet: library/clips/sheets/EP004_S02.jpg
+  best: 0.0-1.8
+EP004_S03:
+  path: productions/ep004/shots/S03/kling3.mp4
+  duration: 3.04
+  scene: GRASS_STUMP
+  pose: worms_group_ball>worms_group_ball_down
+  characters: Worms (4)
+  shows: The four worms look up and panic in place, open-mouthed screams; the ball drops to the grass
+  talking: 'no'
+  reusable: A
+  notes: Silent panic beat (the "aaah" was an SFX). Ghosting 0.33-0.50 s is covered by hold_frames 8-12.
+  cost: 0.252
+  sheet: library/clips/sheets/EP004_S03.jpg
+  hold_frames:
+  - - 8
+    - 12
+EP004_S05:
+  path: productions/ep004/shots/S05/kling3.mp4
+  duration: 3.04
+  scene: GRASS_STUMP
+  pose: billy_tophat_landing_approach4>billy_tophat_landing_touchdown
+  characters: Billy
+  shows: Billy's last small move of a landing - touches down on the grass and skids a few centimetres
+  talking: 'no'
+  reusable: B
+  notes: Use 0.79-2.0 s ONLY (smear before f19, big dust cloud hides his feet after). Cut into it from a flight shot on a
+    whoosh.
+  cost: 0.252
+  sheet: library/clips/sheets/EP004_S05.jpg
+  best: 0.79-2.0
+EP004_S06:
+  path: productions/ep004/shots/S06/kling3.mp4
+  duration: 6.04
+  scene: GRASS_FLOWERS
+  pose: snail_side>snail_side
+  characters: Snail
+  shows: The Snail watches something off screen, flinches, then gasps wide-mouthed
+  talking: 'no'
+  reusable: C
+  notes: Known flaws - eye-squeezes (brown blobs) 2.1-3.25 s, a jump 2.25-2.62 s, white eyes in the gasp. Clean only 0-2.05 s
+    and 4.0-5.46 s with the eye tint; EP004 used it as punch-in cuts (clip_fixes edit + tint_eyes).
+  cost: 0.504
+  sheet: library/clips/sheets/EP004_S06.jpg
+  fixes:
+    tint_eyes:
+    - {frames: [96, 131], box: [300, 600, 640, 1000], color: [205, 254, 194]}
+EP004_S07:
+  path: productions/ep004/shots/S07/kling3.mp4
+  duration: 5.04
+  scene: GRASS_STUMP
+  pose: billy_tophat_34left>billy_tophat_34left
+  characters: Billy
+  shows: Billy full and smug at the stump, pats his tummy with one feathered wing, big burp (beak pops open ~3.0 s), hat
+    wobbles but stays on
+  talking: 'no'
+  reusable: A
+  notes: Silent (EP004 laid "Mmm... delicious!" over 0.85 s and the burp SFX at 3.05 s). Badge/face soft 2.75-3.08 s; end by
+    4.375 s (last sharp badge). Also the O3 test's reference video (0-3.0 s).
+  cost: 0.42
+  sheet: library/clips/sheets/EP004_S07.jpg
+  best: 0.0-4.375
+EP004_S08:
+  path: productions/ep004/shots/S08/kling_test.mp4
+  duration: 3.2
+  scene: GRASS_FLOWERS
+  pose: snail_side (Kling Avatar)
+  characters: Snail
+  shows: The Snail says 'Ah, these birds are big trouble makers, mun.' (calm, pale-green eyes)
+  talking: Snail (production, his original recording)
+  reusable: B
+  notes: Talking - reuse only with this exact line. Lips barely move and almost no head shake (Avatar on a non-human mouth).
+  cost: 0.2248
+  sheet: library/clips/sheets/EP004_S08.jpg
+  audio: productions/ep004/audio/originals/L066_snail.wav
+  audio_lead: 0.01
+  line: Ah, these birds are big trouble makers, mun.

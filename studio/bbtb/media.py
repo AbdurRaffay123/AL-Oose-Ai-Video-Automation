@@ -37,8 +37,9 @@ def duration(path: Path) -> float:
     return float(json.loads(out)["format"]["duration"])
 
 
-def to_wav(src: Path, dst: Path, trim_silence: bool = False) -> Path:
-    """Mono 48 kHz 16-bit WAV copy; optionally trim leading/trailing silence."""
+def to_wav(src: Path, dst: Path, trim_silence: bool = False, denoise: bool = False) -> Path:
+    """Mono 48 kHz 16-bit WAV copy; optionally trim leading/trailing silence and reduce steady background hiss
+    (a gentle FFT denoiser + 80 Hz high-pass, for noisy original recordings such as the Snail's)."""
     dst.parent.mkdir(parents=True, exist_ok=True)
     af = ["aresample=48000"]
     if trim_silence:
@@ -46,6 +47,8 @@ def to_wav(src: Path, dst: Path, trim_silence: bool = False) -> Path:
               "areverse",
               "silenceremove=start_periods=1:start_threshold=-50dB:start_silence=0.12",
               "areverse", "aresample=48000"]
+    if denoise:
+        af = ["highpass=f=80", "afftdn=nr=24:nf=-38", "agate=threshold=0.02:ratio=4:attack=5:release=120"] + af
     ffmpeg("-i", str(src), "-ac", "1", "-ar", str(SR), "-af", ",".join(af), "-c:a", "pcm_s16le", str(dst))
     return dst
 

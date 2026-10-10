@@ -7,6 +7,8 @@
   bbtb status <script.md>               where a production is and what to do next
   bbtb resume <script.md>               re-check LTX jobs that were submitted (never resubmits)
   bbtb export <script.md>               free re-export from existing clips (e.g. after a trim:<s> edit)
+bbtb review <script.md>               free: frame sheets (every 0.5 s) + owner-approval status of each generated clip
+bbtb approve-clip <script.md> S01,S04 record the OWNER's approval after they looked at the sheets (gate for assembly)
   bbtb make <script.md> --placeholder-voices   free timing preview before voices exist (never final)
   bbtb voices ...                       voice setup: status, assess, account, clone, set, verify, test,
                                         approve, use, tune, render  (see `bbtb voices -h`)
@@ -17,6 +19,7 @@ bbtb references <script.md>           free: scene reference boards + Kling 3.0 c
 bbtb music                            free: analyse Jason's music (library/audio/music/jason/MUSIC_INVENTORY.md)
 bbtb preprod <script.md>              free: PRE_PRODUCTION.md (GO/NO-GO per shot, risk order, cost plan) + PROMPTS.md
   bbtb plates [--only PREFIX]           crop background plates (library/backgrounds.yaml `crop:`) to library/backgrounds/
+  bbtb grounds [--only PREFIX]          overlays of each plate's walkable ground / forbidden areas (ground_zones.yaml)
   bbtb ltx forget <request_hash>        clear an 'unknown' ledger row after checking the LTX console
 """
 from __future__ import annotations
@@ -35,7 +38,8 @@ def cmd_make(a):
     from .voices import VoicesNotReady
     try:
         s = pipeline.make(Path(a.script), approve=a.approve, only=a.only.split(",") if a.only else None,
-                          placeholder_voices=a.placeholder_voices, max_cost=a.max_cost)
+                          placeholder_voices=a.placeholder_voices, max_cost=a.max_cost,
+                          assemble=not a.no_assemble, auto_approve=a.auto_approve)
     except VoicesNotReady as exc:
         print("STOPPED at the voice stage (nothing generated, nothing spent):\n  " + "\n  ".join(exc.problems))
         if any("no ElevenLabs voice" in p for p in exc.problems):
@@ -78,7 +82,15 @@ def cmd_make(a):
             bal, note = s["balance"]
             print(f"\nfal.ai balance: " + (f"${bal:.2f} {note}" if bal is not None else note))
         print(f"Ledger spend for this episode so far: ${s.get('spent_after', 0):.2f}")
-        print(f"\nFinal video: {s['final']}\nQA: {s['qa']}  ->  {s['qa_report']}")
+        for p in s.get("review_sheets", []):
+            print(f"Frame sheet for review: {p}")
+        if s.get("final"):
+            print(f"\nFinal video: {s['final']}\nQA: {s['qa']}  ->  {s['qa_report']}")
+        elif s.get("unreviewed"):
+            print(f"\nNOT ASSEMBLED - waiting for the owner to approve: {', '.join(s['unreviewed'])} "
+                  f"(look at the frame sheets, then ./bbtb approve-clip {a.script} {','.join(s['unreviewed'])})")
+        else:
+            print("\nNot assembled (--no-assemble): the new clip is in shots/<id>/; run `bbtb export` when ready.")
         for f in s.get("failures", []):
             print(f"  ! {f}")
 
@@ -136,9 +148,36 @@ def cmd_resume(a):
                   f"LTX console; if it is not there, run: bbtb ltx forget {j.request_hash()}")
 
 
+def cmd_review(a):
+    from . import pipeline, review
+    prod = pipeline.prepare(Path(a.script))
+    js = [j for j in pipeline.jobs(prod) if pipeline.is_done(j)]
+    for j, p in zip(js, pipeline.review_sheets(prod, js)):
+        ok = review.approved(prod.root, j.shot_id, j.request_hash())
+        print(f"  {j.shot_id}: {'APPROVED' if ok else 'waiting for owner'}  {p}")
+
+
+def cmd_approve_clip(a):
+    from . import pipeline, review
+    prod = pipeline.prepare(Path(a.script))
+    wanted = {x.strip().upper() for x in a.shots.split(",")}
+    for j in pipeline.jobs(prod):
+        if j.shot_id.upper() in wanted:                  # case-insensitive: pinned ids like S01b
+            if not pipeline.is_done(j):
+                sys.exit(f"{j.shot_id}: no generated clip to approve")
+            review.approve(prod.root, j.shot_id, j.request_hash(), a.note)
+            print(f"  {j.shot_id}: approved (this exact take)")
+            wanted.discard(j.shot_id.upper())
+    if wanted:
+        sys.exit(f"no generated clip for: {', '.join(sorted(wanted))}")
+
+
 def cmd_export(a):
     from . import pipeline
-    s = pipeline.export(Path(a.script))
+    try:
+        s = pipeline.export(Path(a.script), auto_approve=a.auto_approve)
+    except RuntimeError as exc:
+        sys.exit(str(exc))
     print(f"Re-exported for free ({s['duration']:.1f}s): {s['final']}")
     print(f"QA: {s['qa']}  ->  {s['qa_report']}")
     if s["missing"]:
@@ -162,8 +201,22 @@ def cmd_audit(a):
 
 def cmd_cutouts(a):
     from . import cutout
-    done = cutout.run(a.only)
-    print(f"{len(done)} cut-outs written to library/derived/cutouts/ (status: draft until approved)")
+    from .paths import DERIVED
+    if not a.review:
+        done = cutout.run(a.only)
+        print(f"{len(done)} cut-outs written to library/derived/cutouts/ (status: draft until approved)")
+    fails = []
+    for p in sorted((DERIVED / "cutouts").glob(f"{a.review or a.only or ''}*.png")):
+        r = cutout.red_test(p.stem)
+        if a.review or not r["ok"]:
+            cutout.red_review(p.stem, DERIVED / "cutout_review" / f"{p.stem}.png")
+        if not r["ok"]:
+            fails.append(f"  FAIL {p.stem}: undecided white {r['undecided'][:4]}, edge white {r['edge_white']}px")
+    print(f"red-background test: {'all pass' if not fails else str(len(fails)) + ' fail (blocked from keyframes)'}")
+    print("\n".join(fails))
+    if fails:
+        print("Review images: library/derived/cutout_review/<id>.png (blue = undecided). In library/cutlist.yaml add a "
+              "`holes:` sheet point to clear trapped background, or a `keep_white:` point to approve white art.")
 
 
 def cmd_music(a):
@@ -182,8 +235,16 @@ def cmd_preprod(a):
 def cmd_references(a):
     from pathlib import Path
     from . import references
-    from .script_parser import load_characters
-    for b in references.build(Path(a.script).resolve().parent, load_characters()):
+    from .script_parser import load_characters, parse_file
+    if a.characters:
+        for b in references.build_characters():
+            print(f"  {b}")
+        return
+    only = [x.strip().upper() for x in a.only.split(",")] if a.only else None
+    if parse_file(Path(a.script)).meta.get("keyframes") == "locked" and not only:
+        sys.exit("This episode is `keyframes: locked` (finished): rebuilding its reference images would orphan its paid "
+                 "clips. To remake specific shots use --only S01[,S07] (only those shots' images are rebuilt).")
+    for b in references.build(Path(a.script).resolve().parent, load_characters(), only=only):
         print(f"  {b}")
     print("element images in productions/<ep>/scene_references/elements/ (used with header `elements: on`)")
 
@@ -192,6 +253,37 @@ def cmd_plates(a):
     from . import bgplates
     for d in bgplates.build(a.only):
         print(f"{d['scene']:<16} {d['size'][0]}x{d['size'][1]}  -> {d['file']}")
+
+
+def cmd_sfx(a):
+    import hashlib, json
+    from . import audio_bed
+    from .ledger import Ledger
+    names = [n.strip() for n in a.names.split(",") if n.strip()]
+    plan = audio_bed.sfx_plan(names)
+    if not plan:
+        print("Nothing to buy: every named sound already exists (local or cached).")
+        return
+    code = hashlib.sha256(("sfx|" + json.dumps([[p["name"], p["prompt"], p["seconds"]] for p in plan])).encode()
+                          ).hexdigest()[:8].upper()
+    for p in plan:
+        print(f"  {p['name']:<8} {p['seconds'] or 'auto'} s  ~{p['credits']} credits   \"{p['prompt']}\"")
+    print(f"Total: ~{sum(p['credits'] for p in plan)} ElevenLabs credits (one request per sound, never retried).")
+    if a.approve is None:
+        print(f"NOTHING SPENT. To generate: ./bbtb sfx {a.script} {a.names} --approve {code}")
+        return
+    if a.approve.strip().upper() != code:
+        sys.exit(f"Approval code {a.approve} does not match the current plan ({code}).")
+    led = Ledger(Path(a.script).resolve().parent / "ledger.jsonl")
+    for p in plan:
+        print(p["name"], "->", audio_bed.sfx(p["name"], led, allow_paid=True))
+
+
+def cmd_grounds(a):
+    from . import grounding
+    for p in grounding.build_overlays(a.only):
+        print(p)
+    print("green = walkable ground, red = forbidden (library/backgrounds/ground_zones.yaml)")
 
 
 def cmd_refs(a):
@@ -222,24 +314,40 @@ def main(argv=None):
     m = sub.add_parser("make"); m.add_argument("script"); m.add_argument("--approve")
     m.add_argument("--only", help="comma-separated shot ids, e.g. S04,S07")
     m.add_argument("--max-cost", type=float, help="refuse the paid run if it would cost more than this (USD)")
+    m.add_argument("--no-assemble", action="store_true", help="generate + clip QA only; do not build the final video")
+    m.add_argument("--auto-approve", action="store_true", help="TESTS ONLY: skip the owner's frame-review gate")
     m.add_argument("--placeholder-voices", action="store_true",
                    help="free timing preview with macOS voices where speech is missing (never final)")
     m.set_defaults(f=cmd_make)
     s = sub.add_parser("status"); s.add_argument("script"); s.set_defaults(f=cmd_status)
     ex = sub.add_parser("export", help="free re-export from existing clips (no paid calls)")
-    ex.add_argument("script"); ex.set_defaults(f=cmd_export)
+    ex.add_argument("script"); ex.add_argument("--auto-approve", action="store_true", help="TESTS ONLY: skip the review gate")
+    ex.set_defaults(f=cmd_export)
+    rv = sub.add_parser("review", help="free: frame sheets (every 0.5 s) + approval status of every generated clip")
+    rv.add_argument("script"); rv.set_defaults(f=cmd_review)
+    ap = sub.add_parser("approve-clip", help="record the OWNER's approval of reviewed clips (after they saw the sheets)")
+    ap.add_argument("script"); ap.add_argument("shots"); ap.add_argument("--note", default="")
+    ap.set_defaults(f=cmd_approve_clip)
     r = sub.add_parser("resume"); r.add_argument("script"); r.set_defaults(f=cmd_resume)
     voice_cli.register(sub)
     au = sub.add_parser("audit"); au.add_argument("--rebuild", action="store_true"); au.set_defaults(f=cmd_audit)
-    cu = sub.add_parser("cutouts"); cu.add_argument("--only"); cu.set_defaults(f=cmd_cutouts)
+    cu = sub.add_parser("cutouts"); cu.add_argument("--only"); cu.add_argument("--review", metavar="PREFIX")
+    cu.set_defaults(f=cmd_cutouts)
     mu = sub.add_parser("music", help="free: analyse Jason's tracks in library/audio/music/jason/")
     mu.set_defaults(f=cmd_music)
     pp = sub.add_parser("preprod", help="free: PRE_PRODUCTION.md (GO/NO-GO, cost plan) + PROMPTS.md")
     pp.add_argument("script"); pp.set_defaults(f=cmd_preprod)
     rf = sub.add_parser("references", help="build scene reference boards + Kling element images (free)")
-    rf.add_argument("script"); rf.set_defaults(f=cmd_references)
+    rf.add_argument("--only", help="rebuild only these shots (allowed on a locked episode, to remake them)")
+    rf.add_argument("script", nargs="?"); rf.add_argument("--characters", action="store_true",
+                                                         help="build reusable sets in library/scene_references/<char>/")
+    rf.set_defaults(f=cmd_references)
     pl = sub.add_parser("plates", help="crop background plates from the originals (free)")
     pl.add_argument("--only"); pl.set_defaults(f=cmd_plates)
+    sx = sub.add_parser("sfx", help="price (free) or buy (--approve) named ElevenLabs sound effects")
+    sx.add_argument("script"); sx.add_argument("names"); sx.add_argument("--approve"); sx.set_defaults(f=cmd_sfx)
+    gz = sub.add_parser("grounds", help="draw each plate's walkable ground (green) and forbidden areas (red) (free)")
+    gz.add_argument("--only"); gz.set_defaults(f=cmd_grounds)
     rf = sub.add_parser("refs"); rfs = rf.add_subparsers(dest="rcmd", required=True)
     ra = rfs.add_parser("analyze"); ra.add_argument("paths", nargs="+"); ra.add_argument("--max-seconds", type=float, default=30.0)
     ra.set_defaults(f=cmd_refs)

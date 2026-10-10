@@ -41,7 +41,15 @@ SFX_PROMPTS = {
     "pop": "cartoon pop",
     "scroll": "old paper scroll unrolling",
     "tummy": "funny cartoon stomach growl, a long hungry gurgle",
+    # EP004 (owner 2026-10-07)
+    "gulp": "single big comedic cartoon gulp swallow, one wet throat gulp, kid-friendly, no voice, no music",
+    "burp": "one short funny cartoon burp from a small bird, satisfied, kid-friendly, no words, no music",
+    "alarm": "short cartoon alarm siren whoop, urgent warning, comedic, no voice, no music",
+    "giggles": "a few tiny cartoon worms giggling and squeaking happily while playing ball, high-pitched, kid-friendly, no words, no music",
+    "aaah": "a short group scream of tiny cartoon worms, high-pitched 'aaah!', comedic panic, kid-friendly, no words, no music",
 }
+SFX_SECONDS = {"gulp": 1.0, "burp": 1.0, "alarm": 1.5, "giggles": 2.0, "aaah": 1.0}   # fixed length = predictable ElevenLabs credits
+SFX_CREDITS_PER_SECOND = 40                               # ElevenLabs sound effects pricing (set length)
 
 
 def _key() -> str | None:
@@ -73,6 +81,27 @@ def _eleven(url: str, body: dict, dst: Path, ledger: Ledger, cost: float, label:
     return dst
 
 
+def sfx_body(name: str, prompt: str) -> dict:
+    body = {"text": prompt, "prompt_influence": 0.5}
+    if name in SFX_SECONDS:
+        body["duration_seconds"] = SFX_SECONDS[name]
+    return body
+
+
+def sfx_plan(names: list[str]) -> list[dict]:
+    """What `bbtb sfx` would buy: only sounds with no local file and no cached ElevenLabs file."""
+    out = []
+    for n in names:
+        prompt = SFX_PROMPTS.get(n, f"cartoon sound effect: {n}")
+        dst = AUDIO / "elevenlabs" / f"sfx_{hashlib.sha256(prompt.encode()).hexdigest()[:10]}.mp3"
+        if _local("sfx", n) or dst.exists():
+            continue
+        secs = SFX_SECONDS.get(n)
+        out.append({"name": n, "prompt": prompt, "seconds": secs, "dst": dst,
+                    "credits": round(secs * SFX_CREDITS_PER_SECOND) if secs else 200})
+    return out
+
+
 def sfx(name: str, ledger: Ledger, allow_paid: bool) -> Path | None:
     local = _local("sfx", name)
     if local:
@@ -82,7 +111,7 @@ def sfx(name: str, ledger: Ledger, allow_paid: bool) -> Path | None:
     if dst.exists():
         return dst
     if allow_paid and _key():
-        return _eleven(SFX_URL, {"text": prompt, "prompt_influence": 0.5}, dst, ledger, SFX_COST, f"sfx {name}")
+        return _eleven(SFX_URL, sfx_body(name, prompt), dst, ledger, SFX_COST, f"sfx {name}")
     return synth_sfx(name)
 
 

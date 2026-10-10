@@ -17,11 +17,12 @@ from pathlib import Path
 
 import yaml
 
-from . import animate, assemble, audio_bed, clip_qa, elevenlabs, fal, keyframes, ltx, media, preflight, qa, references, revoice, voices
+from . import animate, assemble, localanim, audio_bed, clip_qa, clipfix, cliplib, review, elevenlabs, fal, keyframes, ltx, media, preflight, qa, references, revoice, voices
 from .ledger import ACTIVE, Ledger
 from .paths import DERIVED, LIBRARY, PRODUCTIONS
 DERIVED_CUTOUTS = DERIVED / "cutouts"
 from .script_parser import Script, load_characters, parse_file
+from . import shots as shots_mod
 from .shots import SPECIAL_SCENES, Shot, apply_durations, lines_of, plan
 
 
@@ -40,6 +41,20 @@ class Production:
         return round(sum(s.duration for s in self.shots), 3)
 
 
+def apply_retimed(root: Path, lines: dict) -> None:
+    """audio/retimed.yaml {exact line text: wav}: a free re-timing of an approved recording (slices of the same audio
+    with pauses added, e.g. EP004's count so each CHOMP gets its own number). The original slice stays untouched."""
+    cfg = root / "audio" / "retimed.yaml"
+    if not cfg.exists():
+        return
+    table = yaml.safe_load(cfg.read_text()) or {}
+    for lid, e in lines.items():
+        wav = table.get(e.get("text", ""))
+        if wav and e.get("final") and (root / "audio" / wav).exists():
+            p = root / "audio" / wav
+            lines[lid] = {**e, "path": str(p), "seconds": media.duration(p), "retimed_from": e.get("path")}
+
+
 def prepare(script_path: Path, placeholder_voices: bool = False) -> Production:
     """Free: never calls a paid API. Raises voices.VoicesNotReady if speech still has to be generated
     (unless placeholder_voices - an explicit, never-final timing preview)."""
@@ -49,13 +64,39 @@ def prepare(script_path: Path, placeholder_voices: bool = False) -> Production:
     led = Ledger(root / "ledger.jsonl")
     lines = voices.render_lines(lines_of(script), chars, root / "audio", led,
                                 allow_paid=False, placeholder=placeholder_voices)
+    apply_retimed(root, lines)
     shots = plan(script, chars)
     previous = None
     for s in shots:                                    # scene types -> a concrete background (never twice in a row)
         if s.scene not in SPECIAL_SCENES:
             s.scene = keyframes.resolve_scene(s.scene, previous)
             previous = s.scene
+    for s in shots:                                    # reused talking clips bring their own approved line audio
+        if s.engine == "reuse_talk":
+            e = cliplib.entry(s.reuse)
+            ev = next(x for x in script.events if x.line_no == s.source_line)
+            audio, lead = cliplib.talk_audio(e, ev.text)
+            dst = root / "audio" / "reused" / f"{s.lines[0]}.wav"
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            ms = int(lead * 1000)
+            media.ffmpeg("-i", str(audio), "-af", f"adelay={ms}|{ms}", "-ac", "1", "-ar", "48000", str(dst))
+            lines[s.lines[0]] = {"path": str(dst), "seconds": media.duration(dst), "text": ev.text, "final": True,
+                                 "speaker": ev.speaker, "source": f"reused clip audio ({s.reuse})",
+                                 "line_source": ev.source}
     apply_durations(shots, {k: v["seconds"] for k, v in lines.items()})
+    edits = clipfix.spec(root)                         # clip_fixes.yaml `edit:` sets the shot's on-screen length
+    for s_ in shots:
+        if (edits.get(s_.id) or {}).get("edit"):
+            s_.duration = clipfix.edit_seconds(edits[s_.id]["edit"])
+    for s in shots:                                    # a reused clip can't run longer than its usable window
+        if s.engine in ("reuse_clip", "reuse_talk"):
+            e = cliplib.entry(s.reuse)
+            a, b = cliplib.window(e, s.reuse_from)
+            if s.engine == "reuse_talk":
+                s.duration = round(min(lines[s.lines[0]]["seconds"] + 0.2, b - a), 2)
+            elif s.duration > (b - a) * cliplib.MAX_SLOW + 1e-6:
+                raise ValueError(f"{s.id}: {s.reuse} offers {b - a:.1f}s (up to {(b - a) * cliplib.MAX_SLOW:.1f}s slowed) "
+                                 f"but the narration needs {s.duration:.1f}s: split the narration or pick a longer clip")
     size = keyframes.out_size(script.meta["format"], script.meta["resolution"])
     prod = Production(script, root, chars, shots, lines, size, led)
     locked = script.meta.get("keyframes") == "locked"   # finished episode: keep the exact frames its paid clips used
@@ -63,15 +104,17 @@ def prepare(script_path: Path, placeholder_voices: bool = False) -> Production:
         first, last = frame_paths(prod, s)
         if locked and first.exists() and (not s.end_cast or last.exists()) and s.engine != "local_endcard":
             continue
-        if s.engine == "local_endcard" and s.card:      # moment: the keyframe is its last (complete) frame
+        if s.engine in ("reuse_clip", "reuse_talk"):
+            cliplib.frame(cliplib.entry(s.reuse), cliplib.window(cliplib.entry(s.reuse), s.reuse_from)[0], first)
+        elif s.engine == "local_endcard" and s.card:      # moment: the keyframe is its last (complete) frame
             keyframes.save(keyframes.card_frame(s, keyframes.card_layers(s, chars, size), s.duration), first)
         elif s.engine == "local_endcard":
             keyframes.save(keyframes.end_card(size), first)
         else:
             start = s.start_cast if s.start_cast is not None else s.cast     # [] = the empty scene
-            keyframes.save(keyframes.compose(s.scene, start, chars, size, s.zoom), first)
+            keyframes.save(keyframes.compose(s.scene, start, chars, size, s.zoom, place=s.place), first)
             if s.end_cast:
-                keyframes.save(keyframes.compose(s.scene, s.end_cast, chars, size, s.zoom), last)
+                keyframes.save(keyframes.compose(s.scene, s.end_cast, chars, size, s.zoom, place=s.place_end), last)
     return prod
 
 
@@ -90,25 +133,50 @@ def kling_prompt(chars: dict, on) -> str:
     return " ".join(tpl.split()).replace("{facing}", cfg["facing_words"][face])
 
 
-def upload_audio(src: Path, dst: Path) -> dict:
-    """Trimmed, -16 LUFS upload copy of a line (cached by the source's hash)."""
+def upload_audio(src: Path, dst: Path, keep_lead: bool = False) -> dict:
+    """Trimmed, -16 LUFS upload copy of a line (cached by the source's hash). keep_lead: a timed driver track whose
+    leading silence is intentional (Avatar action shots)."""
     meta = dst.with_suffix(".json")
-    sha = hashlib.sha256(src.read_bytes()).hexdigest()
+    sha = hashlib.sha256(src.read_bytes()).hexdigest() + (":lead" if keep_lead else "")
     if dst.exists() and meta.exists():
         info = json.loads(meta.read_text())
         if info.get("source_sha256") == sha:
             return info
-    info = {**preflight.prepare_audio(src, dst), "source_sha256": sha, "source_path": str(src)}
+    info = {**preflight.prepare_audio(src, dst, keep_lead=keep_lead), "source_sha256": sha, "source_path": str(src)}
     meta.write_text(json.dumps(info, indent=2))
     return info
 
 
+def avatar_driver(prod: Production, s: Shot) -> tuple[str, float] | None:
+    """An ACTION shot on Avatar is driven by the ON-SCREEN character's own timed voice-over line only (never the
+    narrator: Avatar moves the mouth to whatever audio it gets). Returns (line id, start in the shot)."""
+    if s.kind != "action" or not s.cast:
+        return None
+    for lid, at in (s.line_at or {}).items():
+        if prod.lines[lid].get("speaker") == s.cast[0].char:
+            return lid, at
+    return None
+
+
 def kling_job(prod: Production, s: Shot, first: Path, test: bool = False) -> fal.Job:
-    lid = s.lines[0]
+    drv = avatar_driver(prod, s)
+    lid = drv[0] if drv else s.lines[0]
     e = prod.lines[lid]
     d = prod.root / "shots" / s.id
     files, info, seconds, head = {"image_url": first}, {}, e["seconds"], 0.0
-    if e.get("final"):                     # only real (original / approved ElevenLabs) audio is ever uploaded
+    if e.get("final") and drv:             # silence up to the line's start, then the line (lead kept, not trimmed)
+        lead = assemble.LEAD["kling_avatar"]
+        src = d / "kling_driver_src.wav"
+        d.mkdir(parents=True, exist_ok=True)
+        media.ffmpeg("-f", "lavfi", "-t", f"{max(drv[1] - lead, 0.0):.3f}", "-i", "anullsrc=r=48000:cl=mono",
+                     "-i", str(e["path"]), "-filter_complex", "[1:a]aresample=48000,aformat=channel_layouts=mono[b];[0:a][b]concat=n=2:v=0:a=1",
+                     "-c:a", "pcm_s16le", str(src))
+        audio = d / "kling_voice.wav"
+        info = upload_audio(src, audio, keep_lead=True)
+        info["driver"] = {"line": lid, "start": drv[1]}
+        files["audio_url"] = audio
+        seconds, head = info["prepared"]["seconds"], 0.0
+    elif e.get("final"):                   # only real (original / approved ElevenLabs) audio is ever uploaded
         audio = d / "kling_voice.wav"
         info = upload_audio(Path(e["path"]), audio)
         files["audio_url"] = audio
@@ -187,34 +255,46 @@ def kling3_prompt(prod: Production, s: Shot) -> tuple[str, str]:
     return text, " ".join((cfg.get("negative") or "").split())
 
 
+def shot_tags(prod: Production, s: Shot) -> list[str]:
+    line = next((e for e in prod.script.events if e.line_no == s.source_line), None)
+    return line.direction if line else []
+
+
 def shot_negative(prod: Production, s: Shot, base: str) -> str:
     """The shared negative prompt, plus the script's opt-in sets (header `negatives: <set>[,<set>]`, defined under
     negative_sets: in library/kling_prompts.yaml) for every shot with that set's character on screen. Opt-in, so
     finished episodes keep their exact requests."""
     names = [n.strip() for n in (prod.script.meta.get("negatives") or "").split(",") if n.strip()]
+    line = next((e for e in prod.script.events if e.line_no == s.source_line), None)   # per-shot tag neg:<set>[+<set>]
+    names += [n.strip() for n in shots_mod.tag_value(line.direction, "neg").split("+") if n.strip()] if line else []
     if not names:
         return base
     sets = yaml.safe_load((LIBRARY / "kling_prompts.yaml").read_text()).get("negative_sets") or {}
     on = {o.char for o in (s.cast or []) + (s.end_cast or []) + (s.start_cast or [])}
-    extra = []
+    extra, drop = [], set()
     for n in names:
         if n not in sets:
             raise RuntimeError(f"unknown negative set '{n}' (script header negatives:); see negative_sets: in kling_prompts.yaml")
         if sets[n]["character"] in on:
-            extra.append(" ".join(sets[n]["text"].split()))
+            if " ".join((sets[n].get("text") or "").split()):          # a set may only drop shared terms
+                extra.append(" ".join(sets[n]["text"].split()))
+            drop |= {d.strip() for d in sets[n].get("drop") or []}
+    if drop:      # a set may remove shared terms its shot needs (EP004 dive: airborne + skid vs "floating, sliding")
+        base = ", ".join(t for t in (x.strip() for x in base.split(",")) if t and t not in drop)
     return ", ".join([base, *extra]) if extra else base
 
 
 def with_elements(prod: Production, s: Shot, job: fal.Job) -> fal.Job:
     """Header `elements: on`: attach the shot's character references (references.yaml, built by `bbtb references`)
     to a Kling 3.0 Standard job and name them in the prompt as @Element1, @Element2 ..."""
-    if prod.script.meta.get("elements") != "on" or job.model != fal.KLING3_STD:
-        return job
+    if job.model not in (fal.KLING3_STD, fal.KLING_O3_R2V) or (prod.script.meta.get("elements") != "on"
+                                                              and "refs" not in shot_tags(prod, s)):
+        return job                                    # header elements: on, or per shot with the tag `refs`
     els = references.paths(prod.root, s.id)
     if not els:
         return job
     on_screen = {o.char for o in (s.cast or []) + (s.end_cast or [])}
-    if {e["char"] for e in els} != on_screen:            # stale references.yaml (e.g. shots renumbered)
+    if not on_screen <= {e["char"] for e in els}:        # stale references.yaml (e.g. shots renumbered)
         raise RuntimeError(f"{s.id}: references.yaml lists {sorted(e['char'] for e in els)} but the shot shows "
                            f"{sorted(on_screen)}: fix the shot ids in references.yaml, then `bbtb references`")
     names = ", ".join(f"@Element{i + 1} is {prod.chars[e['char']]['display_name']}" for i, e in enumerate(els))
@@ -267,9 +347,62 @@ def kling3_job(prod: Production, s: Shot) -> fal.Job:
     files = {"start_image_url": first}
     if s.end_cast:
         files["end_image_url"] = last
-    return with_elements(prod, s, fal.Job(s.id, fal.KLING3_STD, prompt, files, float(secs), d / "kling3.mp4", endpoint="kling3-action",
-                   extra={"duration": str(secs), "generate_audio": False, "negative_prompt": negative},
-                   required=("start_image_url",)))
+    elif "loop" in s.motion:                          # tag loop: end on the start frame (keeps characters on model)
+        files["end_image_url"] = first
+    job = fal.Job(s.id, fal.KLING3_STD, prompt, files, float(secs), d / "kling3.mp4", endpoint="kling3-action",
+                  extra={"duration": str(secs), "generate_audio": False, "negative_prompt": negative},
+                  required=("start_image_url",))
+    if "o3" in shot_tags(prod, s):
+        return o3_job(prod, s, job, negative)
+    return with_elements(prod, s, job)
+
+
+O3_VIDEO_SECONDS = (3.0, 10.05)                       # fal limits for an element video (2026-10-08 schema)
+O3_PROMPT_MAX = 2400                                  # fal's limit is 2500, but fal refused a 2,493-character prompt
+                                                      # (2026-10-10; it seems to expand the @Element tags): keep 100 spare
+O3_VIDEO_ITEMS = 4                                    # fal: with a video, at most 4 elements + reference images
+
+
+def o3_job(prod: Production, s: Shot, job: fal.Job, negative: str) -> fal.Job:
+    """Script tag `o3` on a kling3std action (owner 2026-10-08 model test): the same keyframes, prompt and character
+    references on Kling O3 reference-to-video. O3 has no negative-prompt field, so the shot's blocking list is
+    appended to the prompt as "Never: ...". Tag `refvideo:<path>` (relative to the production) adds a 3-10 s clip of
+    the character as its OWN element: @Element1 = the character's images, @Element2 = the video (owner 2026-10-10: fal
+    refuses an element with both). With a video, fal allows at most 4 items (elements + reference images)."""
+    job.model, job.endpoint = fal.KLING_O3_R2V, "kling-o3"
+    job.extra = {"duration": job.extra["duration"], "aspect_ratio": "9:16", "generate_audio": False}
+    never = shots_mod.tag_value(shot_tags(prod, s), "never")      # tag never:<set>: a short O3-only list (owner
+    if never:                                                       # 2026-10-08) instead of the full negative
+        sets = yaml.safe_load((LIBRARY / "kling_prompts.yaml").read_text()).get("negative_sets") or {}
+        if never not in sets:
+            raise RuntimeError(f"{s.id}: never:{never} is not a negative set in library/kling_prompts.yaml")
+        negative = " ".join(sets[never]["text"].split())
+    base = f"{job.prompt} Never: {negative}."
+    job.prompt = base
+    job = with_elements(prod, s, job)
+    ref = shots_mod.tag_value(shot_tags(prod, s), "refvideo")
+    if ref:
+        video = prod.root / ref
+        if not video.exists():
+            raise RuntimeError(f"{s.id}: reference video {ref} not found in {prod.root}")
+        if len(job.elements) != 1:
+            raise RuntimeError(f"{s.id}: refvideo needs exactly one character with references (header elements: on, "
+                               f"or tag refs); found {len(job.elements)}")
+        secs = media.duration(video)
+        lo, hi = O3_VIDEO_SECONDS
+        if not lo <= secs <= hi:
+            raise RuntimeError(f"{s.id}: reference video is {secs:.2f} s; Kling O3 needs {lo:g}-{hi:g} s")
+        job.elements = [job.elements[0], {"video": video}]
+        items = len(job.elements) + len(job.elements[0]["refs"])
+        if items > O3_VIDEO_ITEMS:
+            raise RuntimeError(f"{s.id}: {items} items (elements + reference images); with a video Kling O3 takes at "
+                               f"most {O3_VIDEO_ITEMS}: list fewer refs for this shot in references.yaml")
+        name = prod.chars[(s.cast or s.end_cast)[0].char]["display_name"]
+        job.prompt = f"{base} @Element1 is {name}; @Element2 is a video of him."
+    if len(job.prompt) > O3_PROMPT_MAX:
+        raise RuntimeError(f"{s.id}: the Kling O3 prompt is {len(job.prompt)} characters (limit {O3_PROMPT_MAX}: fal's "
+                           f"2500 minus a safety margin; the blocking list is part of it): shorten the template or the neg: sets. Nothing was sent.")
+    return job
 
 
 def use_revoiced(prod: Production, job_list: list) -> None:
@@ -345,6 +478,8 @@ def cost_table(prod: Production, job_list: list[ltx.Job], include_audio: bool = 
         j = next((x for x in job_list if x.shot_id == s.id), None)
         if j is None and s.engine.startswith(("kling", "ltx")):
             rows.append(f"  {s.id}  {s.engine:<14} {s.duration:5.1f}s   not in this run (storyboard still)")
+        elif j is None and s.engine.startswith("reuse"):
+            rows.append(f"  {s.id}  {s.engine:<14} {s.duration:5.1f}s   free (reuses {s.reuse})")
         elif j is None:
             rows.append(f"  {s.id}  {s.engine:<14} {s.duration:5.1f}s   free (local)")
         elif is_done(j):
@@ -408,7 +543,7 @@ def preflight_report(prod: Production, job_list: list) -> dict[str, list]:
     out = {}
     for j in job_list:
         s = by_shot[j.shot_id]
-        if is_done(j) or not (s.kind == "talk" or s.engine == "kling3_action"):
+        if is_done(j) or not (s.kind == "talk" or s.engine in ("kling3_action", "kling_avatar")):
             continue
         first, last = frame_paths(prod, s)
         if s.engine == "kling3_action":
@@ -423,6 +558,13 @@ def preflight_report(prod: Production, job_list: list) -> dict[str, list]:
                            for c in preflight.keyframe_checks(prod, s, frame=last, cast=s.end_cast)]
         else:
             checks = preflight.keyframe_checks(prod, s)
+            if any(o.char == "young_saul" for o in s.cast) and s.engine in ("kling3_talk", "wan_talk"):
+                checks.append(preflight.Check("Saul engine", "FAIL", "No Turbo/Wan for Saul: his eyes droop for most of the "
+                                              "clip (EP002 S01). Talking Saul: Kling Avatar (least drift so far)"))
+            elif any(o.char == "young_saul" for o in s.cast) and s.kind == "talk":
+                checks.append(preflight.Check("Saul engine", "WARN", "Talking Saul drifts on every Kling model (Avatar: "
+                                              "short squint; Standard: 37% droopy frames). Check his eyes frame by frame; "
+                                              "the real fix is high-res expression art from Jason"))
             if s.engine == "kling3_talk" and prod.script.meta.get("elements") == "on":
                 checks.append(preflight.Check("character references", "FAIL",
                                               "Kling 3.0 Turbo takes no reference images: tag the line kling3std"))
@@ -438,8 +580,24 @@ def preflight_report(prod: Production, job_list: list) -> dict[str, list]:
     return out
 
 
+def unreviewed(prod: Production, job_list: list) -> list:
+    """Generated clips the owner has not approved yet (review gate)."""
+    return [j for j in job_list if isinstance(j, fal.Job) and j.done()
+            and not review.approved(prod.root, j.shot_id, j.request_hash())]
+
+
+def review_sheets(prod: Production, job_list: list) -> list[Path]:
+    out = []
+    for j in job_list:
+        if isinstance(j, fal.Job) and j.done():
+            out.append(review.sheet(j.out_path, prod.root / "reviews" / f"{j.shot_id}_frames.jpg",
+                                    f"{prod.script.title} {j.shot_id}"))
+    return out
+
+
 def make(script_path: Path, approve: str | None = None, only: list[str] | None = None,
-         placeholder_voices: bool = False, max_cost: float | None = None) -> dict:
+         placeholder_voices: bool = False, max_cost: float | None = None, assemble: bool = True,
+         auto_approve: bool = False) -> dict:
     """`only`: generate just these shot ids (e.g. a cheap test); everything else stays local."""
     if approve and placeholder_voices:
         raise RuntimeError("--placeholder-voices is for free previews only; it can't be combined with --approve.")
@@ -451,11 +609,11 @@ def make(script_path: Path, approve: str | None = None, only: list[str] | None =
     use_revoiced(prod, all_jobs)
     job_list = list(all_jobs)
     if only:
-        wanted = {x.strip().upper() for x in only}
-        unknown = wanted - {s.id for s in prod.shots}
+        wanted = {x.strip().upper() for x in only}      # case-insensitive: pinned ids like S01b (owner 2026-10-07)
+        unknown = wanted - {s.id.upper() for s in prod.shots}
         if unknown:
             raise RuntimeError(f"no such shot(s): {', '.join(sorted(unknown))}")
-        job_list = [j for j in job_list if j.shot_id in wanted]
+        job_list = [j for j in job_list if j.shot_id.upper() in wanted]
     table, new_cost = cost_table(prod, job_list, include_audio=not only)
     spent = prod.ledger.spent()
     code = approval_code(job_list, meta["budget"])
@@ -527,6 +685,11 @@ def make(script_path: Path, approve: str | None = None, only: list[str] | None =
     if made or any(isinstance(j, fal.Job) for j in job_list):
         summary["balance"] = fal_client.balance()
     summary["spent_after"] = prod.ledger.spent()
+    summary["review_sheets"] = [str(p) for p in review_sheets(prod, made)]
+    pending = [] if auto_approve else unreviewed(prod, all_jobs)
+    if not assemble or pending:                        # owner reviews the new clip(s) before anything is assembled
+        summary.update({"final": None, "failures": failures, "unreviewed": [j.shot_id for j in pending]})
+        return summary
     final = render(prod, final=True, paid_audio=not only, job_list=all_jobs)
     if not only:
         final = copy_finals(prod, final)
@@ -566,12 +729,19 @@ def archive_take(j: fal.Job) -> Path | None:
     return dst
 
 
-def export(script_path: Path) -> dict:
+def export(script_path: Path, auto_approve: bool = False) -> dict:
     """Free re-export from the clips already made (after an edit such as trim:<s>). Never calls a paid API:
     music/SFX come from the cache or are synthesized; shots without a clip use free local animation."""
     prod = prepare(script_path)
     all_jobs = jobs(prod)
     use_revoiced(prod, all_jobs)
+    pending = [] if auto_approve else unreviewed(prod, all_jobs)
+    if pending:
+        sheets = review_sheets(prod, pending)
+        raise RuntimeError("Not assembled: the owner has not approved these clips yet (review gate):\n  "
+                           + "\n  ".join(f"{j.shot_id}: {p}" for j, p in zip(pending, sheets))
+                           + f"\nAfter the owner approves: ./bbtb approve-clip {script_path} "
+                           + ",".join(j.shot_id for j in pending))
     missing = [j.shot_id for j in all_jobs if not is_done(j)]
     final = render(prod, final=True, paid_audio=False, job_list=all_jobs)
     final = copy_finals(prod, final)
@@ -629,7 +799,14 @@ def render(prod: Production, final: bool, paid_audio: bool = True, job_list: lis
                                                       or revoice.done(kj.out_path.parent, kj.request_hash()))
             if final and ready:
                 dst = work / f"{s.id}_kling3_fitted.mp4"
-                assemble.fit_clip(kj.out_path, s.duration, prod.size, dst, skip=s.trim)
+                src = kj.out_path
+                fixes = clipfix.spec(prod.root).get(s.id)
+                if fixes:                              # free render-time fixes (clip_fixes.yaml); the paid clip is untouched
+                    bg, _ = keyframes.layout(s.scene, s.cast, prod.chars, prod.size, zoom=s.zoom)
+                    src = clipfix.apply(kj.out_path, bg, fixes, work / f"{s.id}_clipfix.mp4")
+                assemble.fit_clip(src, s.duration, prod.size, dst, skip=s.trim)
+                if s.fx_args:                          # localanim overlays: bubble / numbers / ball (owner 2026-10-07)
+                    dst = localanim.overlay(s, dst, prod.size, work / f"{s.id}_overlay.mp4")
                 if s.cut and last.exists():            # tag cut:<s> (owner 2026-10-05: S07 meltdown hidden, free)
                     thud = next((fx["at"] for fx in sorted(s.sfx, key=lambda x: x["at"]) if fx["at"] >= s.cut), s.cut)
                     dst = assemble.cut_and_hold(dst, s.cut, last, s.duration, prod.size,
@@ -651,10 +828,15 @@ def render(prod: Production, final: bool, paid_audio: bool = True, job_list: lis
         elif final and kj is not None and kj.done():
             dst = work / f"{s.id}_kling_fitted.mp4"
             src = kj.out_path
+            fixes = clipfix.spec(prod.root).get(s.id)
+            if fixes:                                  # free render-time fixes for Avatar clips too (EP001 S02/S03/S06)
+                bg, _ = keyframes.layout(s.scene, s.cast, prod.chars, prod.size, zoom=s.zoom)
+                src = clipfix.apply(src, bg, fixes, work / f"{s.id}_clipfix.mp4")
             if s.cut:                                  # tag cut:<s>: use the clip up to <s>, hold that frame (free)
-                src = work / f"{s.id}_cut_src.mp4"
-                media.ffmpeg("-i", str(kj.out_path), "-t", f"{s.cut:.3f}", "-an", "-c:v", "libx264", "-preset", "medium",
-                             "-crf", "16", str(src))
+                cut_src = work / f"{s.id}_cut_src.mp4"
+                media.ffmpeg("-i", str(src), "-t", f"{s.cut:.3f}", "-an", "-c:v", "libx264", "-preset", "medium",
+                             "-crf", "16", str(cut_src))   # cut the fixed copy, not the raw clip
+                src = cut_src
             assemble.fit_clip(src, s.duration, prod.size, dst,
                               lead=assemble.LEAD.get(s.engine, assemble.LEAD["kling_avatar"]) + kj.head_trim)
         elif final and raw.exists() and s.engine.startswith("ltx"):
@@ -664,8 +846,18 @@ def render(prod: Production, final: bool, paid_audio: bool = True, job_list: lis
             animate.render_card(s, prod.chars, prod.size, dst)
         elif s.engine == "local_endcard":
             assemble.still_clip(first, s.duration, prod.size, dst, push=0.04, fade_in=0.3)
+        elif s.engine in ("reuse_clip", "reuse_talk"):    # free: a library clip (cliplib), with its known fixes
+            e = cliplib.entry(s.reuse)
+            fixes = clipfix.spec(prod.root).get(s.id) or {}
+            tw = (fixes.get("trapped_white") or (e.get("fixes") or {}).get("trapped_white"))
+            plate = keyframes.plate(e["scene"], prod.size, float(tw.get("plate_zoom", 1.0))) if tw else None
+            dst = cliplib.fitted(e, s.reuse_from, s.duration, prod.size, work / f"{s.id}_reuse.mp4", fixes, plate)
+        elif s.engine == "local_still" and s.cast:     # owner 2026-10-06: never a flat zoom - layered parallax
+            animate.render_parallax(s, prod.chars, prod.size, dst)
         elif s.engine == "local_still" or (s.engine == "ltx_i2v" and not s.cast):
-            assemble.still_clip(first, s.duration, prod.size, dst, push=0.05)
+            animate.render_parallax(s, prod.chars, prod.size, dst)
+        elif s.fx:                                     # free local animation from Jason's art (localanim.py)
+            localanim.render_fx(s, prod.size, dst)
         else:
             animate.render(s, prod.chars, prod.size, dst, prod.lines, assemble.line_offsets(s, seconds))
         clips.append(dst)
@@ -712,6 +904,24 @@ def caption_cues(prod: Production) -> list[tuple[str, float, float]]:
 EDGE_WHITE_MAX = 50          # edge-white pixels allowed on a cut-out (after defringe they are ~0-30)
 
 
+def free_shot_verdict(prod: Production, s: Shot) -> tuple[str, str]:
+    """Owner 2026-10-06: no static images anywhere; reused clips must carry their fixes; end cards must be dynamic."""
+    if s.engine in ("reuse_clip", "reuse_talk"):
+        e = cliplib.entry(s.reuse)
+        fixes = clipfix.spec(prod.root).get(s.id) or {}
+        if e.get("chin_white") and not (fixes.get("trapped_white") or (e.get("fixes") or {}).get("trapped_white")):
+            return f"**NO-GO**: {s.reuse} has Billy's chin white - set a trapped_white clip fix", f"reuse {s.reuse}"
+        if e.get("reusable") == "C":
+            return f"**NO-GO**: {s.reuse} is rated C ({e.get('notes')})", f"reuse {s.reuse}"
+        return "GO (free reuse)", f"reuse {s.reuse}"
+    if s.engine == "local_still":
+        return ("GO (free, parallax)" if s.cast else
+                "**NO-GO**: static still with no character (rule 2) - reuse a clip"), "parallax" if s.cast else "still"
+    if s.engine == "local_endcard" and s.card == "tease":
+        return "**NO-GO**: static end card (owner rejected) - use a dynamic end card", "end card"
+    return "GO (free)", s.engine
+
+
 def preprod(script_path: Path) -> Path:
     """Free: write PRE_PRODUCTION.md (GO/NO-GO per paid shot, risk order, min/max cost) and PROMPTS.md (the exact
     prompts that would be sent, with the rationale from prompt_notes.yaml). Never calls a paid API."""
@@ -723,41 +933,53 @@ def preprod(script_path: Path) -> Path:
     pre = preflight_report(prod, all_jobs)
     meta = prod.script.meta
     cap = meta.get("shot_cap")
-    rows, gos, plan_rows = [], 0, []
+    rows, gos, plan_rows, gos_free = [], 0, [], []
     for s in prod.shots:
         j = next((x for x in all_jobs if x.shot_id == s.id), None)
         who = ", ".join(prod.chars[o.char]["display_name"] for o in (s.cast or s.end_cast or [])) or "-"
         if j is None:
-            rows.append(f"| {s.id} | {s.scene} | {who} | - | {s.engine} | {s.duration:.1f}s | free | - | - | - | - | GO (free) |")
+            verdict, engine = free_shot_verdict(prod, s)
+            gos_free.append(verdict.startswith("GO"))
+            rows.append(f"| {s.id} | {s.scene} | {who} | - | {engine} | {s.duration:.1f}s | free | - | - | - | - | {verdict} |")
             continue
         checks = pre.get(s.id, [])
         pf = preflight.worst(checks) if checks else "PASS"
         voice_ok = all(prod.lines[l].get("final") for l in s.lines) or s.kind != "talk"
-        refs_needed = isinstance(j, fal.Job) and j.model == fal.KLING3_STD and meta.get("elements") == "on"
+        refs_needed = isinstance(j, fal.Job) and j.model in (fal.KLING3_STD, fal.KLING_O3_R2V) and (meta.get("elements") == "on"
+                                                                                 or "refs" in shot_tags(prod, s))
         refs = references.paths(prod.root, s.id)
         on_screen = {o.char for o in (s.cast or []) + (s.end_cast or [])}
-        refs_ok = (not refs_needed) or (bool(refs) and {e["char"] for e in refs} == on_screen
+        refs_ok = (not refs_needed) or (bool(refs) and on_screen <= {e["char"] for e in refs}
                                          and all(Path(p).exists() and references.aspect_ok(p)
                                                  for e in refs for p in [e["frontal"], *e["refs"]]))
         arts = {o.art for o in (s.cast or []) + (s.end_cast or [])}
-        white = max((cutout.edge_white(Image.open(DERIVED_CUTOUTS / f"{a}.png")) for a in arts), default=0)
+        reds = {a: cutout.red_test(a) for a in arts}
+        white = sum(len(r["undecided"]) for r in reds.values()) + sum(r["edge_white"] > EDGE_WHITE_MAX for r in reds.values())
         facing = next((c.status for c in checks if c.name == "facing"), "PASS")
         n = notes.get(s.id, {})
         reviewed = bool(n.get("reviewed"))
         cost_ok = cap is None or j.cost <= cap + 1e-9
         bg_ok = s.scene in keyframes.backgrounds()
-        go = all([pf != "FAIL", voice_ok, refs_ok, white <= EDGE_WHITE_MAX, facing != "FAIL", reviewed, cost_ok, bg_ok])
+        faces_missing = references.face_ok(prod.root, s.id) if refs_needed else []
+        saul_on = "young_saul" in on_screen and isinstance(j, fal.Job) and j.model in (fal.KLING3_STD, fal.KLING3_TURBO, fal.WAN27)
+        big_eyes = (not saul_on) or ("LARGE and ROUND" in j.prompt and "beady eyes" in j.extra.get("negative_prompt", ""))
+        go = all([pf != "FAIL", voice_ok, refs_ok, white == 0, facing != "FAIL", reviewed, cost_ok, bg_ok,
+                  not faces_missing, big_eyes])
         gos += go
         why = [w for w, ok in (("pre-flight", pf != "FAIL"), ("voice not final", voice_ok), ("references", refs_ok),
-                                ("white edge", white <= EDGE_WHITE_MAX), ("facing", facing != "FAIL"),
-                                ("prompt review", reviewed), (f"> shot cap ${cap}", cost_ok), ("background", bg_ok)) if not ok]
+                                ("red test (white)", white == 0), ("facing", facing != "FAIL"),
+                                ("prompt review", reviewed), (f"> shot cap ${cap}", cost_ok), ("background", bg_ok),
+                                (f"no face close-up in references ({', '.join(faces_missing)})", not faces_missing),
+                                ("Saul big-eye rule / saul_eyes negative missing", big_eyes)) if not ok]
+        if is_done(j):                                 # already paid and made: shown for the record, not re-judged
+            go, why = True, ["done (paid clip kept)"]
         expr = n.get("emotion", "-").split(" (")[0]
         label = {fal.KLING3_STD: "Kling 3.0 Std", fal.KLING3_TURBO: "Kling 3.0 Turbo", fal.KLING_AVATAR: "Kling Avatar",
-                 fal.WAN27: "Wan 2.7"}.get(getattr(j, "model", ""), s.engine)
+                 fal.WAN27: "Wan 2.7", fal.KLING_O3_R2V: "Kling O3"}.get(getattr(j, "model", ""), s.engine)
         rows.append(f"| {s.id} | {s.scene} | {who} | {expr} | {label} "
                     f"{'(+refs)' if refs_needed else ''} | {j.billed_seconds}s | ${j.cost:.2f} | {'yes' if refs_ok else 'NO'} "
                     f"| {pf} | {'yes' if reviewed else 'NO'}{' (owner: ' + ('ok' if n.get('owner_ok') else 'pending') + ')'} "
-                    f"| {white}px | **{'GO' if go else 'NO-GO'}**{(': ' + ', '.join(why)) if why else ''} |")
+                    f"| {'PASS' if white == 0 else 'FAIL'} | **{'GO' if go else 'NO-GO'}**{(': ' + ', '.join(why)) if why else ''} |")
         plan_rows.append((risk_rank(j)[0], s.id, j))
     paid = [p for p in plan_rows]
     lo = round(sum(j.cost for _, _, j in paid), 2)
@@ -766,11 +988,11 @@ def preprod(script_path: Path) -> Path:
     md = f"""# {prod.script.title}: pre-production quality sheet
 Generated by `./bbtb preprod {script_path}` (free; rerun after every change). Only shots marked **GO** may be generated.
 
-| Shot | Scene | Character | Expression | Engine | Seconds | Cost | Reference ready? | Pre-flight | Prompt reviewed? | Cut-out white edge | GO/NO-GO |
+| Shot | Scene | Character | Expression | Engine | Seconds | Cost | Reference ready? | Pre-flight | Prompt reviewed? | Red test (white) | GO/NO-GO |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 """ + "\n".join(rows) + f"""
 
-**{gos} of {len(paid)} paid shots are GO.** Facing is checked by pre-flight (art as drawn, never mirrored); backgrounds are
+**{gos} of {len(paid)} paid shots and {sum(gos_free)} of {len(gos_free)} free shots are GO.** Facing is checked by pre-flight (art as drawn, never mirrored); backgrounds are
 all assigned plates (`library/backgrounds/INVENTORY.md`).
 
 ## Cost plan (fal.ai)

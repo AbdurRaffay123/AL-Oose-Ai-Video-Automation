@@ -40,6 +40,8 @@ def art(name: str) -> Image.Image:
         sheet, box = c["crops"][name]
         return Image.open(registry.path_of(c["sheets"][sheet])).convert("RGB").crop(tuple(box))
     cut = Image.open(DERIVED / "cutouts" / f"{name}.png").convert("RGBA")
+    if name.endswith("_group"):                      # group composites sit on a full-frame canvas: crop to the figures
+        cut = cut.crop(cut.getbbox())
     bg = Image.new("RGBA", cut.size, (255, 255, 255, 255))
     bg.alpha_composite(cut)
     return bg.convert("RGB")
@@ -96,12 +98,14 @@ def paths(prod_root: Path, shot_id: str) -> list[dict]:
     return out
 
 
-def build(prod_root: Path, chars: dict) -> list[Path]:
-    """Write every shot's element images and its labelled review board. Returns the board paths."""
+def build(prod_root: Path, chars: dict, only: list[str] | None = None) -> list[Path]:
+    """Write every shot's (or only these shots') element images and labelled review boards. Returns the boards."""
     root = out_dir(prod_root)
     (root / "elements").mkdir(parents=True, exist_ok=True)
     boards = []
     for shot_id, cast in spec(prod_root).items():
+        if only and shot_id not in only:
+            continue
         rows = []
         for char, s in cast.items():
             if len(s.get("refs", [])) > 3:
@@ -142,3 +146,36 @@ def _board(shot_id: str, cast: dict, rows: list, dst: Path) -> Path:
         d.line([(0, y + row_h - 2), (W, y + row_h - 2)], fill=(220, 220, 220), width=2)
     board.save(dst, quality=92)
     return dst
+
+
+# Check B (owner 2026-10-06): references must show each character's face details at a usable size.
+FACE_CROPS = {"young_saul": "saul_face_", "bad_billy": "billy_head_"}
+
+
+def face_ok(prod_root: Path, shot_id: str) -> list[str]:
+    """Characters in the shot whose references.yaml lacks a face close-up (Saul: eyes; Billy: head/chin)."""
+    bad = []
+    for char, s in (spec(prod_root).get(shot_id) or {}).items():
+        need = FACE_CROPS.get(char)
+        if need and not any(n.startswith(need) for g in s.get("refs", []) for n in g):
+            bad.append(char)
+    return bad
+
+
+def build_characters() -> list[Path]:
+    """Reusable per-character element sets from library/character_refs.yaml -> library/scene_references/<name>/."""
+    sets = yaml.safe_load((LIBRARY / "character_refs.yaml").read_text())
+    out = []
+    for name, s in sets.items():
+        d = LIBRARY / "scene_references" / name
+        d.mkdir(parents=True, exist_ok=True)
+        frontal(s["frontal"]).save(d / f"{name}_frontal.png")
+        refs = []
+        for i, group in enumerate(s["refs"]):
+            g = grid(group, cell=768 if len(group) == 1 else 512)
+            g.save(d / f"{name}_ref{i + 1}.jpg", quality=92)
+            refs.append((g, group))
+        out.append(_board(name.upper(), {}, [(name, "reusable character set", frontal(s["frontal"]), refs)],
+                          d / f"{name.upper()}_reference.jpg"))
+    return out
+

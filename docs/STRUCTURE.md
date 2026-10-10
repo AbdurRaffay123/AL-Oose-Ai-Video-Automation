@@ -434,6 +434,12 @@ script.md ─► ./bbtb voices render (approval code, ElevenLabs credits)
   then an estimated mood, energy and best use) into MUSIC_INVENTORY.md. `music: auto` never repeats the previous
   episode's track and falls back to the cached bed while the folder is empty.
 - **Backgrounds:** 21 in `library/backgrounds/INVENTORY.md` (16 rated ⭐⭐⭐), with scene-type matching.
+- **Red-background test (2026-10-06):** `cutout.red_test()`. Every enclosed white patch in a cut-out must be cleared
+  (`holes:`) or approved (`keep_white:`) in `cutlist.yaml`. It is checked by `bbtb cutouts` (review images in
+  `library/derived/cutout_review/`), by pre-flight for every keyframe character, and by `bbtb preprod`.
+- **Reference checks:** Saul shots need a face close-up, the big-eye rule and `saul_eyes`; Billy shots need a head
+  close-up. Reusable sets: `library/character_refs.yaml` → `library/scene_references/<char>/`
+  (`bbtb references --characters`).
 
 **What Kling 3.0 Standard receives per shot (EP003 on, header `elements: on`):**
 1. The keyframe as the start frame, plus an optional end frame: our cut-out on the background plate, which already

@@ -14,9 +14,9 @@ S04:
     refs: [[saul_ball, saul_cheerful, saul_standing_tall], [saul_face_happy, saul_face_excited, saul_face_surprised]]
 S05:
   young_saul:
-    note: Ball time (Kling Avatar, board for review only)
+    note: Ball time - Kling 3.0 Standard (2026-10-06); ref 1 = ONE large face close-up (eye size), then faces, then poses
     frontal: saul_ball_front
-    refs: [[saul_ball, saul_cheerful], [saul_face_excited, saul_face_happy]]
+    refs: [[saul_face_happy], [saul_face_excited, saul_face_surprised], [saul_ball, saul_cheerful]]
 S07:
   bad_billy:
     note: sly, menacing, "Lunch... is served!" (3/4 left)

@@ -1,0 +1,43 @@
+# EP004 v4 "WATCH OUT!" references (Kling 3.0 Standard shots only). Billy refs lead with head close-ups (chin +
+# moustache curls), then the landing-sheet poses, then details. The Snail has ONE official image (book p.14): the
+# whole "snail" image folder is Big Guy art (misfiled), so his frontal is also his only reference.
+S02:
+  snail:
+    note: looks up at the tree, silent shout (side, facing right)
+    frontal: snail_side
+    refs: [[snail_side]]
+S04:   # script S04a
+  bad_billy:
+    note: launches off the branch and dives down-right (landing sheet Approach 1 -> Approach 3)
+    frontal: billy_tophat_landing_approach1
+    refs: [[billy_head_neutral, billy_head_suspicious], [billy_fly_approach1, billy_fly_approach4], [billy_turn_34right, billy_detail_badge, billy_detail_wing, billy_detail_monocle]]
+S05:   # script S04b (v2: only the last small move)
+  bad_billy:
+    note: feet just above the grass, touches down and skids a few centimetres (Approach 4 -> Touchdown)
+    frontal: billy_tophat_landing_approach4
+    refs: [[billy_head_neutral, billy_head_suspicious], [billy_fly_approach4, billy_fly_touchdown], [billy_detail_badge, billy_detail_wing, billy_detail_shoe, billy_detail_monocle]]
+S07:   # script S06
+  bad_billy:
+    note: full and smug, pats his tummy with one wing, burps (3/4 left)
+    frontal: billy_tophat_34left
+    refs: [[billy_head_neutral, billy_head_suspicious], [billy_turn_34left, billy_turn_front], [billy_detail_monocle, billy_detail_badge, billy_detail_wing, billy_detail_beak]]
+S06:   # the count = reaction cutaway to the Snail
+  snail:
+    note: watches off screen right, flinches on each chomp, ducks into his shell (side, facing right)
+    frontal: snail_side
+    refs: [[snail_side]]
+S01a:   # v5: the four naughty worms play ball (Jason's art; the group is the exact keyframe layout)
+  worms:
+    note: the four worms play ball at the landing spot
+    frontal: worms_group_ball
+    refs: [[worm_ball_kid, worm_bow], [worm_tophat, worm_cap], [prop_blue_ball]]
+S01b:   # v5 (card review): head-and-chest, official look-down head on the 3/4-right body
+  bad_billy:
+    note: looks down at the meadow, eyes narrow, sly smile, wings folded
+    frontal: billy_tophat_34right   # v6: the exact single-piece pose in the keyframes
+    refs: [[billy_tophat_head_lookdown, billy_head_suspicious], [billy_turn_34right, billy_turn_front], [billy_detail_monocle, billy_detail_badge, billy_detail_wing, billy_detail_beak]]
+S03:    # v5: the four worms panic on the spot
+  worms:
+    note: they look up, gloves to cheeks, tremble in place; the ball drops
+    frontal: worms_group_ball
+    refs: [[worm_ball_kid, worm_bow], [worm_tophat, worm_cap], [prop_blue_ball]]

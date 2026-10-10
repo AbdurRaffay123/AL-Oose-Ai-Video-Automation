@@ -1,0 +1,16 @@
+id: worms
+display_name: the four naughty worms
+height: 1.0
+mirror_ok: false
+group: true            # one art = four figures; the grounding gate checks each worm's feet
+default_variant: default
+variants:
+  default:
+    identity_prompt: "four small light-pink cartoon worms with no legs, huge round pale-blue eyes and white cartoon gloves"
+    poses:
+      group: worms_group   # composite of Jason's four official worms (cutlist.yaml composites)
+      group-ball: worms_group_ball         # + the blue ball in the tuft worm's gloves
+      group-ball-down: worms_group_ball_down   # + the ball dropped on the grass
+    facing: {group: front, group-ball: front, group-ball-down: front}
+    expressions: {}
+voice: {}

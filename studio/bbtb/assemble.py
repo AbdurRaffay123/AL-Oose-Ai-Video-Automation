@@ -8,7 +8,7 @@ from .shots import Shot
 
 FPS = 24
 LEAD = {"ltx_a2v": 0.15, "kling_avatar": 0.15, "kling3_talk": 0.0, "kling3_talk_std": 0.0, "kling3_action": 0.30, "ltx_i2v": 0.30, "local_still": 0.15, "local_endcard": 0.40, "local_flap": 0.15,
-        "local_anim": 0.25, "wan_talk": 0.15}
+        "local_anim": 0.25, "wan_talk": 0.15, "reuse_clip": 0.25, "reuse_talk": 0.0}
 GAP = 0.25   # between consecutive lines inside one shot
 
 
@@ -17,8 +17,10 @@ def line_offsets(shot: Shot, seconds: dict[str, float]) -> list[tuple[str, float
     negative offset: its re-voiced audio is tied to the clip, so the same seconds are cut from the audio too."""
     t, out = LEAD.get(shot.engine, 0.2) - (shot.trim if shot.engine in ("kling3_talk", "kling3_talk_std") else 0.0), []
     for lid in shot.lines:
-        out.append((lid, t))
-        t += seconds[lid] + GAP
+        at = (getattr(shot, "line_at", None) or {}).get(lid)     # voice-over with a fixed start (tag say:<s>)
+        out.append((lid, at if at is not None else t))
+        if at is None:
+            t += seconds[lid] + GAP
     return out
 
 
@@ -90,13 +92,16 @@ def mix(shots: list[Shot], lines: dict[str, dict], sfx: dict[str, Path], music: 
                 continue
             inputs += ["-i", str(path)]
             ms = int((t0 + fx.get("at", 0.0)) * 1000)
-            chains.append(f"[{n}:a]aresample=48000,aformat=channel_layouts=mono,volume=0.8,adelay={ms}:all=1[f{n}]")
+            chains.append(f"[{n}:a]aresample=48000,aformat=channel_layouts=mono,volume={fx.get('vol', 0.8)},adelay={ms}:all=1[f{n}]")
             fx_labels.append(f"[f{n}]")
             n += 1
         t0 += s.duration
-    if not voice_labels:
-        raise media.MediaError("no voice lines to mix")
-    chains.append(f"{''.join(voice_labels)}amix=inputs={len(voice_labels)}:normalize=0,apad=whole_dur={total}[vox]")
+    if not voice_labels:                                # a silent production (2026-10-08 model test): silent voice bus
+        inputs += ["-f", "lavfi", "-t", f"{total:.3f}", "-i", "anullsrc=r=48000:cl=mono"]
+        chains.append(f"[{n}:a]anull[vox]")
+        n += 1
+    else:
+        chains.append(f"{''.join(voice_labels)}amix=inputs={len(voice_labels)}:normalize=0,apad=whole_dur={total}[vox]")
     bus = "[vox]"
     if music is not None:
         inputs += ["-stream_loop", "-1", "-i", str(music)]

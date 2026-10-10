@@ -1,0 +1,142 @@
+# GROUNDING RULE (owner, repeated 5+ times, 2026-10-06): every standing character's feet must sit on the flat
+# walkable ground of its background. Never on rims, ledges, edges, leaves or dark areas.
+#
+# Per background plate (names as in library/backgrounds.yaml):
+#   ground:    polygons where soles may stand (flat, walkable, lit like the rest of the ground)
+#   forbidden: polygons that soles may never touch (stump rims and faces, roots, ladders, rocks, leaves, edges)
+#   note:      what the zones mean
+# Coordinates are FRACTIONS of the plate's source image (x right, y down), so they hold for any 9:16 crop or zoom.
+# `ground: []` = no walkable ground: only characters the script tags as airborne (pos:.../air) may appear.
+# Pre-flight (`grounding` check) FAILs any keyframe whose soles break these zones; `bbtb grounds` draws overlays.
+
+GRASS_STUMP:
+  ground:
+    - [[0.00, 0.52], [1.00, 0.50], [1.00, 0.69], [0.62, 0.71], [0.52, 0.75], [0.40, 0.79], [0.22, 0.81], [0.08, 0.82], [0.00, 0.83]]
+    - [[0.00, 0.93], [0.30, 0.93], [0.52, 0.95], [0.55, 1.00], [0.00, 1.00]]
+  forbidden:
+    - [[0.52, 0.72], [0.66, 0.69], [1.00, 0.68], [1.00, 1.00], [0.57, 1.00], [0.50, 0.93], [0.30, 0.91], [0.12, 0.89], [0.02, 0.87], [0.10, 0.83], [0.30, 0.81], [0.45, 0.78]]
+  note: "flat open grass left of and behind the stump; the stump, its rim and its roots are forbidden"
+
+GRASS_FLOWERS:
+  ground:
+    - [[0.00, 0.53], [1.00, 0.53], [1.00, 1.00], [0.00, 1.00]]
+  forbidden:
+    - [[0.00, 0.00], [1.00, 0.00], [1.00, 0.52], [0.00, 0.52]]
+    - [[0.74, 0.81], [0.88, 0.78], [1.00, 0.78], [1.00, 0.94], [0.80, 0.93]]
+  note: "the whole grass floor below the flower bush; the bush and the root in the bottom-right corner are forbidden"
+
+GRASS_SIGN:
+  ground:
+    - [[0.00, 0.69], [0.60, 0.69], [0.78, 0.69], [1.00, 0.70], [1.00, 0.79], [0.86, 0.80], [0.84, 0.77], [0.60, 0.78], [0.20, 0.79], [0.00, 0.82]]
+    - [[0.88, 0.83], [1.00, 0.81], [1.00, 1.00], [0.94, 1.00], [0.90, 0.90]]
+  forbidden:
+    - [[0.00, 0.00], [1.00, 0.00], [1.00, 0.69], [0.78, 0.68], [0.00, 0.68]]
+    - [[0.00, 0.83], [0.18, 0.79], [0.60, 0.79], [0.62, 0.71], [0.83, 0.71], [0.86, 0.83], [0.97, 0.92], [0.99, 1.00], [0.00, 1.00]]
+  note: "the grass band behind the stump and the grass right of it; the far ledge, the sign, the stump, ladder and roots are forbidden"
+
+GRASS_SIGN_LOW:
+  ground:
+    - [[0.00, 0.50], [0.78, 0.50], [1.00, 0.56], [1.00, 0.76], [0.88, 0.78], [0.84, 0.72], [0.00, 0.72]]
+    - [[0.90, 0.82], [1.00, 0.80], [1.00, 0.92], [0.95, 0.90]]
+  forbidden:
+    - [[0.00, 0.00], [1.00, 0.00], [1.00, 0.55], [0.78, 0.49], [0.00, 0.49]]
+    - [[0.36, 0.49], [0.78, 0.49], [0.80, 0.73], [0.34, 0.73]]
+    - [[0.00, 0.71], [0.85, 0.71], [0.88, 0.80], [1.00, 0.93], [1.00, 1.00], [0.00, 1.00]]
+  note: "only the grass behind the stump (small figures) and a sliver right of it; the stump fills the foreground, so a full-size standing character has NO flat ground here"
+
+STUMP_GRASS:
+  ground:
+    - [[0.00, 0.50], [1.00, 0.45], [1.00, 1.00], [0.00, 1.00]]
+  forbidden:
+    - [[0.00, 0.00], [0.48, 0.00], [0.48, 0.50], [0.00, 0.52]]
+    - [[0.44, 0.60], [0.70, 0.56], [0.74, 0.45], [0.90, 0.45], [0.90, 0.62], [0.98, 0.88], [0.75, 0.92], [0.45, 0.90]]
+  note: "grass around the stump; the flower bush, the stump, ladder and roots are forbidden"
+
+STUMP_SIGN:
+  ground:
+    - [[0.00, 0.66], [0.55, 0.62], [1.00, 0.58], [1.00, 1.00], [0.66, 1.00], [0.64, 0.80], [0.00, 0.74]]
+  forbidden:
+    - [[0.00, 0.00], [1.00, 0.00], [1.00, 0.57], [0.00, 0.60]]
+    - [[0.00, 0.74], [0.38, 0.73], [0.40, 0.62], [0.58, 0.62], [0.62, 0.78], [0.66, 1.00], [0.00, 1.00]]
+  note: "the grass right of and behind the stump; the stump, ladder, sign and far ledge are forbidden"
+
+BIG_WORM_HOLE:
+  ground:
+    - [[0.00, 0.64], [0.40, 0.66], [0.47, 0.71], [0.62, 0.73], [1.00, 0.73], [1.00, 1.00], [0.00, 1.00]]
+  forbidden:
+    - [[0.40, 0.47], [0.80, 0.48], [0.80, 0.72], [0.47, 0.72], [0.38, 0.66]]
+    - [[0.62, 0.60], [1.00, 0.60], [1.00, 0.73], [0.62, 0.73]]
+    - [[0.00, 0.00], [1.00, 0.00], [1.00, 0.46], [0.00, 0.60]]
+  note: "the open grass in front of the rocks; the rock pile, the hatch and everything above the grass are forbidden"
+
+TUNNELS:
+  ground:
+    - [[0.00, 0.27], [1.00, 0.25], [1.00, 0.33], [0.00, 0.33]]
+    - [[0.30, 0.93], [0.95, 0.93], [0.95, 0.99], [0.30, 0.99]]
+  forbidden: []
+  note: "the grass surface on top and the lair floor at the bottom (the tunnels themselves are a cut-away, not a floor)"
+
+BG_OAK_MEADOW_TALL:
+  ground:
+    - [[0.42, 0.74], [1.00, 0.72], [1.00, 0.86], [0.78, 0.92], [0.18, 0.92], [0.08, 0.84], [0.42, 0.80]]
+  forbidden:
+    - [[0.00, 0.00], [0.44, 0.00], [0.46, 0.79], [0.08, 0.83], [0.00, 0.80]]
+  note: "the island grass in front of the oak (book p.12); the trunk and its roots are forbidden. Local shots only"
+
+BG_OAK_TREEHOUSE:
+  ground:
+    - [[0.32, 0.352], [0.52, 0.343], [0.52, 0.372], [0.32, 0.378]]
+  forbidden: []
+  note: "no ground in frame; only the treehouse porch is a perch. Billy diving here must be tagged airborne"
+
+BG_CAVE_TUNNEL:
+  ground:
+    - [[0.00, 0.18], [0.46, 0.15], [0.52, 0.26], [1.00, 0.26], [1.00, 0.44], [0.75, 0.48], [0.74, 0.74], [0.00, 0.76]]
+  forbidden:
+    - [[0.34, 0.30], [0.68, 0.30], [0.68, 0.84], [0.34, 0.84]]
+    - [[0.00, 0.76], [1.00, 0.74], [1.00, 1.00], [0.00, 1.00]]
+  note: "the sandy cave floor; the signpost, crates and the dark rock foreground are forbidden"
+
+BG_CAVE_TUNNEL_CART:
+  ground:
+    - [[0.00, 0.18], [0.46, 0.15], [0.52, 0.26], [1.00, 0.26], [1.00, 0.44], [0.75, 0.48], [0.74, 0.74], [0.00, 0.76]]
+  forbidden:
+    - [[0.34, 0.30], [0.68, 0.30], [0.68, 0.84], [0.34, 0.84]]
+    - [[0.00, 0.76], [1.00, 0.74], [1.00, 1.00], [0.00, 1.00]]
+  note: "as BG_CAVE_TUNNEL"
+
+FLOATING_ISLAND:
+  ground:
+    - [[0.22, 0.58], [0.95, 0.56], [0.95, 0.62], [0.22, 0.63]]
+  forbidden: []
+  note: "only the far island top (tiny figures); otherwise sky: airborne only"
+
+BG_FLOATING_TREE_ISLAND:
+  ground:
+    - [[0.40, 0.66], [0.92, 0.64], [0.92, 0.69], [0.40, 0.70]]
+  forbidden: []
+  note: "only the far island top (tiny figures); otherwise sky: airborne only"
+
+FLOATING_TREE:
+  ground:
+    - [[0.30, 0.75], [0.68, 0.74], [0.68, 0.78], [0.30, 0.79]]
+  forbidden: []
+  note: "only the far island top (tiny figures); otherwise sky: airborne only"
+
+BG_MEADOW_SIGN_FLOWERS:
+  ground: []
+  forbidden: []
+  note: "no grass floor in frame (feet would stand on leaves): no standing characters"
+
+BG_CAVE_STUDY:
+  ground: []
+  forbidden: []
+  note: "no floor in frame (the desk is not a floor): no standing characters"
+
+SKY_CLOUDS: {ground: [], forbidden: [], note: "sky only - airborne characters"}
+SKY_CLEAR: {ground: [], forbidden: [], note: "sky only - airborne characters"}
+SKY_SHIP: {ground: [], forbidden: [], note: "sky only - airborne characters"}
+BG_SKY_RAINBOW: {ground: [], forbidden: [], note: "sky only - airborne characters"}
+BG_ISLAND_WINDMILL_SKY: {ground: [], forbidden: [], note: "sky only - airborne characters"}
+BG_SKY_CASTLE: {ground: [], forbidden: [], note: "a rock pillar in the sky - airborne characters only"}
+BG_SKY_ISLAND_AIRSHIP: {ground: [], forbidden: [], note: "sky only - airborne characters"}

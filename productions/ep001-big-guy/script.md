@@ -1,10 +1,11 @@
 # EP001 The Scroll and The Big Guy
-format: 9:16   resolution: 720p   music: playful-adventure   budget: 5   captions: off   talking_engine: kling3   action_engine: kling3   spend_cap: 5   session_cap: 5   keyframes: locked
+format: 9:16   resolution: 720p   music: playful-adventure   budget: 6   captions: off   talking_engine: kling3   action_engine: kling3   spend_cap: 6   session_cap: 6   keyframes: locked
 
 <!-- Source: Bad Billy the Bird, pp.28-31 (printed edition, top-hat Billy).                 -->
 <!-- Line sources: canon:<page> = the book's exact words; adapted:<page> = the book's words  -->
 <!-- shortened (sentences dropped, nothing reworded); production = new line, not book text.   -->
 <!-- Engines: Kling 3.0 on fal (talk = Turbo + ElevenLabs re-voice, action = Standard). Owner 2026-10-04: best quality, $5 cap. -->
+<!-- Caps raised to $6 (owner 2026-10-10) for possible regeneration (Jason notes 5C/5D); nothing spent against it. -->
 <!-- Hybrid (owner 2026-10-04): long dialogue (S02, S03, S06) = `kling` tag = Kling AI Avatar driven by OUR approved audio. -->
 
 ## SCENE BIG_WORM_HOLE

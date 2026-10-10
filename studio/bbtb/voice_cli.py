@@ -238,13 +238,25 @@ def render(a):
     if problems:
         sys.exit("Can't generate yet:\n  " + "\n  ".join(problems))
     est = voices.estimate(plan, root / "audio")
-    if est["lines"] == 0:
-        print("All lines are already generated (cached) - nothing to pay for.")
+    from . import audio_bed
+    import hashlib, json
+    sfx_names = sorted({e.text.strip() for e in script.events if e.kind == "sfx"})
+    sfx = audio_bed.sfx_plan(sfx_names)                   # owner 2026-10-07: one code for voices + sound effects
+    if est["lines"] == 0 and not sfx:
+        print("All lines and sound effects are already generated (cached) - nothing to pay for.")
         return
-    print(f"{est['lines']} line(s) in {est['requests']} request(s) (one per character): {est['characters']} characters, "
-          f"about {est['credits']} credits.")
-    for sp, n in est["per_character"].items():
-        print(f"  {sp:<12} {n} characters (lines joined with short pauses, sliced by ElevenLabs timestamps)")
+    if est["lines"]:
+        print(f"{est['lines']} line(s) in {est['requests']} request(s) (one per character): {est['characters']} characters, "
+              f"about {est['credits']} credits.")
+        for sp, n in est["per_character"].items():
+            print(f"  {sp:<12} {n} characters (lines joined with short pauses, sliced by ElevenLabs timestamps)")
+    for x in sfx:
+        print(f"  SFX {x['name']:<9} {x['seconds'] or 'auto'} s  ~{x['credits']} credits  \"{x['prompt']}\"")
+    if sfx:
+        est = dict(est, credits=est["credits"] + sum(x["credits"] for x in sfx),
+                   code=hashlib.sha256((est.get("code", "") + json.dumps([[x["name"], x["prompt"], x["seconds"]] for x in sfx]))
+                                       .encode()).hexdigest()[:8].upper())
+        print(f"Total with sound effects: about {est['credits']} credits.")
     try:
         sub = elevenlabs.Client().subscription()
         left = sub["character_limit"] - sub["character_count"]
@@ -259,9 +271,12 @@ def render(a):
     if a.approve.strip().upper() != est["code"]:
         sys.exit(f"approval code does not match the current lines ({est['code']})")
     try:
-        voices.render_lines(lines_of(script), chars, root / "audio", Ledger(root / "ledger.jsonl"),
-                            allow_paid=True)
-    except (elevenlabs.ElevenLabsError, voices.VoicesNotReady) as exc:
+        if est["lines"]:
+            voices.render_lines(lines_of(script), chars, root / "audio", Ledger(root / "ledger.jsonl"),
+                                allow_paid=True)
+        for x in sfx:                                      # one request per sound, never retried
+            print("SFX", x["name"], "->", audio_bed.sfx(x["name"], Ledger(root / "ledger.jsonl"), allow_paid=True))
+    except (elevenlabs.ElevenLabsError, voices.VoicesNotReady, RuntimeError) as exc:
         sys.exit(f"Stopped: {exc}")
     print(f"Done. ElevenLabs lines are in {root / 'audio' / 'lines'}; next: `./bbtb make {a.script}` for the free animatic.")
 

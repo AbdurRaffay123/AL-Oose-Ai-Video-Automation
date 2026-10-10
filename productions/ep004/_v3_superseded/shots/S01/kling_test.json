@@ -1,0 +1,11 @@
+{
+  "request_hash": "fal:2b36204b790970548bd7e533",
+  "request_id": "01a10e28-2e32-7452-9c93-6aeb324ed772",
+  "model": "fal-ai/kling-video/ai-avatar/v2/standard",
+  "result_url": "https://v3b.fal.media/files/b/0aad36bb/6e1Tt4BjgERypaxa0Ntsw_output.mp4",
+  "head_trim": 0.0,
+  "audio_seconds": 1.95,
+  "output_seconds": 2.133,
+  "cost_estimate": 0.1124,
+  "approval_code": "2FC33AD4"
+}

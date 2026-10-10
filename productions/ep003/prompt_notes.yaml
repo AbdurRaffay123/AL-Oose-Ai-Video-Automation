@@ -1,7 +1,7 @@
 # Per-shot prompt rationale (Task 5). reviewed: who checked the prompt; owner_ok: set true when the owner signs off.
 S01:
   emotion: theatrical self-pity turning into outrage at his own empty tummy (comic hook)
-  action: droops, looks down at his tummy, head snaps up on "EMPTY", eyes pop; settles back (end frame = start frame)
+  action: FIRST take kept (owner 2026-10-06) - wing swoon, tummy hug, wing fling on EMPTY; chin white removed at render (clip_fixes.yaml)
   background: big oak trunk + treehouse, pink sky (BG_OAK_TREEHOUSE, p.12); close-up so no floating feet
   avoid: wings as hands/fists (S02 EP002 lesson), teeth in the beak, monocle switching eye, floating
   preserve: monocle LEFT eye, silver B badge + crack, teal moustache curls, orange beak with no teeth
@@ -17,9 +17,9 @@ S04:
   owner_ok: false
 S05:
   emotion: excitement
-  action: shouts "Ball time, everybody!", bounces once, lifts the ball (Kling Avatar drives the mouth with OUR audio)
+  action: v2 - lifts the ball on "Ball time", one small bounce on "everybody", settles back; eyes FULLY OPEN and huge throughout (no squint, no blink) - Kling 3.0 Std + refs + saul_eyes
   background: Saul's side of the meadow (GRASS_SIGN); the canon sign lettering is painted art (Avatar keeps it static)
-  avoid: Avatar takes no references or negative prompt - kept short and simple, low risk
+  avoid: the Avatar take's mid-line squint (eyes ~60% for 0.5 s) - saul_eyes negative + explicit eye rule; legs, coloured gloves
   preserve: white gloves, ball, eyes
   reviewed: claude
   owner_ok: false

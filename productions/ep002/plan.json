@@ -12,15 +12,19 @@
     "action_engine": "kling3_action",
     "spend_cap": 4.5,
     "session_cap": 4.5,
-    "negatives": "billy_hands"
+    "negatives": "billy_hands",
+    "keyframes": "locked",
+    "elements": null,
+    "bg_element": null,
+    "shot_cap": null
   },
-  "approval_code": "73E4AF37",
-  "new_cost": 0.0,
+  "approval_code": "56955B69",
+  "new_cost": 0.76,
   "shots": [
     {
       "id": "S01",
       "kind": "talk",
-      "engine": "kling3_talk",
+      "engine": "kling3_talk_std",
       "scene": "GRASS_STUMP",
       "cast": [
         {
@@ -58,7 +62,7 @@
       "source_line": 22,
       "duration": 6.0,
       "gen_seconds": 6.0,
-      "prompt_key": "saul_brave",
+      "prompt_key": "saul_brave_v8",
       "acting": "expressive",
       "start_cast": null,
       "zoom": 1.15,
@@ -260,32 +264,8 @@
     {
       "shot": "S01",
       "endpoint": "kling3-talk",
-      "cost": 0.672,
-      "request_hash": "fal:cee9cb706d3c2e510b132ae8"
-    },
-    {
-      "shot": "S02",
-      "endpoint": "kling3-talk",
-      "cost": 0.504,
-      "request_hash": "fal:c7346b36468bd94dd3a91152"
-    },
-    {
-      "shot": "S03",
-      "endpoint": "kling-avatar",
-      "cost": 0.3372,
-      "request_hash": "fal:615e98f030ac860467fc59b3"
-    },
-    {
-      "shot": "S04",
-      "endpoint": "kling-avatar",
-      "cost": 0.281,
-      "request_hash": "fal:c9b9b2d197e7f196b17989e9"
-    },
-    {
-      "shot": "S05",
-      "endpoint": "kling3-talk",
-      "cost": 0.448,
-      "request_hash": "fal:b3ef2bf1e406a70040cdefd8"
+      "cost": 0.756,
+      "request_hash": "fal:509c07e41f6bde06f21007a8"
     }
   ]
 }

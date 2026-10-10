@@ -1,0 +1,12 @@
+# Free render-time fixes for paid clips (studio/bbtb/clipfix.py). Owner 2026-10-06: keep S01's FIRST take (its
+# performance) and remove the white trapped in Billy's moustache curl under his chin (the clip was generated from the
+# keyframe made before the red-background test). box = [x0, y0, x1, y1] in the 720x1280 frame; below_y = chin line.
+S01:
+  trapped_white: {box: [230, 620, 560, 980], below_y: 755}
+S07:
+  trapped_white: {box: [230, 620, 560, 980], below_y: 755}   # same framing as S01 (oak close-up, zoom 1.55)
+# Saul eyes (owner 2026-10-06: "no squinting Saul eyes anywhere"): hold the last open-eye frame over each blink/droop.
+S04:
+  hold_frames: [[38, 46]]                       # 24 fps: eyes close after he lands (1.58-1.92 s); frame 37 (eyes open) is held
+S08:
+  hold_frames: [[32, 37], [60, 70], [104, 107]] # 24 fps: droop 1.38-1.54 s, blink 2.54-2.92 s, droop 4.38-4.46 s (+1 frame each side: eyelids fading)

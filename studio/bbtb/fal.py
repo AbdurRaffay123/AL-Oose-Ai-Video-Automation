@@ -35,9 +35,12 @@ KLING_AVATAR = "fal-ai/kling-video/ai-avatar/v2/standard"
 KLING3_TURBO = "fal-ai/kling-video/v3/turbo/standard/image-to-video"   # 720p, native audio always on
 KLING3_STD = "fal-ai/kling-video/v3/standard/image-to-video"           # start+end frame, audio switchable
 WAN27 = "fal-ai/wan/v2.7/image-to-video"   # audio_url = driving audio (lip sync); resolution MUST be sent (default 1080p)
+KLING_O3_R2V = "fal-ai/kling-video/o3/standard/reference-to-video"   # start+end frame, elements (+ ONE element video
+                                                                     # 3-10.05 s), NO negative prompt field (2026-10-08)
 PRICES = {KLING_AVATAR: 0.0562, KLING3_TURBO: 0.112, KLING3_STD: 0.084,   # USD per output second (verified
-          WAN27: 0.10}                                                    # 2026-10-04, GET /v1/models/pricing;
+          WAN27: 0.10, KLING_O3_R2V: 0.084}                               # 2026-10-04, GET /v1/models/pricing;
 KLING3_STD_AUDIO = 0.126                                                 # Wan 2.7: model page, 720p; 1080p is 0.15)
+KLING_O3_AUDIO = 0.112                                                   # O3: model page 2026-10-08 (audio off 0.084)
 KEY_NAMES = ("FAL_KEY", "FAL_AI_API_KEY")
 DATA_URI_LIMIT = 10_000_000
 POLL_MIN, POLL_MAX_WAIT = 5.0, 30 * 60
@@ -78,7 +81,9 @@ class Job:
     extra: dict = field(default_factory=dict)       # extra request fields (duration, negative_prompt ...)
     info: dict = field(default_factory=dict)        # pre-flight audio stats (never sent)
     required: tuple = ("image_url", "audio_url")    # file fields that must exist before submitting
-    elements: list = field(default_factory=list)    # Kling 3.0 character references: [{"frontal": Path, "refs": [Path]}]
+    elements: list = field(default_factory=list)    # Kling 3.0 / O3 character references: image elements
+                                                    # {"frontal": Path, "refs": [Path]}; O3 also takes ONE video element
+                                                    # {"video": Path} (fal: an element is images OR a video, never both)
 
     @property
     def billed_seconds(self) -> int:
@@ -88,6 +93,8 @@ class Job:
     def rate(self) -> float:
         if self.model == KLING3_STD and self.extra.get("generate_audio", True):
             return KLING3_STD_AUDIO
+        if self.model == KLING_O3_R2V and self.extra.get("generate_audio", False):
+            return KLING_O3_AUDIO
         return PRICES[self.model]
 
     @property
@@ -101,7 +108,7 @@ class Job:
     @property
     def ready(self) -> bool:
         return (all(k in self.files and Path(self.files[k]).exists() for k in self.required)
-                and all(Path(p).exists() for e in self.elements for p in [e["frontal"], *e["refs"]]))
+                and all(Path(p).exists() for e in self.elements for p in element_files(e)))
 
     def request_hash(self) -> str:
         files = {k: hashlib.sha256(Path(p).read_bytes()).hexdigest() for k, p in sorted(self.files.items())
@@ -110,8 +117,8 @@ class Job:
         if self.extra:
             spec["extra"] = self.extra
         if self.elements:                              # only present when used, so older requests keep their hash
-            spec["elements"] = [[hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in [e["frontal"], *e["refs"]]]
-                                for e in self.elements]
+            spec["elements"] = [[hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in element_files(e)]
+                                for e in self.elements]          # a video is hashed only when present
         blob = json.dumps(spec, sort_keys=True)
         return "fal:" + hashlib.sha256(blob.encode()).hexdigest()[:24]
 
@@ -128,6 +135,18 @@ class Job:
             return json.loads(self.sidecar.read_text()).get("request_hash") == self.request_hash()
         except (ValueError, OSError):
             return False
+
+
+def element_files(e: dict) -> list:
+    """Every file of one element: front view + reference images (image element) or the clip (O3 video element)."""
+    return [e["video"]] if "video" in e else [e["frontal"], *e["refs"]]
+
+
+def element_body(e: dict) -> dict:
+    """One element as fal expects it: images OR a video (fal 422 otherwise, 2026-10-10)."""
+    if "video" in e:
+        return {"video_url": data_uri(e["video"])}
+    return {"frontal_image_url": data_uri(e["frontal"]), "reference_image_urls": [data_uri(r) for r in e["refs"]]}
 
 
 def data_uri(path: Path) -> str:
@@ -194,8 +213,7 @@ class Client:
         for name, path in job.files.items():
             body[name] = data_uri(path)
         if job.elements:
-            body["elements"] = [{"frontal_image_url": data_uri(e["frontal"]),
-                                 "reference_image_urls": [data_uri(r) for r in e["refs"]]} for e in job.elements]
+            body["elements"] = [element_body(e) for e in job.elements]
         self.ledger.write(rh, state="intent", kind="fal", provider="fal.ai", shot=job.shot_id, model=job.model,
                           audio_seconds=round(job.audio_seconds, 3), billed_seconds=job.billed_seconds,
                           cost_estimate=job.cost, approval_code=self.approval_code,

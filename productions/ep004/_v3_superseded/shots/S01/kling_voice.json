@@ -1,0 +1,22 @@
+{
+  "source": {
+    "seconds": 2.012,
+    "lead_silence": 0.04,
+    "tail_silence": 0.112,
+    "peak_db": -7.7,
+    "clipped": 0,
+    "noise_floor_db": -71.6
+  },
+  "prepared": {
+    "seconds": 1.95,
+    "lead_silence": 0.03,
+    "tail_silence": 0.01,
+    "peak_db": -1.5,
+    "clipped": 0,
+    "noise_floor_db": -60.6
+  },
+  "head_trim": 0.0,
+  "lufs": -16.8,
+  "source_sha256": "4b749a98de6cd05672df3211090f761cae1be12c3f411d3cefa4a0a11dd925e2",
+  "source_path": "/Users/abdurraffay/Documents/Al-oose-Ai-video/productions/ep004/audio/originals/L013_big_pea.wav"
+}

@@ -1,0 +1,13 @@
+# Model test (owner 2026-10-08): both shots get the official Billy references. S01 (O3, owner 2026-10-10): with the
+# reference video as @Element2, fal allows 4 items, so @Element1 keeps the turnaround + details boards (head close-ups
+# dropped). S02 (control) keeps the full EP004 S07 set.
+S01:
+  bad_billy:
+    note: head-and-chest at the rocks, suspicious, looks left then right (3/4 left)
+    frontal: billy_tophat_34left
+    refs: [[billy_turn_34left, billy_turn_front], [billy_detail_monocle, billy_detail_badge, billy_detail_wing, billy_detail_beak]]
+S02:
+  bad_billy:
+    note: head-and-chest at the rocks, suspicious, looks left then right (3/4 left)
+    frontal: billy_tophat_34left
+    refs: [[billy_head_neutral, billy_head_suspicious], [billy_turn_34left, billy_turn_front], [billy_detail_monocle, billy_detail_badge, billy_detail_wing, billy_detail_beak]]

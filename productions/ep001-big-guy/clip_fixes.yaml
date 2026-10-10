@@ -1,0 +1,18 @@
+# Free render-time fixes for EP001's paid clips (studio/bbtb/clipfix.py). Jason's batch-1 notes, owner-reviewed per shot.
+# box = [x0, y0, x1, y1] in the 720x1280 frame. Chin boxes stop at the collar: never the belt, sneakers, scroll or dust.
+# trapped_white: below_y = top of the box (the box sits under the eyes), so every sheet-white patch inside it is filled
+# from the shot's own plate. keep_collar / keep_scroll: never fill Billy's shirt collar / the scroll's cream paper.
+# feather_white removed from every shot (owner 2026-10-09): it hit wing-vest and beak highlights, not the feather tips.
+S01:
+  trapped_white: {box: [292, 716, 351, 774], below_y: 716}
+S02:   # Avatar clip (fixes applied in the Avatar branch since 2026-10-08)
+  trapped_white: {box: [312, 584, 422, 686], below_y: 584}
+S03:   # Avatar clip (Saul): the sheet-white strip between his outline and the grass (owner 2026-10-10)
+  under_white: {box: [0, 1040, 560, 1180]}
+S05:
+  trapped_white: {box: [282, 607, 493, 737], below_y: 607, keep_collar: true, keep_scroll: true}
+S06:   # Avatar clip
+  trapped_white: {box: [277, 576, 496, 732], below_y: 576, keep_collar: true}
+# S04: left unfixed (owner 2026-10-09: a fix would mark his shirt; not flagged by
+# Jason). S08: no fix (owner 2026-10-10: its box sat on his sneaker's white toe-cap and laces, not chin white).
+# S09: no fix needed (max 106 px in 1.4% of frames).

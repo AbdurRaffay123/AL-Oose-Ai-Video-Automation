@@ -5,6 +5,7 @@ sheets:
   billy_turn:  character-facials-sheet.whatsapp-image-2026-10-05-at-02-39-55
   billy_land:  character-facials-sheet.whatsapp-image-2026-10-05-at-02-40-11
   saul_bible:  character-facials-sheet.whatsapp-image-2026-10-05-at-02-42-00
+  bigpea:      images.characters.big-pea.big-pea-reference-sheet
 crops:
   billy_head_neutral:    [billy_heads, [18, 160, 192, 362]]
   billy_head_suspicious: [billy_heads, [204, 168, 376, 362]]
@@ -25,6 +26,8 @@ crops:
   billy_detail_tail:     [billy_turn, [1252, 622, 1474, 780]]
   billy_fly_approach1:   [billy_land, [18, 150, 330, 440]]
   billy_fly_approach2:   [billy_land, [345, 150, 640, 440]]
+  billy_fly_approach4:   [billy_land, [905, 150, 1190, 440]]     # EP004: closed beak, wings out, feet down
+  billy_fly_touchdown:   [billy_land, [1222, 150, 1585, 452]]    # EP004: 'Touchdown (slide)'
   saul_standing_tall:    [saul_bible, [1245, 186, 1392, 436]]
   saul_talking:          [saul_bible, [785, 190, 985, 395]]
   saul_cheerful:         [saul_bible, [988, 190, 1168, 395]]
@@ -38,3 +41,13 @@ crops:
   saul_face_scared:      [saul_bible, [362, 830, 468, 965]]
   billy_head_happy:      [billy_heads, [392, 160, 566, 362]]
   billy_head_scared:     [billy_heads, [936, 160, 1118, 362]]
+  # Big Pea (Jason's reference sheet, Images/Characters/Big-pea) - sheet pixels
+  bigpea_turn_front:     [bigpea, [22, 162, 246, 436]]
+  bigpea_turn_34right:   [bigpea, [262, 162, 488, 436]]
+  bigpea_turn_sideright: [bigpea, [752, 160, 1002, 436]]
+  bigpea_head_neutral:   [bigpea, [22, 512, 212, 682]]
+  bigpea_head_angry:     [bigpea, [884, 512, 1076, 682]]
+  bigpea_head_worried:   [bigpea, [1100, 512, 1300, 682]]
+  bigpea_detail_goggles: [bigpea, [982, 762, 1082, 858]]
+  bigpea_detail_wing:    [bigpea, [1314, 762, 1412, 858]]
+  bigpea_detail_shoe:    [bigpea, [1424, 762, 1522, 858]]
