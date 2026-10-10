@@ -640,3 +640,23 @@ def test_under_white_ignores_white_with_no_body_above_and_respects_the_box():
     fr, plate = _saul()
     out, n = under_white_frame(fr, plate, (0, 0, 120, 50))       # box above the strip
     assert n == 0 and (out == fr).all()
+
+
+# ---------------------------------------------------------------- no-music delivery copy (owner 2026-10-10)
+def test_music_off_means_no_music_bed():
+    from bbtb import audio_bed
+    for mood in (None, "", "off", "false", "None", "NO"):
+        assert audio_bed.music(mood, 30.0, None, allow_paid=False) is None
+    assert audio_bed.estimate([], "off", 30.0) == 0.0
+
+
+def test_no_music_copy_gets_its_own_name_and_never_replaces_the_final(tmp_path):
+    from types import SimpleNamespace
+    root = tmp_path / "ep_x"; (root / "exports").mkdir(parents=True)
+    (root / "exports" / "ep_x_FINAL_9x16.mp4").write_bytes(b"with music")
+    for tag in ("9x16", "4x5"):
+        (root / "exports" / f"ep_x_v1_{tag}.mp4").write_bytes(b"no music")
+    out = pipeline.copy_finals(SimpleNamespace(root=root), root / "exports" / "ep_x_v1_9x16.mp4", suffix="_nomusic")
+    assert out.name == "ep_x_FINAL_9x16_nomusic.mp4" and out.read_bytes() == b"no music"
+    assert (root / "exports" / "ep_x_FINAL_4x5_nomusic.mp4").exists()
+    assert (root / "exports" / "ep_x_FINAL_9x16.mp4").read_bytes() == b"with music"

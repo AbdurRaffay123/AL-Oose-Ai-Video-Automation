@@ -354,3 +354,7 @@ All shot paths are relative to `productions/ep001-big-guy/`. The Kling 3.0 talki
     feathers of his right wing in S02 (`feather_white` damaged wing-vest and beak highlights; removed).
 - Avatar clips now get clip fixes too (pipeline change). Tests 146 pass; 99 originals unchanged.
 - Not done (owner: confirm with Jason first): note 5C/5D, cutting "worm" from S02/S06 narration (Avatar lip sync).
+- **EP001 delivery copy without music (Jason, 2026-10-10):** `exports/ep001-big-guy_FINAL_9x16_nomusic.mp4` (15.7 MB) +
+  `ep001-big-guy_FINAL_4x5_nomusic.mp4` (14.3 MB), 45.79 s, -16.3 LUFS: voices + SFX only, music bed removed (new
+  `./bbtb export --no-music`; header `music: off` also works). The finals with music are unchanged (checksums).
+  From now on every export has two versions: with music for our review, without music for delivery to Jason.

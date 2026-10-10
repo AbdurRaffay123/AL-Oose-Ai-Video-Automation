@@ -184,8 +184,15 @@ def synth_sfx(name: str) -> Path | None:
     return dst
 
 
+MUSIC_OFF = {"off", "false", "none", "no"}       # header `music: off` (owner 2026-10-10): no music bed at all
+
+
+def music_off(mood) -> bool:
+    return not mood or str(mood).strip().lower() in MUSIC_OFF
+
+
 def music(mood: str | None, seconds: float, ledger: Ledger, allow_paid: bool) -> Path | None:
-    if not mood:
+    if music_off(mood):
         return None
     if mood == "auto" or mood.startswith("auto:"):        # Jason's library (bbtb music); else the cached bed
         from . import music_lib
@@ -238,6 +245,6 @@ def estimate(names: list[str], mood: str | None, seconds: float) -> float:
         cached = AUDIO / "elevenlabs" / f"sfx_{hashlib.sha256(prompt.encode()).hexdigest()[:10]}.mp3"
         if not _local("sfx", n) and not cached.exists():
             cost += SFX_COST
-    if mood and not _local("music", mood):
+    if not music_off(mood) and not _local("music", mood):
         cost += MUSIC_COST_PER_MIN * (seconds + 3) / 60
     return round(cost, 3)

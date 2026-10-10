@@ -14,7 +14,7 @@
 | 7 | **Approval card per paid shot** | `productions/<ep>/reviews/approval/<shot>_approval.jpg`: start frame, end frame, background, references, **FEET / GROUND zoom panel**, full prompt, negative prompt, engine, cost | Owner approves EACH card individually |
 | 8 | **Generate ONE shot** | Free run for that shot's code, confirm the request equals the approved card, generate, show its frame sheet (`reviews/<shot>_frames.jpg`) | Owner approves or rejects; only then the next shot |
 | 9 | **Full animatic WITH SOUND** | Overlays and cards only (no art-animated characters); the owner watches the whole animatic as a video with sound, plus a 1 fps strip | Owner approves |
-| 10 | **Assemble the final, run QA** | `./bbtb export`; the owner watches the final | Owner approves |
+| 10 | **Assemble the final, run QA: TWO versions** | `./bbtb export` = WITH music (`_FINAL_<fmt>.mp4`: our internal review only); then `./bbtb export --no-music` = WITHOUT music (`_FINAL_<fmt>_nomusic.mp4`: voices + SFX, the version delivered to Jason, who adds BG music last in his own edit). The owner watches both | Owner approves |
 | 11 | **Update the records** | `docs/EPISODE_LOG.md`, `docs/LESSONS_LEARNED.md`, `docs/SESSION_BRIEF.md`, `docs/IDEAS_LOG.md` | – |
 
 ## Hard rules (each one repeated by the owner)
@@ -23,6 +23,8 @@
 - **Every story beat has a voice or a strong sound.** A character who reacts says something.
 - **Review the WHOLE animatic with sound** before calling any piece done, not just each clip.
 - **Voices before video, always.**
+- **Every export comes in two versions** (Jason, 2026-10-10): WITH music for our internal review; WITHOUT music
+  (voices + SFX only, `--no-music`) for delivery to Jason. Never deliver the music version.
 - **Feet on the ground in every keyframe** (GROUNDING RULE below).
 - **Show prompts and references BEFORE any generation.**
 - **One approval = one generation.** Never batch-approve.

@@ -71,6 +71,12 @@ Details: `docs/CHARACTER_BIBLE.md`, `docs/LESSONS_LEARNED.md`.
    Kling 3.0 Standard + references. Never fake a talking Saul by enlarging the small sheet faces (rejected: blurry). The
    real fix needs high-resolution Saul expression art from Jason.
 
+## Two export versions (Jason, 2026-10-10)
+Every episode export produces TWO versions:
+- WITH music (`./bbtb export` -> `exports/<ep>_FINAL_<fmt>.mp4`): for our internal review only.
+- WITHOUT music (`./bbtb export --no-music` -> `exports/<ep>_FINAL_<fmt>_nomusic.mp4`): voices + SFX only. This is
+  the version delivered to Jason; he adds the BG music last in his own edit. A header `music: off` also drops the bed.
+
 ## Kling 3.0 Turbo: permanently retired (owner, 2026-10-10)
 Never use Kling 3.0 Turbo (`kling3` talking tag / `fal-ai/kling-video/v3/turbo/...`) for any new shot. Record: 3 of 8
 generations rejected (38%), wings turned into fists, Saul's eyes drooped ~5 s (EP002 S01), and its re-voice step garbled

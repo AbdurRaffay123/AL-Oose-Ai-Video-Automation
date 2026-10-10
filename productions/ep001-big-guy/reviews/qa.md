@@ -1,8 +1,8 @@
-# QA: ep001-big-guy_FINAL_9x16.mp4
-2026-10-04 06:36 - **PASS**
+# QA: ep001-big-guy_FINAL_9x16_nomusic.mp4
+2026-10-10 05:44 - **PASS**
 
 - ok: duration 45.8s (planned 45.8s)
-- ok: loudness -16.4 LUFS, true peak -2.9 dBTP
+- ok: loudness -16.3 LUFS, true peak -2.9 dBTP
 - ok: black frames: none
 - ok: all lines use original recordings or owner-approved cloned voices
 

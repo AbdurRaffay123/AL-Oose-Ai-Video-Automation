@@ -175,7 +175,7 @@ def cmd_approve_clip(a):
 def cmd_export(a):
     from . import pipeline
     try:
-        s = pipeline.export(Path(a.script), auto_approve=a.auto_approve)
+        s = pipeline.export(Path(a.script), auto_approve=a.auto_approve, no_music=a.no_music)
     except RuntimeError as exc:
         sys.exit(str(exc))
     print(f"Re-exported for free ({s['duration']:.1f}s): {s['final']}")
@@ -322,6 +322,7 @@ def main(argv=None):
     s = sub.add_parser("status"); s.add_argument("script"); s.set_defaults(f=cmd_status)
     ex = sub.add_parser("export", help="free re-export from existing clips (no paid calls)")
     ex.add_argument("script"); ex.add_argument("--auto-approve", action="store_true", help="TESTS ONLY: skip the review gate")
+    ex.add_argument("--no-music", action="store_true", help="delivery copy for Jason: voices + SFX only, *_nomusic.mp4")
     ex.set_defaults(f=cmd_export)
     rv = sub.add_parser("review", help="free: frame sheets (every 0.5 s) + approval status of every generated clip")
     rv.add_argument("script"); rv.set_defaults(f=cmd_review)

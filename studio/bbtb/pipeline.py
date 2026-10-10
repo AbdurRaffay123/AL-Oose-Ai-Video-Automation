@@ -698,14 +698,14 @@ def make(script_path: Path, approve: str | None = None, only: list[str] | None =
     return summary
 
 
-def copy_finals(prod: Production, final: Path) -> Path:
+def copy_finals(prod: Production, final: Path, suffix: str = "") -> Path:
     """Rename the export to the owner's delivery names (exports/ holds only the _FINAL_ files; owner 2026-10-04).
-    Returns the FINAL 9:16 path."""
+    `suffix` "_nomusic" names the no-music delivery copy. Returns the FINAL 9:16 path."""
     for tag in ("9x16", "4x5"):
         src = final.with_name(final.name.replace("_9x16", f"_{tag}"))
         if src.exists():
-            src.replace(final.with_name(f"{prod.root.name}_FINAL_{tag}.mp4"))
-    return final.with_name(f"{prod.root.name}_FINAL_9x16.mp4")
+            src.replace(final.with_name(f"{prod.root.name}_FINAL_{tag}{suffix}.mp4"))
+    return final.with_name(f"{prod.root.name}_FINAL_9x16{suffix}.mp4")
 
 
 def archive_take(j: fal.Job) -> Path | None:
@@ -729,10 +729,14 @@ def archive_take(j: fal.Job) -> Path | None:
     return dst
 
 
-def export(script_path: Path, auto_approve: bool = False) -> dict:
+def export(script_path: Path, auto_approve: bool = False, no_music: bool = False) -> dict:
     """Free re-export from the clips already made (after an edit such as trim:<s>). Never calls a paid API:
-    music/SFX come from the cache or are synthesized; shots without a clip use free local animation."""
+    music/SFX come from the cache or are synthesized; shots without a clip use free local animation.
+    `no_music` (owner 2026-10-10, Jason's delivery format): voices + SFX only, saved as `_FINAL_<fmt>_nomusic.mp4`
+    next to the finals with music (which are never overwritten by it)."""
     prod = prepare(script_path)
+    if no_music:
+        prod.script.meta["music"] = "off"
     all_jobs = jobs(prod)
     use_revoiced(prod, all_jobs)
     pending = [] if auto_approve else unreviewed(prod, all_jobs)
@@ -744,7 +748,7 @@ def export(script_path: Path, auto_approve: bool = False) -> dict:
                            + ",".join(j.shot_id for j in pending))
     missing = [j.shot_id for j in all_jobs if not is_done(j)]
     final = render(prod, final=True, paid_audio=False, job_list=all_jobs)
-    final = copy_finals(prod, final)
+    final = copy_finals(prod, final, suffix="_nomusic" if no_music else "")
     report = qa.check(prod, final, [f"{sid}: no generated clip (local stand-in)" for sid in missing])
     return {"final": final, "duration": prod.total, "missing": missing, "qa": report["verdict"],
             "qa_report": report["path"]}
